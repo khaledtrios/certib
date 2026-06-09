@@ -1,0 +1,85 @@
+// ============================================================
+// CRTIB CMS — Personalização do Painel Administrativo
+// ============================================================
+
+// ── Variáveis de marca ──────────────────────────────────────
+:root {
+  --crtib-primary: #2c8c5b;
+  --crtib-primary-dark: #22704a;
+  --crtib-primary-hover: #237a4e;
+  --crtib-accent: #31af91;
+}
+
+// ── Botões principais (Salvar, Publicar, etc.) ───────────────
+.btn.btn--style-primary {
+  background-color: var(--crtib-primary) !important;
+  border-color: var(--crtib-primary) !important;
+  color: #fff !important;
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--crtib-primary-hover) !important;
+    border-color: var(--crtib-primary-hover) !important;
+    color: #fff !important;
+  }
+}
+
+// ── Nav: estado ativo dos links ──────────────────────────────
+.nav__link--active,
+.nav__sub-link--active {
+  color: var(--crtib-primary) !important;
+}
+
+.nav__link:hover,
+.nav__sub-link:hover {
+  color: var(--crtib-primary) !important;
+}
+
+// ── Barra de destaque no topo da nav ────────────────────────
+.nav {
+  position: relative;
+
+  &::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, var(--crtib-primary) 0%, var(--crtib-accent) 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+  }
+}
+
+// ── Pill/tag com cor de sucesso → verde CRTIB ────────────────
+.pill--style-success {
+  background-color: var(--crtib-primary) !important;
+  border-color: var(--crtib-primary) !important;
+}
+
+// ── Cards do dashboard customizado ──────────────────────────
+.crtib-card {
+  display: block;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--theme-elevation-100, #e4e4e7);
+  text-decoration: none !important;
+  background: var(--theme-elevation-0, #fff);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  color: inherit;
+
+  &:hover {
+    border-color: var(--crtib-primary) !important;
+    box-shadow: 0 0 0 3px rgba(44, 140, 91, 0.1);
+    text-decoration: none !important;
+  }
+}
+
+// ── Login: espaçamento antes do formulário ───────────────────
+.login__form,
+.login-form {
+  padding-top: 8px;
+}

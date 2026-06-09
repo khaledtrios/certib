@@ -1,0 +1,2 @@
+src/payload.config.ts(7,20): error TS2307: Cannot find module '@payloadcms/translations/languages/fr' or its corresponding type declarations.
+src/payload.config.ts(8,20): error TS2307: Cannot find module '@payloadcms/translations/languages/en' or its corresponding type declarations.

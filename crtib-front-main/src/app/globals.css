@@ -1,0 +1,229 @@
+@config "../../tailwind.config.ts";
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #3b3b3b;
+
+  --crtib-green: #2c8c5b;
+  --crtib-gray-light: #f5f5f5;
+  --crtib-gray-dark: #3b3b3b;
+  --crtib-white: #ffffff;
+  --crtib-green-blue: #37c2a2;
+  --crtib-green-back: #31AF91;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Cores CRTIB (alinhadas ao tailwind.config.ts) para as utilities funcionarem */
+  --color-crtib-green: #2c8c5b;
+  --color-crtib-gray-light: #f5f5f5;
+  --color-crtib-gray-dark: #3b3b3b;
+  --color-crtib-white: #ffffff;
+
+  --font-sans: var(--font-dosis);
+  --font-clauses: var(--font-dosis), Impact, sans-serif;
+  --font-download: "Open Sans", Arial, Helvetica, sans-serif;
+  --font-grid: "Open Sans", Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Estilos para conteúdo rico do Lexical Editor */
+.rich-text,
+.page-content {
+  @apply text-gray-600 leading-relaxed;
+}
+
+.rich-text p,
+.page-content p {
+  @apply mb-6;
+}
+
+.rich-text p:first-child,
+.page-content p:first-child {
+  @apply text-lg;
+}
+
+.rich-text h1,
+.page-content h1 {
+  @apply text-3xl font-bold text-gray-800 mb-4 mt-8;
+}
+
+.rich-text h2,
+.page-content h2 {
+  @apply text-2xl font-bold text-gray-800 mb-3 mt-6;
+}
+
+.rich-text h3,
+.page-content h3 {
+  @apply text-xl font-semibold text-gray-800 mb-3 mt-6;
+}
+
+.rich-text h4,
+.page-content h4 {
+  @apply text-lg font-semibold text-gray-800 mb-2 mt-4;
+}
+
+.rich-text h5,
+.page-content h5 {
+  @apply text-base font-semibold text-gray-800 mb-2 mt-4;
+}
+
+.rich-text h6,
+.page-content h6 {
+  @apply text-sm font-semibold text-gray-800 mb-2 mt-4;
+}
+
+/* Listas */
+.rich-text ul,
+.page-content ul {
+  @apply list-disc list-inside mb-6 space-y-2;
+}
+
+.rich-text ol,
+.page-content ol {
+  @apply list-decimal list-inside mb-6 space-y-2;
+}
+
+.rich-text li,
+.page-content li {
+  @apply text-gray-600 mb-3;
+}
+
+.rich-text ul ul,
+.rich-text ol ul,
+.page-content ul ul,
+.page-content ol ul {
+  @apply ml-6 mt-2 mb-2;
+}
+
+.rich-text ul ol,
+.rich-text ol ol,
+.page-content ul ol,
+.page-content ol ol {
+  @apply ml-6 mt-2 mb-2;
+}
+
+/* Links — exclui elementos com bg (botões) */
+.rich-text a:not([class*="bg-"]),
+.page-content a:not([class*="bg-"]) {
+  @apply text-teal-600 hover:text-teal-700 hover:underline transition-colors;
+}
+
+/* Blockquotes */
+.rich-text blockquote,
+.page-content blockquote {
+  @apply border-l-4 border-teal-500 pl-4 py-2 my-6 italic text-gray-700 bg-gray-50;
+}
+
+/* Código */
+.rich-text code,
+.page-content code {
+  @apply bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-sm font-mono;
+}
+
+.rich-text pre,
+.page-content pre {
+  @apply bg-gray-900 text-white p-4 rounded-lg overflow-x-auto mb-6;
+}
+
+.rich-text pre code,
+.page-content pre code {
+  @apply bg-transparent text-white px-0 py-0;
+}
+
+/* Linha horizontal */
+.rich-text hr,
+.page-content hr {
+  @apply border-gray-300 my-8;
+}
+
+/* Imagens */
+.rich-text img,
+.page-content img {
+  @apply max-w-full h-auto rounded-lg shadow-md my-6;
+}
+
+/* Figures com caption */
+.rich-text figure,
+.page-content figure {
+  @apply my-6;
+}
+
+.rich-text figcaption,
+.page-content figcaption {
+  @apply text-sm text-gray-600 italic mt-2 text-center;
+}
+
+/* Imagens com posicionamento */
+.rich-text .float-left,
+.page-content .float-left {
+  @apply float-left mr-6 mb-4 max-w-sm;
+}
+
+.rich-text .float-right,
+.page-content .float-right {
+  @apply float-right ml-6 mb-4 max-w-sm;
+}
+
+/* Callouts - Blocos de destaque */
+.rich-text .callout,
+.page-content .callout {
+  @apply rounded-r-lg shadow-sm;
+}
+
+/* HTML Blocks */
+.rich-text .html-block,
+.page-content .html-block {
+  @apply my-6;
+}
+
+/* Accordion */
+.rich-text .accordion-block,
+.page-content .accordion-block {
+  @apply my-8;
+}
+
+.accordion-item {
+  @apply transition-all duration-200;
+}
+
+.accordion-header {
+  @apply cursor-pointer select-none;
+}
+
+.accordion-content {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.accordion-content p:last-child {
+  @apply mb-0;
+}
+
+/* Formatação de texto */
+.rich-text strong,
+.page-content strong {
+  @apply font-bold;
+}
+
+.rich-text em,
+.page-content em {
+  @apply italic;
+}
+
+.rich-text u,
+.page-content u {
+  @apply underline;
+}
+
+.rich-text s,
+.page-content s {
+  @apply line-through;
+}
