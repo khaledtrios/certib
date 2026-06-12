@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CRTI-B – Documentation Technique Complète</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    color: #1a1a2e;
+    background: #fff;
+    line-height: 1.65;
+  }
+
+  /* ── COUVERTURE ── */
+  .cover {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #08AA86 0%, #2F3E46 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+  }
+  .cover-logo {
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 32px;
+  }
+  .cover-logo svg { width: 48px; height: 48px; }
+  .cover h1 { font-size: 36px; font-weight: 700; color: #fff; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .cover h2 { font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.75); margin-bottom: 40px; }
+  .cover-meta {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 24px 40px;
+    display: inline-block;
+    text-align: left;
+  }
+  .cover-meta p { color: rgba(255,255,255,0.85); font-size: 13px; margin: 4px 0; }
+  .cover-meta strong { color: #fff; }
+  .cover-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  /* ── MISE EN PAGE ── */
+  .page { max-width: 900px; margin: 0 auto; padding: 48px 48px 32px; }
+
+  @media print {
+    .page { padding: 24px 32px 16px; }
+    .cover { min-height: auto; padding: 80px 40px; }
+  }
+
+  /* ── SOMMAIRE ── */
+  .toc { page-break-after: always; }
+  .toc h2 { font-size: 22px; font-weight: 700; color: #08AA86; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #08AA86; }
+  .toc-item { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px dotted #ddd; }
+  .toc-item.section { font-weight: 700; font-size: 14px; color: #2F3E46; margin-top: 12px; }
+  .toc-item.sub { padding-left: 20px; font-size: 12px; color: #555; }
+  .toc-num { color: #08AA86; font-weight: 600; flex-shrink: 0; }
+
+  /* ── SECTIONS ── */
+  .section-header {
+    background: linear-gradient(90deg, #08AA86 0%, #05896c 100%);
+    color: #fff;
+    padding: 18px 28px;
+    border-radius: 10px;
+    margin: 40px 0 24px;
+    page-break-after: avoid;
+  }
+  .section-header .num { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.8; margin-bottom: 4px; }
+  .section-header h2 { font-size: 20px; font-weight: 700; }
+
+  h3 {
+    font-size: 15px; font-weight: 700; color: #2F3E46;
+    margin: 28px 0 10px;
+    padding-left: 12px;
+    border-left: 3px solid #08AA86;
+    page-break-after: avoid;
+  }
+  h4 { font-size: 13px; font-weight: 600; color: #08AA86; margin: 18px 0 6px; }
+  p { margin: 8px 0; color: #333; }
+
+  /* ── TABLES ── */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12px; page-break-inside: avoid; }
+  th { background: #2F3E46; color: #fff; padding: 9px 12px; text-align: left; font-weight: 600; font-size: 11px; letter-spacing: 0.05em; }
+  td { padding: 8px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+  tr:nth-child(even) td { background: #f9fafb; }
+  tr:hover td { background: #f0fdf9; }
+
+  /* ── CODE ── */
+  code {
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
+    background: #f1f5f9;
+    color: #0f172a;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  pre {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 12px 0;
+    page-break-inside: avoid;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  .kw { color: #93c5fd; }
+  .str { color: #86efac; }
+  .cm { color: #6b7280; font-style: italic; }
+  .fn { color: #fde68a; }
+
+  /* ── BADGES & PILLS ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .badge-green  { background: #dcfce7; color: #166534; }
+  .badge-blue   { background: #dbeafe; color: #1e40af; }
+  .badge-purple { background: #f3e8ff; color: #6b21a8; }
+  .badge-gray   { background: #f3f4f6; color: #374151; }
+  .badge-teal   { background: #ccfbf1; color: #065f46; }
+  .badge-orange { background: #fed7aa; color: #92400e; }
+
+  /* ── CARDS ── */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin: 14px 0; }
+  .card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px 16px;
+    page-break-inside: avoid;
+  }
+  .card h4 { margin: 0 0 6px; color: #2F3E46; font-size: 13px; }
+  .card p { font-size: 11px; color: #64748b; margin: 0; }
+
+  /* ── INFO BOXES ── */
+  .info-box {
+    background: #f0fdf9;
+    border-left: 4px solid #08AA86;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 14px 0;
+    page-break-inside: avoid;
+  }
+  .warn-box {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 14px 0;
+  }
+  .info-box strong, .warn-box strong { font-size: 12px; }
+
+  /* ── ARCHITECTURE DIAGRAM ── */
+  .arch {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+    page-break-inside: avoid;
+  }
+  .arch-box {
+    flex: 1;
+    border: 2px solid;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .arch-box.cms { border-color: #08AA86; background: #f0fdf9; }
+  .arch-box.front { border-color: #2F3E46; background: #f0f4f8; }
+  .arch-box.db { border-color: #f59e0b; background: #fffbeb; }
+  .arch-box h4 { font-size: 13px; margin-bottom: 6px; }
+  .arch-box p { font-size: 11px; color: #555; }
+  .arch-arrow { display: flex; align-items: center; font-size: 22px; color: #08AA86; }
+
+  /* ── FLOW ── */
+  .flow { display: flex; flex-direction: column; gap: 4px; margin: 12px 0; }
+  .flow-step {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 8px; padding: 10px 14px;
+    page-break-inside: avoid;
+  }
+  .flow-num {
+    background: #08AA86; color: #fff;
+    border-radius: 50%; width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+  }
+  .flow-arrow { text-align: center; font-size: 16px; color: #08AA86; }
+
+  ul.feature-list { list-style: none; padding: 0; margin: 8px 0; }
+  ul.feature-list li { padding: 4px 0 4px 20px; position: relative; font-size: 12px; color: #374151; }
+  ul.feature-list li::before { content: "→"; position: absolute; left: 0; color: #08AA86; font-weight: 700; }
+
+  hr { border: none; border-top: 1px solid #e5e7eb; margin: 28px 0; }
+
+  .page-break { page-break-after: always; }
+  .no-break { page-break-inside: avoid; }
+
+  .footer-doc { text-align: center; color: #9ca3af; font-size: 11px; padding: 32px 0 16px; border-top: 1px solid #e5e7eb; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     COUVERTURE
+═══════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+      <rect width="48" height="48" rx="10" fill="rgba(255,255,255,0.2)"/>
+      <g transform="translate(4,3) scale(0.83)">
+        <path fill="white" d="M48.1,12.1L24.5,1.5c-0.2-0.1-0.4-0.1-0.6,0L7.4,8.9C7,9.1,6.9,9.5,7,9.9c0.2,0.4,0.6,0.5,1,0.4L24.2,3 L46,12.8l-18.1,8c0.2,0.5,0.5,1,0.5,1.6L47.3,14l0,25L25.4,49.3V26.1c-1,0.1-0.6,0.1-0.9,0.1c-0.4,0-1.1-0.1-1.1-0.2 v23.4L1.5,39.3l0.1-25.2l18.8,8.3c0-0.6,0.1-1.1,0.3-1.6L1.1,12.3c-0.2-0.1-0.5-0.1-0.7,0.1C0.1,12.5,0,12.7,0,13l0,26.8 c0,0.3,0.2,0.6,0.4,0.7l23.3,10.8c0.1,0,0.2,0.1,0.3,0.1c0.1,0,0.2,0,0.3-0.1L48,40.2c0.3-0.1,0.4-0.4,0.4-0.7l0.2-26.7 C48.6,12.5,48.4,12.2,48.1,12.1z"/>
+        <circle fill="white" cx="24.3" cy="22.8" r="2.1"/>
+      </g>
+    </svg>
+  </div>
+  <div class="cover-tag">Documentation Technique</div>
+  <h1>CRTI-B</h1>
+  <h2>Centre de Ressources des Technologies et de l'Innovation pour le Bâtiment</h2>
+  <div class="cover-meta">
+    <p><strong>Version :</strong> 1.0 – Juin 2026</p>
+    <p><strong>CMS :</strong> PayloadCMS 3.76 · Next.js 15 · Port 3000</p>
+    <p><strong>Frontend :</strong> Next.js 16.1 · Tailwind CSS v4 · Port 3001</p>
+    <p><strong>Base de données :</strong> PostgreSQL 16 · certibbackend</p>
+    <p><strong>Auteur :</strong> Triosweb · ghassen@triosweb.fr</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SOMMAIRE
+═══════════════════════════════════════════════════════════════ -->
+<div class="page toc">
+  <h2>Table des matières</h2>
+
+  <div class="toc-item section"><span>1. Architecture générale</span><span class="toc-num">§1</span></div>
+  <div class="toc-item sub"><span>1.1 Vue d'ensemble</span></div>
+  <div class="toc-item sub"><span>1.2 Flux de données</span></div>
+  <div class="toc-item sub"><span>1.3 Environnement & variables</span></div>
+
+  <div class="toc-item section"><span>2. Backend CMS (PayloadCMS)</span><span class="toc-num">§2</span></div>
+  <div class="toc-item sub"><span>2.1 Configuration générale</span></div>
+  <div class="toc-item sub"><span>2.2 Collections (base de données)</span></div>
+  <div class="toc-item sub"><span>2.3 Interface d'administration</span></div>
+  <div class="toc-item sub"><span>2.4 Sidebar admin – fonctionnalités</span></div>
+  <div class="toc-item sub"><span>2.5 Migrations</span></div>
+
+  <div class="toc-item section"><span>3. Frontend (Next.js)</span><span class="toc-num">§3</span></div>
+  <div class="toc-item sub"><span>3.1 Structure des routes</span></div>
+  <div class="toc-item sub"><span>3.2 Layout global & navigation</span></div>
+  <div class="toc-item sub"><span>3.3 Système de pages dynamiques</span></div>
+  <div class="toc-item sub"><span>3.4 API Proxy</span></div>
+
+  <div class="toc-item section"><span>4. Système de blocs (Page Builder)</span><span class="toc-num">§4</span></div>
+  <div class="toc-item sub"><span>4.1 Architecture BlockRenderer</span></div>
+  <div class="toc-item sub"><span>4.2 Catalogue des 20 blocs</span></div>
+
+  <div class="toc-item section"><span>5. Composants Frontend</span><span class="toc-num">§5</span></div>
+  <div class="toc-item sub"><span>5.1 Layout (Header, Footer, GlobalLayout)</span></div>
+  <div class="toc-item sub"><span>5.2 Pages spéciales</span></div>
+  <div class="toc-item sub"><span>5.3 Composants métier</span></div>
+  <div class="toc-item sub"><span>5.4 Composants UI</span></div>
+
+  <div class="toc-item section"><span>6. Collections détaillées</span><span class="toc-num">§6</span></div>
+  <div class="toc-item sub"><span>6.1 Pages</span></div>
+  <div class="toc-item sub"><span>6.2 Actualités (News)</span></div>
+  <div class="toc-item sub"><span>6.3 Médias</span></div>
+  <div class="toc-item sub"><span>6.4 Autres collections</span></div>
+
+  <div class="toc-item section"><span>7. Fonctionnalités spéciales</span><span class="toc-num">§7</span></div>
+  <div class="toc-item sub"><span>7.1 Newsletter</span></div>
+  <div class="toc-item sub"><span>7.2 Formulaire de contact</span></div>
+  <div class="toc-item sub"><span>7.3 Recherche</span></div>
+  <div class="toc-item sub"><span>7.4 Actualités & rubriques</span></div>
+
+  <div class="toc-item section"><span>8. Guide d'administration</span><span class="toc-num">§8</span></div>
+  <div class="toc-item sub"><span>8.1 Créer/modifier une page</span></div>
+  <div class="toc-item sub"><span>8.2 Publier des actualités</span></div>
+  <div class="toc-item sub"><span>8.3 Gestion des médias</span></div>
+  <div class="toc-item sub"><span>8.4 Ordre du menu</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §1 – ARCHITECTURE GÉNÉRALE
+═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-header">
+    <div class="num">Section 01</div>
+    <h2>Architecture générale</h2>
+  </div>
+
+  <h3>1.1 Vue d'ensemble</h3>
+  <p>Le site CRTI-B est composé de deux applications distinctes qui communiquent via l'API REST de PayloadCMS.</p>
+
+  <div class="arch">
+    <div class="arch-box cms">
+      <h4>🖥 Backend CMS</h4>
+      <p><strong>PayloadCMS 3.76</strong><br/>Next.js 15 · Port 3000<br/>Interface d'admin<br/>API REST + GraphQL</p>
+    </div>
+    <div class="arch-arrow">⇄</div>
+    <div class="arch-box front">
+      <h4>🌐 Frontend</h4>
+      <p><strong>Next.js 16.1</strong><br/>Port 3001<br/>Tailwind CSS v4<br/>SSR + ISR</p>
+    </div>
+    <div class="arch-arrow">⇄</div>
+    <div class="arch-box db">
+      <h4>🗄 Base de données</h4>
+      <p><strong>PostgreSQL 16</strong><br/>Port 5432<br/>DB: certibbackend<br/>User: postgres</p>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Composant</th><th>Technologie</th><th>Port</th><th>Rôle</th></tr>
+    <tr><td>CMS Backend</td><td>PayloadCMS 3.76 + Next.js 15</td><td>3000</td><td>Administration du contenu, API REST</td></tr>
+    <tr><td>Frontend</td><td>Next.js 16.1 + Tailwind CSS v4</td><td>3001</td><td>Site public visible par les visiteurs</td></tr>
+    <tr><td>Base de données</td><td>PostgreSQL 16.14</td><td>5432</td><td>Stockage de toutes les données</td></tr>
+    <tr><td>Gestionnaire de paquets</td><td>pnpm</td><td>—</td><td>Installation des dépendances</td></tr>
+  </table>
+
+  <h3>1.2 Flux de données</h3>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-num">1</div>
+      <div><strong>Admin crée du contenu</strong> — L'administrateur se connecte à <code>localhost:3000/admin</code> et crée/modifie des pages, actualités, médias, etc.</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="flow-num">2</div>
+      <div><strong>PayloadCMS sauvegarde</strong> — Les données sont stockées dans PostgreSQL. Un hook <code>revalidatePage</code> déclenche la revalidation du cache frontend.</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="flow-num">3</div>
+      <div><strong>Frontend interroge l'API</strong> — <code>localhost:3001</code> appelle <code>/api/cms/[collection]</code> (proxy) qui redirige vers <code>localhost:3000/api/[collection]</code>.</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="flow-num">4</div>
+      <div><strong>Rendu côté serveur</strong> — Next.js génère le HTML côté serveur (SSR) avec les données fraîches et l'envoie au visiteur.</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="flow-num">5</div>
+      <div><strong>Visiteur reçoit la page</strong> — La page HTML statique/SSR est rendue dans le navigateur avec le bon contenu.</div>
+    </div>
+  </div>
+
+  <h3>1.3 Environnement & variables</h3>
+  <table>
+    <tr><th>Variable</th><th>Application</th><th>Valeur par défaut</th><th>Description</th></tr>
+    <tr><td><code>DATABASE_URL</code></td><td>CMS</td><td>postgresql://postgres:…@localhost:5432/certibbackend</td><td>Connexion PostgreSQL</td></tr>
+    <tr><td><code>PAYLOAD_SECRET</code></td><td>CMS</td><td><em>requis</em></td><td>Clé de chiffrement JWT</td></tr>
+    <tr><td><code>NEXT_PUBLIC_PAYLOAD_URL</code></td><td>Frontend</td><td>http://localhost:3000</td><td>URL du CMS (côté serveur)</td></tr>
+    <tr><td><code>API_TOKEN</code></td><td>Frontend</td><td><em>optionnel</em></td><td>Bearer token pour l'API CMS</td></tr>
+    <tr><td><code>SMTP_HOST/PORT/USER/PASS</code></td><td>CMS</td><td>—</td><td>Configuration email (nodemailer)</td></tr>
+    <tr><td><code>SMTP_FROM_ADDRESS</code></td><td>CMS</td><td>no-reply@crtib.org</td><td>Expéditeur des emails</td></tr>
+    <tr><td><code>CONTACT_TO</code></td><td>Frontend</td><td>contact@crtib.lu</td><td>Destinataire du formulaire contact</td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §2 – BACKEND CMS
+═══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="num">Section 02</div>
+    <h2>Backend CMS (PayloadCMS)</h2>
+  </div>
+
+  <h3>2.1 Configuration générale</h3>
+  <p>Fichier principal : <code>crtib-cms-main/src/payload.config.ts</code></p>
+  <table>
+    <tr><th>Paramètre</th><th>Valeur</th></tr>
+    <tr><td>Adaptateur DB</td><td>PostgreSQL (<code>@payloadcms/db-postgres</code>)</td></tr>
+    <tr><td>Éditeur de texte</td><td>Lexical (<code>@payloadcms/richtext-lexical</code>)</td></tr>
+    <tr><td>Email</td><td>Nodemailer (<code>@payloadcms/email-nodemailer</code>)</td></tr>
+    <tr><td>Thème admin</td><td>Light (clair)</td></tr>
+    <tr><td>Langues</td><td>Français (défaut) + Anglais</td></tr>
+    <tr><td>Logo admin</td><td><code>/logo.svg</code> (composant <code>Logo.tsx</code>)</td></tr>
+    <tr><td>Favicon admin</td><td><code>/icon.svg</code> (cube géométrique CRTI-B)</td></tr>
+    <tr><td>Traitement images</td><td>Sharp (optimisation automatique)</td></tr>
+  </table>
+
+  <h3>2.2 Collections (base de données)</h3>
+  <p>12 collections définissent la structure complète des données :</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>📄 Pages</h4>
+      <p>Pages du site avec éditeur de blocs (20+ types). Hiérarchie parent/enfant, ordre de menu, icône, SEO.</p>
+    </div>
+    <div class="card">
+      <h4>📰 News (Actualités)</h4>
+      <p>Articles avec titre, slug, contenu richText, date de publication, rubrique (5 catégories), image.</p>
+    </div>
+    <div class="card">
+      <h4>🖼 Media</h4>
+      <p>Images, PDFs, vidéos uploadés. Stockés dans <code>/public/media/</code>. Accès via <code>/api/media/</code>.</p>
+    </div>
+    <div class="card">
+      <h4>🤝 Partners</h4>
+      <p>Partenaires et associations avec logo, lien externe, type (partner/association), ordre d'affichage.</p>
+    </div>
+    <div class="card">
+      <h4>🎓 Formations</h4>
+      <p>Catalogue de formations BIM. <strong>Masquée du sidebar</strong> (hidden:true) — modifiable en DB ou via API.</p>
+    </div>
+    <div class="card">
+      <h4>📹 Videos</h4>
+      <p>Vidéos YouTube ou fichiers internes. Type (youtube/internal), URL source, ordre d'affichage.</p>
+    </div>
+    <div class="card">
+      <h4>📊 ActivityReports</h4>
+      <p>Rapports d'activité annuels. Champs : année, fichier PDF.</p>
+    </div>
+    <div class="card">
+      <h4>⏳ TimelineItems</h4>
+      <p>Éléments de la ligne du temps (Notre histoire). Année, titre, ordre.</p>
+    </div>
+    <div class="card">
+      <h4>📋 Clauses</h4>
+      <p>Clauses techniques et contractuelles (CTG). Numéro, titre, date, version, PDF/RTF/DOC.</p>
+    </div>
+    <div class="card">
+      <h4>📧 NewsletterSubscribers</h4>
+      <p>Abonnés à la newsletter. Email, statut (active/inactive), token de désabonnement.</p>
+    </div>
+    <div class="card">
+      <h4>👤 Users</h4>
+      <p>Comptes administrateurs. Email + mot de passe. Authentification JWT via PayloadCMS.</p>
+    </div>
+  </div>
+
+  <h3>2.3 Interface d'administration</h3>
+  <p>Accès : <code>http://localhost:3000/admin</code></p>
+
+  <div class="info-box">
+    <strong>Dashboard personnalisé</strong> — Le tableau de bord affiché à la connexion est un composant React custom (<code>src/components/Dashboard.tsx</code>) organisé en 5 groupes thématiques avec icônes et descriptions.
+  </div>
+
+  <h3>2.4 Sidebar admin – Fonctionnalités complètes</h3>
+
+  <table>
+    <tr><th>Section sidebar</th><th>Collection</th><th>Ce qu'on peut faire</th></tr>
+    <tr>
+      <td><span class="badge badge-teal">Pages</span></td>
+      <td>pages</td>
+      <td>Créer, modifier, supprimer des pages. Configurer titre, slug, ordre menu, page parente, icône, blocs de contenu, SEO. Publier/dépublier (draft/published).</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-blue">Actualités</span></td>
+      <td>news</td>
+      <td>Écrire des articles richText avec images, titres, listes. Choisir la rubrique (marchés publics, performance énergétique, construction durable, digitalisation BIM, général). Envoyer une newsletter aux abonnés depuis l'article.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-purple">Médias</span></td>
+      <td>media</td>
+      <td>Uploader images (JPG/PNG/WebP/SVG) et PDF. Les médias sont accessibles dans tous les autres champs upload du CMS.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-purple">Vidéos</span></td>
+      <td>videos</td>
+      <td>Référencer des vidéos YouTube (URL embed) ou des fichiers internes. Définir un ordre d'affichage.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-orange">Partenaires</span></td>
+      <td>partners</td>
+      <td>Ajouter partenaires et associations avec logo et lien. L'ordre d'affichage détermine la position sur la page d'accueil.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-orange">Rapports d'activité</span></td>
+      <td>activity-reports</td>
+      <td>Uploader les rapports annuels PDF. Chaque rapport est accessible par clic sur l'année correspondante.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-orange">Timeline</span></td>
+      <td>timeline-items</td>
+      <td>Gérer les événements de la frise chronologique (Notre histoire) avec année et titre.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-orange">Clauses</span></td>
+      <td>clauses</td>
+      <td>Gérer les clauses techniques (CTG) avec numéro, titre, date de publication, version, et fichiers (PDF, RTF, DOC, XLS, ZIP).</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-gray">Abonnés Newsletter</span></td>
+      <td>newsletter-subscribers</td>
+      <td>Voir la liste des abonnés, leur statut. Token unique de désabonnement.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-gray">Utilisateurs</span></td>
+      <td>users</td>
+      <td>Gérer les comptes administrateurs CMS. Créer des comptes secondaires pour d'autres éditeurs.</td>
+    </tr>
+  </table>
+
+  <h3>2.5 Éditeur de pages – Système de blocs</h3>
+  <p>Chaque page dispose d'un champ <strong>Layout</strong> (constructeur de pages) permettant d'ajouter, réordonner et configurer des sections.</p>
+  <p>Le champ <strong>Content</strong> est un éditeur richText Lexical enrichi (texte + images + callouts + accordéons inline).</p>
+
+  <div class="info-box">
+    <strong>Ordre du menu :</strong> Les pages avec <code>menuOrder &lt; 900</code> et sans page parente apparaissent dans la navigation principale. Les pages enfant s'affichent dans les menus déroulants.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §3 – FRONTEND
+═══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="num">Section 03</div>
+    <h2>Frontend (Next.js)</h2>
+  </div>
+
+  <h3>3.1 Structure des routes</h3>
+  <table>
+    <tr><th>Route</th><th>Fichier</th><th>Description</th></tr>
+    <tr><td><code>/</code></td><td>app/page.tsx</td><td>Page d'accueil — récupère la page avec slug <code>home</code> depuis le CMS</td></tr>
+    <tr><td><code>/[...slug]</code></td><td>app/[...slug]/page.tsx</td><td>Toutes les pages CMS dynamiques (catch-all)</td></tr>
+    <tr><td><code>/actualites</code></td><td>app/actualites/page.tsx</td><td>Liste paginée de toutes les actualités</td></tr>
+    <tr><td><code>/actualites/[slug]</code></td><td>app/actualites/[slug]/page.tsx</td><td>Détail d'un article</td></tr>
+    <tr><td><code>/mentions-legales</code></td><td>app/mentions-legales/page.tsx</td><td>Page statique des mentions légales</td></tr>
+    <tr><td><code>/newsletter/unsubscribed</code></td><td>app/newsletter/unsubscribed/page.tsx</td><td>Confirmation de désabonnement</td></tr>
+    <tr><td colspan="3" style="background:#f0fdf9; font-weight:600; font-size:11px; color:#065f46;">Routes API</td></tr>
+    <tr><td><code>/api/cms/[...path]</code></td><td>app/api/cms/[...path]/route.ts</td><td>Proxy vers l'API CMS (évite les problèmes CORS)</td></tr>
+    <tr><td><code>/api/media/[...path]</code></td><td>app/api/media/[...path]/route.ts</td><td>Proxy pour les médias depuis le CMS</td></tr>
+    <tr><td><code>/api/contact</code></td><td>app/api/contact/route.ts</td><td>Traitement du formulaire de contact (POST)</td></tr>
+    <tr><td><code>/api/newsletter</code></td><td>app/api/newsletter/route.ts</td><td>Inscription à la newsletter (POST)</td></tr>
+    <tr><td><code>/api/newsletter/unsubscribe</code></td><td>app/api/newsletter/unsubscribe/route.ts</td><td>Désabonnement via token</td></tr>
+    <tr><td><code>/api/revalidate</code></td><td>app/api/revalidate/route.ts</td><td>Revalidation du cache ISR (appelé par le CMS hook)</td></tr>
+    <tr><td><code>/api/search</code></td><td>app/api/search/route.ts</td><td>Recherche plein texte dans les pages</td></tr>
+  </table>
+
+  <h3>3.2 Layout global & navigation</h3>
+  <p>Fichier : <code>src/components/layout/GlobalLayout.tsx</code></p>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-num">1</div>
+      <div>Récupère toutes les pages publiées depuis l'API CMS (<code>depth=1, limit=1000</code>)</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">2</div>
+      <div>Construit la hiérarchie parent → enfant → petit-enfant</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">3</div>
+      <div>Filtre : n'affiche que les pages avec <code>menuOrder &lt; 900</code> dans la nav</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">4</div>
+      <div>Rend : <code>&lt;HeaderWithNav /&gt;</code> + <code>&lt;main&gt;{children}&lt;/main&gt;</code> + <code>&lt;Footer /&gt;</code></div>
+    </div>
+  </div>
+
+  <h4>HeaderWithNav</h4>
+  <ul class="feature-list">
+    <li>Navigation desktop : barre horizontale avec dropdowns à 3 niveaux</li>
+    <li>Navigation mobile : menu tiroir (hamburger) avec accordéons</li>
+    <li>Icônes SVG inline pour chaque item de menu (12 types d'icônes)</li>
+    <li>Bouton de recherche → ouvre <code>SearchModal</code></li>
+    <li>Logo CRTI-B cliquable → retour à l'accueil</li>
+    <li>Header sticky (<code>position: sticky; top: 0; z-index: 50</code>)</li>
+  </ul>
+
+  <h4>Footer</h4>
+  <ul class="feature-list">
+    <li>3 colonnes : Logo + description, Coordonnées, Liens utiles</li>
+    <li>Fond sombre <code>#2F3E46</code>, icônes teal <code>#08AA86</code></li>
+    <li>Barre de copyright avec Mentions légales + Contact</li>
+  </ul>
+
+  <h3>3.3 Système de pages dynamiques</h3>
+  <p>Toutes les URLs non définies explicitement sont gérées par <code>app/[...slug]/page.tsx</code> :</p>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-num">1</div>
+      <div>L'URL <code>/mpu/formation-mpu</code> extrait le slug <code>mpu/formation-mpu</code></div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">2</div>
+      <div>Appel à <code>getPageBySlug("mpu/formation-mpu")</code> via l'API CMS</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">3</div>
+      <div>La page CMS retourne son <code>title</code>, <code>layout[]</code> (blocs) et <code>content</code> (richText)</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">4</div>
+      <div><code>PageLayout</code> rend : Breadcrumb + Hero titre + <code>BlockRenderer</code> + RichText content</div>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <strong>Important – Slugs :</strong> Les slugs ne doivent pas contenir d'espaces (ex: <code>formation mpu</code> → 404). Utiliser uniquement des tirets : <code>formation-mpu</code>. Le hook <code>beforeValidate</code> dans Pages.ts génère automatiquement les slugs depuis le titre.
+  </div>
+
+  <h3>3.4 API Proxy</h3>
+  <p>Le frontend ne contacte jamais directement le CMS depuis le navigateur. Toutes les requêtes passent par le proxy Next.js :</p>
+  <pre><code><span class="cm">// app/api/cms/[...path]/route.ts</span>
+<span class="kw">GET</span>  /api/cms/pages?where[slug][equals]=contact
+  → <span class="str">http://localhost:3000/api/pages?where[slug][equals]=contact</span>
+
+<span class="kw">GET</span>  /api/media/file.jpg
+  → <span class="str">http://localhost:3000/media/file.jpg</span></code></pre>
+
+  <p>La fonction <code>getMediaUrl(media)</code> retourne <code>/api/media/[filename]</code> côté client ou <code>http://localhost:3000/media/[filename]</code> côté serveur.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §4 – SYSTÈME DE BLOCS
+═══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="num">Section 04</div>
+    <h2>Système de blocs (Page Builder)</h2>
+  </div>
+
+  <h3>4.1 Architecture BlockRenderer</h3>
+  <p>Fichier : <code>src/components/home/BlockRenderer.tsx</code></p>
+  <p>Ce composant reçoit un tableau <code>blocks[]</code> et rend le composant correspondant à chaque <code>blockType</code>.</p>
+
+  <div class="info-box">
+    <strong>Principe :</strong> Dans le CMS, l'admin ajoute des blocs à une page. Chaque bloc a un <code>blockType</code> (slug) et des champs configurables. Le frontend lit ces blocs et affiche le composant React correspondant.
+  </div>
+
+  <h3>4.2 Catalogue des 20 blocs disponibles</h3>
+
+  <table>
+    <tr><th>Slug CMS</th><th>Composant</th><th>Description</th><th>Champs configurables</th></tr>
+    <tr>
+      <td><code>photoHeroCarousel</code></td>
+      <td><code>PhotoHeroCarousel</code></td>
+      <td>Carrousel d'images en hero</td>
+      <td>Slides (image, alt, eyebrow, titre), intervalle autoplay (ms)</td>
+    </tr>
+    <tr>
+      <td><code>newsSection</code></td>
+      <td><code>NewsSectionLoader</code></td>
+      <td>Section d'actualités dynamique</td>
+      <td>Titre, nombre max, variante (défaut/fond vert), lien CTA</td>
+    </tr>
+    <tr>
+      <td><code>textBlock</code></td>
+      <td><code>RichText</code></td>
+      <td>Bloc de texte riche</td>
+      <td>Contenu richText (titres H2-H4, gras, listes, citations)</td>
+    </tr>
+    <tr>
+      <td><code>accordionBlock</code></td>
+      <td><code>AccordionBlock</code></td>
+      <td>Section accordéon (FAQ)</td>
+      <td>Titre de section, items (titre + contenu richText)</td>
+    </tr>
+    <tr>
+      <td><code>contactBlock</code></td>
+      <td><code>ContactBlock</code></td>
+      <td>Page de contact complète</td>
+      <td>Téléphone, email, adresse, horaires, URL Google Maps</td>
+    </tr>
+    <tr>
+      <td><code>formationsSection</code></td>
+      <td><code>FormationsSection</code></td>
+      <td>Grille de formations avec filtres</td>
+      <td>Titre, filtre catégorie, afficher filtres, limite</td>
+    </tr>
+    <tr>
+      <td><code>quickLinks</code></td>
+      <td><code>ClickableCard</code></td>
+      <td>Liens rapides en grille de cartes</td>
+      <td>Items (titre, lien href, icône — auto-détectée)</td>
+    </tr>
+    <tr>
+      <td><code>partners</code></td>
+      <td><code>PartnersSection</code></td>
+      <td>Grille de partenaires et associations</td>
+      <td>Titre section, titre associations, listes (logo, nom, lien)</td>
+    </tr>
+    <tr>
+      <td><code>newsletterBlock</code></td>
+      <td><code>NewsletterBlock</code></td>
+      <td>Bloc d'abonnement newsletter</td>
+      <td>Titre, description, texte du bouton</td>
+    </tr>
+    <tr>
+      <td><code>documentsSection</code></td>
+      <td><code>PdfViewerModal / VideoViewerModal</code></td>
+      <td>Galerie de documents PDF et vidéos</td>
+      <td>Titre, items (type pdf/vidéo, titre, fichier)</td>
+    </tr>
+    <tr>
+      <td><code>downloadGrid</code></td>
+      <td><code>DataGridDownloads</code></td>
+      <td>Tableau téléchargeable paginé</td>
+      <td>Documents (N°, titre, date, version, PDF/RTF/DOC/XLS/ZIP), taille page</td>
+    </tr>
+    <tr>
+      <td><code>downloadLinks</code></td>
+      <td><code>DownloadLink</code></td>
+      <td>Liste de liens de téléchargement</td>
+      <td>Titre, items (libellé, fichier)</td>
+    </tr>
+    <tr>
+      <td><code>clausesGrid</code></td>
+      <td><code>ClausesGrid</code></td>
+      <td>Grille de clauses techniques CTG</td>
+      <td>Titre, sélection de clauses (relation), texte/lien bouton</td>
+    </tr>
+    <tr>
+      <td><code>dynamicGrid</code></td>
+      <td><code>DynamicGrid</code></td>
+      <td>Tableau de données dynamique</td>
+      <td>Titre, colonnes (id, label, type, précision), lignes (JSON values)</td>
+    </tr>
+    <tr>
+      <td><code>organogram</code></td>
+      <td><code>TeamGrid</code></td>
+      <td>Organigramme / grille équipe</td>
+      <td>Nœud racine avec membres (nom, rôle, département, téléphone, email, photo)</td>
+    </tr>
+    <tr>
+      <td><code>timeline</code></td>
+      <td><code>Timeline</code></td>
+      <td>Frise chronologique</td>
+      <td>Items (année, titre), mettre en évidence le dernier</td>
+    </tr>
+    <tr>
+      <td><code>videoCards</code></td>
+      <td><code>VideoCardsSection</code></td>
+      <td>Galerie de vidéos en cartes</td>
+      <td>Titre, vidéos (titre, type youtube/interne, URL)</td>
+    </tr>
+    <tr>
+      <td><code>videoEmbed</code></td>
+      <td><code>VideoEmbedSection</code></td>
+      <td>Grande vidéo intégrée</td>
+      <td>Titre, type (YouTube/fichier), URL</td>
+    </tr>
+    <tr>
+      <td><code>activityReports</code></td>
+      <td><code>ActivityReportsSection</code></td>
+      <td>Rapports d'activité par année</td>
+      <td>Titre section, rapports (année, PDF) — liés à la collection</td>
+    </tr>
+    <tr>
+      <td><code>calculator</code></td>
+      <td><code>CalculatorSection</code></td>
+      <td>Calculateur interactif</td>
+      <td>Titre, options, résultats fixes</td>
+    </tr>
+  </table>
+
+  <div class="warn-box">
+    <strong>Icônes automatiques (quickLinks) :</strong> Le composant <code>resolveIcon(title)</code> dans BlockRenderer détecte automatiquement l'icône Lucide à partir du titre du lien (ex: "marchés" → Scale, "BIM" → Cpu, "formation" → Monitor, "durable" → Sprout…).
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §5 – COMPOSANTS FRONTEND
+═══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="num">Section 05</div>
+    <h2>Composants Frontend</h2>
+  </div>
+
+  <h3>5.1 Layout</h3>
+  <table>
+    <tr><th>Composant</th><th>Fichier</th><th>Type</th><th>Rôle</th></tr>
+    <tr><td><code>GlobalLayout</code></td><td>layout/GlobalLayout.tsx</td><td>Server</td><td>Fetch des pages, structure globale (header + main + footer)</td></tr>
+    <tr><td><code>HeaderWithNav</code></td><td>layout/HeaderWithNav.tsx</td><td>Client</td><td>Navigation desktop (dropdown) + mobile (drawer) + recherche</td></tr>
+    <tr><td><code>Footer</code></td><td>layout/Footer.tsx</td><td>Server</td><td>Pied de page 3 colonnes (logo, contact, liens)</td></tr>
+    <tr><td><code>SearchModal</code></td><td>layout/SearchModal.tsx</td><td>Client</td><td>Modal de recherche full-text dans les pages</td></tr>
+    <tr><td><code>PageLayout</code></td><td>PageLayout.tsx</td><td>Server</td><td>Structure standard : breadcrumb + hero titre + blocs + richText</td></tr>
+    <tr><td><code>Breadcrumb</code></td><td>Breadcrumb.tsx</td><td>Server</td><td>Fil d'Ariane généré depuis le slug de la page</td></tr>
+  </table>
+
+  <h3>5.2 Pages spéciales</h3>
+  <table>
+    <tr><th>Composant</th><th>Fichier</th><th>Description</th></tr>
+    <tr><td><code>ContactBlock</code></td><td>contact/ContactBlock.tsx</td><td>Bloc contact (coordonnées + Google Maps + formulaire)</td></tr>
+    <tr><td><code>ContactForm</code></td><td>contact/ContactForm.tsx</td><td>Formulaire de contact avec validation, états loading/success/error</td></tr>
+    <tr><td><code>FormationsSection</code></td><td>formations/FormationsSection.tsx</td><td>Grille de formations avec filtres par catégorie</td></tr>
+    <tr><td><code>NewsSection</code></td><td>news/NewsSectionLoader.tsx</td><td>Chargeur d'actualités (déterministe par heure, mixe les rubriques)</td></tr>
+    <tr><td><code>NewsCard</code></td><td>news/NewsCard.tsx</td><td>Carte actualité avec badge rubrique</td></tr>
+    <tr><td><code>TeamGrid</code></td><td>team/TeamGrid.tsx</td><td>Grille équipe (Photo / Nom / Rôle / Dept / Tel / Email)</td></tr>
+  </table>
+
+  <h3>5.3 Composants métier</h3>
+  <table>
+    <tr><th>Composant</th><th>Fichier</th><th>Description</th></tr>
+    <tr><td><code>PhotoHeroCarousel</code></td><td>home/PhotoHeroCarousel.tsx</td><td>Carrousel autoplay avec navigation dots et flèches</td></tr>
+    <tr><td><code>PartnersSection</code></td><td>partners/PartnersSection.tsx</td><td>Grille logos partenaires (conteneur fixe 140×70px, object-contain)</td></tr>
+    <tr><td><code>ClickableCard</code></td><td>cards/ClickableCard.tsx</td><td>Carte cliquable avec icône circulaire (hover teal)</td></tr>
+    <tr><td><code>AccordionBlock</code></td><td>blocks/AccordionBlock/index.tsx</td><td>Accordéon client (+/- Lucide)</td></tr>
+    <tr><td><code>NewsletterBlock</code></td><td>blocks/NewsletterBlock/index.tsx</td><td>Formulaire d'abonnement</td></tr>
+    <tr><td><code>ClausesGrid</code></td><td>blocks/ClausesGrid/ClausesGrid.tsx</td><td>Tableau de clauses avec liens téléchargement multiformat</td></tr>
+    <tr><td><code>DynamicGrid</code></td><td>blocks/DynamicGrid/DynamicGrid.tsx</td><td>Tableau de données configurable (texte/nombre/pourcentage/date)</td></tr>
+    <tr><td><code>DataGridDownloads</code></td><td>DataGridDownloads.tsx</td><td>Grille de téléchargements paginée</td></tr>
+    <tr><td><code>PdfViewerModal</code></td><td>pdf/PdfViewerModal.tsx</td><td>Modal lecteur PDF in-browser</td></tr>
+    <tr><td><code>VideoCardsSection</code></td><td>video/VideoCardsSection.tsx</td><td>Galerie vidéo en cartes</td></tr>
+    <tr><td><code>VideoEmbedSection</code></td><td>video/VideoEmbedSection.tsx</td><td>Grande vidéo intégrée (YouTube ou interne)</td></tr>
+    <tr><td><code>ActivityReportsSection</code></td><td>reports/ActivityReportsSection.tsx</td><td>Dates cliquables → PDF du rapport</td></tr>
+    <tr><td><code>Timeline</code></td><td>timeline/Timeline.tsx</td><td>Frise chronologique (notre histoire)</td></tr>
+    <tr><td><code>CalculatorSection</code></td><td>calculator/CalculatorSection.tsx</td><td>Calculateur interactif</td></tr>
+    <tr><td><code>RichText</code></td><td>RichText.tsx</td><td>Rendu du richText Lexical en HTML React (avec fix hydratation div/p)</td></tr>
+  </table>
+
+  <h3>5.4 Composants UI</h3>
+  <table>
+    <tr><th>Composant</th><th>Description</th></tr>
+    <tr><td><code>Button</code></td><td>Bouton standard avec variants</td></tr>
+    <tr><td><code>ButtonLink</code></td><td>Lien stylisé comme bouton</td></tr>
+    <tr><td><code>DownloadLink</code></td><td>Lien de téléchargement avec icône</td></tr>
+    <tr><td><code>Loading</code></td><td>Indicateur de chargement spinner</td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §6 – COLLECTIONS DÉTAILLÉES
+═══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="num">Section 06</div>
+    <h2>Collections détaillées</h2>
+  </div>
+
+  <h3>6.1 Collection Pages</h3>
+  <p>C'est la collection centrale. Elle gère l'ensemble de l'arborescence du site.</p>
+  <table>
+    <tr><th>Champ</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>title</code></td><td>text (requis)</td><td>Titre visible dans le menu et en H1 sur la page</td></tr>
+    <tr><td><code>slug</code></td><td>text (unique)</td><td>Identifiant URL. Généré auto depuis le titre (sans accents, tirets). <strong>Pas d'espaces.</strong></td></tr>
+    <tr><td><code>parent</code></td><td>relationship → pages</td><td>Page parente (pour les sous-menus). Vide = page racine</td></tr>
+    <tr><td><code>menuOrder</code></td><td>number</td><td>Ordre dans le menu. Pages &lt; 900 visibles. 999 = caché du nav.</td></tr>
+    <tr><td><code>icon</code></td><td>select (12 options)</td><td>Icône affichée dans le menu (user, document, globe, leaf, etc.)</td></tr>
+    <tr><td><code>layout</code></td><td>blocks</td><td>Constructeur de page avec 20 types de blocs</td></tr>
+    <tr><td><code>content</code></td><td>richText Lexical</td><td>Contenu textuel riche (headings, images, callouts, accordéons inline)</td></tr>
+    <tr><td><code>seo.metaTitle</code></td><td>text</td><td>Titre SEO (si vide → utilise title)</td></tr>
+    <tr><td><code>seo.metaDescription</code></td><td>textarea</td><td>Description pour les moteurs de recherche</td></tr>
+    <tr><td><code>seo.metaImage</code></td><td>upload → media</td><td>Image Open Graph pour le partage social</td></tr>
+    <tr><td><code>_status</code></td><td>draft / published</td><td>Les pages en draft ne sont pas visibles sur le frontend</td></tr>
+  </table>
+
+  <h3>6.2 Collection News (Actualités)</h3>
+  <table>
+    <tr><th>Champ</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>title</code></td><td>text (requis)</td><td>Titre de l'article</td></tr>
+    <tr><td><code>slug</code></td><td>text (unique)</td><td>URL de l'article</td></tr>
+    <tr><td><code>publishedAt</code></td><td>date</td><td>Date de publication (utilisée pour le tri)</td></tr>
+    <tr><td><code>rubrique</code></td><td>select</td><td>Catégorie : marches-publics, performance-energetique, construction-durable, digitalisation-bim, general</td></tr>
+    <tr><td><code>image</code></td><td>upload → media</td><td>Image de couverture de l'article</td></tr>
+    <tr><td><code>content</code></td><td>richText</td><td>Corps de l'article (texte, images, listes, liens)</td></tr>
+    <tr><td><code>_status</code></td><td>draft / published</td><td>Statut de publication</td></tr>
+  </table>
+
+  <div class="info-box">
+    <strong>Randomisation par rubrique :</strong> Sur la page d'accueil, les actualités sont mélangées de façon déterministe (basé sur l'heure) en alternant les rubriques pour garantir la diversité du contenu affiché.
+  </div>
+
+  <h3>6.3 Collection Media</h3>
+  <table>
+    <tr><th>Champ</th><th>Description</th></tr>
+    <tr><td><code>filename</code></td><td>Nom du fichier (auto-généré)</td></tr>
+    <tr><td><code>alt</code></td><td>Texte alternatif pour l'accessibilité</td></tr>
+    <tr><td><code>mimeType</code></td><td>Type MIME (image/jpeg, application/pdf, etc.)</td></tr>
+    <tr><td><code>filesize</code></td><td>Taille en octets</td></tr>
+    <tr><td><code>width / height</code></td><td>Dimensions (images uniquement)</td></tr>
+  </table>
+  <p>Les fichiers sont stockés dans <code>crtib-cms-main/public/media/</code> et accessibles via <code>http://localhost:3000/media/[filename]</code>.</p>
+
+  <h3>6.4 Collection Formations</h3>
+  <p><span class="badge badge-gray">hidden: true</span> — Cachée du sidebar admin. Les données sont gérées directement en base de données ou via l'API REST.</p>
+  <table>
+    <tr><th>Champ</th><th>Description</th></tr>
+    <tr><td><code>title</code></td><td>Intitulé de la formation</td></tr>
+    <tr><td><code>slug</code></td><td>Identifiant URL unique</td></tr>
+    <tr><td><code>category</code></td><td>digitalisation-bim, marches-publics, performance-energetique, construction-durable, autre</td></tr>
+    <tr><td><code>duration</code></td><td>Durée (ex: "2 jours, 14 heures")</td></tr>
+    <tr><td><code>location</code></td><td>Lieu de la formation</td></tr>
+    <tr><td><code>description</code></td><td>Description richText avec prérequis et certificat</td></tr>
+    <tr><td><code>registrationUrl</code></td><td>Lien direct vers houseoftraining.lu</td></tr>
+    <tr><td><code>registrationEmail</code></td><td>Email de contact pour inscription</td></tr>
+  </table>
+  <p>10 formations réelles issues de <code>digitalbuilding.lu</code> sont insérées (toutes catégorie <code>digitalisation-bim</code>).</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §7 – FONCTIONNALITÉS SPÉCIALES
+═══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="num">Section 07</div>
+    <h2>Fonctionnalités spéciales</h2>
+  </div>
+
+  <h3>7.1 Newsletter</h3>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num">1</div><div>Visiteur saisit son email dans le <code>NewsletterBlock</code></div></div>
+    <div class="flow-step"><div class="flow-num">2</div><div>POST <code>/api/newsletter</code> → sauvegarde dans la collection <code>newsletter-subscribers</code> avec un token unique</div></div>
+    <div class="flow-step"><div class="flow-num">3</div><div>Admin publie un article News → bouton "Envoyer la newsletter" dans le CMS</div></div>
+    <div class="flow-step"><div class="flow-num">4</div><div>PayloadCMS envoie l'email via Nodemailer à tous les abonnés actifs avec lien de désabonnement</div></div>
+    <div class="flow-step"><div class="flow-num">5</div><div>Clic sur désabonnement → <code>/api/newsletter/unsubscribe?token=xxx</code> → statut passe à <code>inactive</code></div></div>
+  </div>
+
+  <h3>7.2 Formulaire de contact</h3>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num">1</div><div>Visiteur remplit le formulaire (nom, email, sujet, message) sur <code>/contact</code></div></div>
+    <div class="flow-step"><div class="flow-num">2</div><div>POST <code>/api/contact</code> (route API Next.js côté serveur)</div></div>
+    <div class="flow-step"><div class="flow-num">3</div><div>Email envoyé via Nodemailer à <code>contact@crtib.lu</code> avec les données du formulaire</div></div>
+    <div class="flow-step"><div class="flow-num">4</div><div>Affichage du message de confirmation → "Message envoyé !"</div></div>
+  </div>
+  <p>La page contact est maintenant une <strong>page CMS standard</strong> avec un <code>contactBlock</code>, comme toutes les autres pages.</p>
+
+  <h3>7.3 Recherche</h3>
+  <ul class="feature-list">
+    <li>Bouton loupe dans le header → ouvre <code>SearchModal</code></li>
+    <li>Appel à <code>/api/search?q=terme</code></li>
+    <li>Recherche dans les titres et slugs de pages via l'API CMS</li>
+    <li>Résultats cliquables avec navigation directe</li>
+  </ul>
+
+  <h3>7.4 Actualités & rubriques</h3>
+  <p>La collection News dispose de 5 rubriques :</p>
+  <table>
+    <tr><th>Valeur</th><th>Label affiché</th><th>Icône badge</th></tr>
+    <tr><td><code>marches-publics</code></td><td>Marchés publics</td><td>Bleu</td></tr>
+    <tr><td><code>performance-energetique</code></td><td>Performance énergétique</td><td>Vert</td></tr>
+    <tr><td><code>construction-durable</code></td><td>Construction durable</td><td>Vert foncé</td></tr>
+    <tr><td><code>digitalisation-bim</code></td><td>Digitalisation / BIM</td><td>Violet</td></tr>
+    <tr><td><code>general</code></td><td>Général</td><td>Gris</td></tr>
+  </table>
+
+  <div class="info-box">
+    <strong>Algorithme de mélange :</strong> <code>NewsSectionLoader</code> récupère 50 actualités et les mélange avec <code>shuffleSeed()</code> (graine basée sur l'heure, change toutes les heures) puis <code>mixByRubrique()</code> (round-robin entre les rubriques pour garantir la diversité).
+  </div>
+
+  <h3>7.5 Favicon & Logo</h3>
+  <p>Le même actif visuel est utilisé sur le frontend et le backend :</p>
+  <table>
+    <tr><th>Asset</th><th>Emplacement CMS</th><th>Emplacement Frontend</th><th>Usage</th></tr>
+    <tr><td><code>icon.svg</code></td><td><code>public/icon.svg</code><br/><code>src/app/icon.svg</code></td><td><code>src/app/icon.svg</code></td><td>Favicon (onglet navigateur)</td></tr>
+    <tr><td><code>logo.svg</code></td><td><code>public/logo.svg</code></td><td><code>public/logo.svg</code></td><td>Logo dans le header et footer</td></tr>
+  </table>
+  <p>L'icône est un cube géométrique 3D CRTI-B blanc sur fond vert <code>#08AA86</code> avec coins arrondis (rx=10).</p>
+
+  <h3>7.6 Revalidation du cache</h3>
+  <p>Lorsqu'une page est modifiée dans le CMS, le hook <code>revalidatePage</code> (dans <code>crtib-cms-main/src/hooks/revalidateFrontend.ts</code>) appelle <code>POST /api/revalidate</code> sur le frontend avec le slug de la page modifiée. Next.js invalide alors le cache ISR de cette page pour que les visiteurs voient le nouveau contenu immédiatement.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     §8 – GUIDE D'ADMINISTRATION
+═══════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="num">Section 08</div>
+    <h2>Guide d'administration</h2>
+  </div>
+
+  <h3>8.1 Créer ou modifier une page</h3>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num">1</div><div>Aller dans <strong>Pages</strong> dans la sidebar admin → cliquer "Créer nouvelle Page"</div></div>
+    <div class="flow-step"><div class="flow-num">2</div><div>Remplir <strong>Titre</strong> (requis) → le slug se génère automatiquement. Vérifier le slug (pas d'espaces, pas d'accents)</div></div>
+    <div class="flow-step"><div class="flow-num">3</div><div>Choisir la <strong>Page Parente</strong> (si sous-menu) et l'<strong>Ordre du Menu</strong> (1-899 visible, 900+ caché)</div></div>
+    <div class="flow-step"><div class="flow-num">4</div><div>Dans <strong>Sections de la page</strong> : ajouter des blocs (cliquer "+", choisir le type, configurer)</div></div>
+    <div class="flow-step"><div class="flow-num">5</div><div>Cliquer <strong>Publier</strong> (ou Sauvegarder brouillon) → la page est visible sur le frontend immédiatement</div></div>
+  </div>
+
+  <div class="warn-box">
+    <strong>Slugs :</strong> Ne jamais mettre d'espaces dans un slug. Utiliser uniquement des lettres minuscules, chiffres et tirets. Exemple : <code>performance-energetique</code> et non <code>performance énergétique</code>.
+  </div>
+
+  <h3>8.2 Publier une actualité</h3>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num">1</div><div>Aller dans <strong>Actualités</strong> → "Créer nouvelle Actualité"</div></div>
+    <div class="flow-step"><div class="flow-num">2</div><div>Remplir titre, date de publication, choisir la <strong>rubrique</strong></div></div>
+    <div class="flow-step"><div class="flow-num">3</div><div>Ajouter une image de couverture (optionnel mais recommandé)</div></div>
+    <div class="flow-step"><div class="flow-num">4</div><div>Rédiger le contenu dans l'éditeur richText (supports images, titres, listes, liens)</div></div>
+    <div class="flow-step"><div class="flow-num">5</div><div>Cliquer <strong>Publier</strong>. Optionnel : envoyer la newsletter aux abonnés depuis cet article</div></div>
+  </div>
+
+  <h3>8.3 Ajouter un bloc à une page existante</h3>
+  <ol style="padding-left: 24px; line-height: 2.2; font-size: 13px; color: #333;">
+    <li>Ouvrir la page dans le CMS admin</li>
+    <li>Défiler jusqu'à <strong>Sections de la page</strong></li>
+    <li>Cliquer le bouton <strong>+ Ajouter un bloc</strong></li>
+    <li>Choisir le type de bloc dans la liste (20 types disponibles)</li>
+    <li>Remplir les champs du bloc (titre, contenu, images…)</li>
+    <li>Réordonner les blocs par drag-and-drop si nécessaire</li>
+    <li>Sauvegarder / Publier</li>
+  </ol>
+
+  <h3>8.4 Gérer l'ordre du menu</h3>
+  <table>
+    <tr><th>menuOrder</th><th>Comportement</th></tr>
+    <tr><td>1 – 899</td><td>Page visible dans la navigation principale (triée du plus petit au plus grand)</td></tr>
+    <tr><td>900 – 998</td><td>Page accessible par URL directe mais absente du menu</td></tr>
+    <tr><td>999</td><td>Masquée du menu (pages de test, pages utilitaires)</td></tr>
+  </table>
+
+  <p>Ordre actuel des pages principales :</p>
+  <table>
+    <tr><th>Ordre</th><th>Page</th><th>Slug</th></tr>
+    <tr><td>5</td><td>Toutes les formations</td><td><code>toutes-les-formations</code> <span class="badge badge-gray">caché du nav</span></td></tr>
+    <tr><td>10</td><td>Marchés publics</td><td><code>mpu</code></td></tr>
+    <tr><td>20</td><td>Performance énergétique</td><td><code>performance-energetique</code></td></tr>
+    <tr><td>30</td><td>Construction durable</td><td><code>construction-durable</code></td></tr>
+    <tr><td>40</td><td>Digitalisation / BIM</td><td><code>bim-au-luxembourg</code></td></tr>
+    <tr><td>50</td><td>Dictionnaire</td><td><code>dictionnaire</code></td></tr>
+    <tr><td>60</td><td>Qui sommes-nous ?</td><td><code>le-crtib-b</code></td></tr>
+    <tr><td>999</td><td>Contact</td><td><code>contact</code> <span class="badge badge-gray">caché du nav</span></td></tr>
+  </table>
+
+  <h3>8.5 Uploader un média</h3>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num">1</div><div>Aller dans <strong>Médias</strong> → "Créer nouveau Média"</div></div>
+    <div class="flow-step"><div class="flow-num">2</div><div>Glisser-déposer le fichier (JPG, PNG, WebP, SVG, PDF…)</div></div>
+    <div class="flow-step"><div class="flow-num">3</div><div>Remplir le champ <strong>Alt</strong> pour l'accessibilité (images)</div></div>
+    <div class="flow-step"><div class="flow-num">4</div><div>Sauvegarder → le média est maintenant sélectionnable dans tous les champs upload du CMS</div></div>
+  </div>
+
+  <h3>8.6 Charte graphique</h3>
+  <table>
+    <tr><th>Couleur</th><th>Code Hex</th><th>Usage</th></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#08AA86;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>Vert CRTI-B</td><td><code>#08AA86</code></td><td>Couleur principale, boutons, icônes, accents</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#2F3E46;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>Gris foncé</td><td><code>#2F3E46</code></td><td>Footer, textes importants</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#f5f5f5;border-radius:3px;vertical-align:middle;margin-right:6px;border:1px solid #ddd;"></span>Gris clair</td><td><code>#F5F5F5</code></td><td>Fond des sections de contenu</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#fff;border-radius:3px;vertical-align:middle;margin-right:6px;border:1px solid #ddd;"></span>Blanc</td><td><code>#FFFFFF</code></td><td>Header, cards, fonds de formulaires</td></tr>
+    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#2F2F2F;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>Texte</td><td><code>#2F2F2F</code></td><td>Texte principal</td></tr>
+  </table>
+  <p>Police principale : <strong>Dosis</strong> (Google Fonts) — utilisée sur tout le frontend.</p>
+
+  <div class="footer-doc">
+    <p><strong>CRTI-B – Documentation Technique v1.0</strong></p>
+    <p>Centre de Ressources des Technologies et de l'Innovation pour le Bâtiment · Luxembourg</p>
+    <p>Développé par Triosweb · ghassen@triosweb.fr · Juin 2026</p>
+    <p style="margin-top:8px; font-size:10px; color:#bbb;">Pour imprimer en PDF : Fichier → Imprimer → Enregistrer en PDF (Chrome/Edge recommandé, format A4, marges normales)</p>
+  </div>
+</div>
+
+</body>
+</html>
