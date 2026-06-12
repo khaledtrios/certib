@@ -5,7 +5,6 @@ import type { NewsArticle } from "@/types/payload";
 import { NewsCard } from "@/components/news/NewsCard";
 import type { NewsItem } from "@/components/news/NewsCard";
 import Breadcrumb from "@/components/Breadcrumb";
-import { Footer } from "@/components/layout/Footer";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -253,11 +252,6 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
         </div>
       </section>
 
-      <Footer
-        links={FOOTER_LINKS}
-        secondaryLinks={FOOTER_SECONDARY}
-        activeHref="/actualites"
-      />
     </div>
   );
 }

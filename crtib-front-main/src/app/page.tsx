@@ -1,4 +1,3 @@
-import { Footer } from "@/components/layout/Footer";
 import { BlockRenderer } from "@/components/home/BlockRenderer";
 import RichText from "@/components/RichText";
 import { getPageBySlug } from "@/lib/payload";
@@ -29,26 +28,6 @@ export default async function Home() {
         )}
       </div>
 
-      <Footer
-        links={[
-          { id: "f1", label: "Accueil", href: "/" },
-          { id: "f2", label: "Actualités", href: "/actualites" },
-          { id: "f3", label: "Agenda", href: "/agenda" },
-          { id: "f4", label: "Liens", href: "/liens" },
-          { id: "f5", label: "Dictionnaire", href: "/dictionnaire" },
-          { id: "f6", label: "Contact", href: "/contact" },
-          {
-            id: "f7",
-            label: "Construction durable",
-            href: "/construction-durable",
-          },
-        ]}
-        secondaryLinks={[
-          { id: "f8", label: "Plan du site", href: "/plan-du-site" },
-          { id: "f9", label: "Mentions légales", href: "/mentions-legales" },
-        ]}
-        activeHref="/"
-      />
     </div>
   );
 }

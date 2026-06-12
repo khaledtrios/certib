@@ -13,43 +13,38 @@ type PartnersSectionProps = {
 };
 
 function LogoItem({ item }: { item: PartnerLogo }) {
-  const content = item.logoUrl ? (
-    <img
-      src={item.logoUrl}
-      alt={item.name}
-      className="h-full w-full object-cover"
-      loading="lazy"
-    />
-  ) : (
-    <span className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[#5B5B5B]">
-      {item.name}
-    </span>
+  const inner = (
+    <>
+      {item.logoUrl ? (
+        /* conteneur à taille fixe — le logo s'y inscrit sans déborder */
+        <div className="w-[140px] h-[70px] flex items-center justify-center">
+          <img
+            src={item.logoUrl}
+            alt={item.name}
+            className="w-full h-full object-contain"
+            loading="lazy"
+          />
+        </div>
+      ) : (
+        <span className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[#5B5B5B] text-center px-2">
+          {item.name}
+        </span>
+      )}
+    </>
   );
+
+  const baseClass =
+    "flex h-[110px] w-[180px] shrink-0 items-center justify-center rounded-md border border-[#E4E4E4] bg-white overflow-hidden";
 
   if (item.href) {
     return (
-      <a
-        href={item.href}
-        className={[
-          "flex h-[110px] w-[180px] shrink-0 items-center justify-center rounded-md border border-[#E4E4E4] bg-white transition-colors hover:border-[#37C2A2]",
-          item.logoUrl ? "overflow-hidden" : "px-4 py-3",
-        ].join(" ")}
-      >
-        {content}
+      <a href={item.href} className={`${baseClass} transition-colors hover:border-[#37C2A2]`}>
+        {inner}
       </a>
     );
   }
 
-  return (
-    <div
-      className={[
-        "flex h-[110px] w-[180px] shrink-0 items-center justify-center rounded-md border border-[#E4E4E4] bg-white",
-        item.logoUrl ? "overflow-hidden" : "px-4 py-3",
-      ].join(" ")}
-    >
-      {content}
-    </div>
-  );
+  return <div className={baseClass}>{inner}</div>;
 }
 
 export function PartnersSection({

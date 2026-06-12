@@ -170,8 +170,7 @@ export const Pages: CollectionConfig = {
                 {
                   name: 'title',
                   type: 'text',
-                  required: true,
-                  label: 'Título',
+                  label: { fr: 'Titre (optionnel)', en: 'Title (optional)' },
                 },
               ],
             },
@@ -536,15 +535,13 @@ export const Pages: CollectionConfig = {
                 {
                   name: 'children',
                   type: 'array',
-                  label: { en: 'Direct Reports', fr: 'Subordonnés directs' },
+                  label: { en: 'Direct Reports', fr: 'Membres de l\'équipe' },
                   fields: [
-                    {
-                      name: 'name',
-                      type: 'text',
-                      required: true,
-                      label: { en: 'Name', fr: 'Nom' },
-                    },
-                    { name: 'role', type: 'text', label: { en: 'Role', fr: 'Rôle' } },
+                    { name: 'name', type: 'text', required: true, label: { en: 'Name', fr: 'Nom' } },
+                    { name: 'role', type: 'text', label: { en: 'Role / Function', fr: 'Rôle / Fonction' } },
+                    { name: 'department', type: 'text', label: { en: 'Department', fr: 'Département' } },
+                    { name: 'phone', type: 'text', label: { en: 'Phone', fr: 'Téléphone' } },
+                    { name: 'email', type: 'email', label: { en: 'Email', fr: 'Email' } },
                     {
                       name: 'photo',
                       type: 'upload',
@@ -554,15 +551,13 @@ export const Pages: CollectionConfig = {
                     {
                       name: 'children',
                       type: 'array',
-                      label: { en: 'Sub-reports', fr: 'Sous-subordonnés' },
+                      label: { en: 'Sub-reports', fr: 'Sous-membres' },
                       fields: [
-                        {
-                          name: 'name',
-                          type: 'text',
-                          required: true,
-                          label: { en: 'Name', fr: 'Nom' },
-                        },
-                        { name: 'role', type: 'text', label: { en: 'Role', fr: 'Rôle' } },
+                        { name: 'name', type: 'text', required: true, label: { en: 'Name', fr: 'Nom' } },
+                        { name: 'role', type: 'text', label: { en: 'Role / Function', fr: 'Rôle / Fonction' } },
+                        { name: 'department', type: 'text', label: { en: 'Department', fr: 'Département' } },
+                        { name: 'phone', type: 'text', label: { en: 'Phone', fr: 'Téléphone' } },
+                        { name: 'email', type: 'email', label: { en: 'Email', fr: 'Email' } },
                         {
                           name: 'photo',
                           type: 'upload',
@@ -792,6 +787,156 @@ export const Pages: CollectionConfig = {
               type: 'text',
               label: { en: 'Button label', fr: 'Texte du bouton' },
               defaultValue: "S'abonner",
+            },
+          ],
+        },
+        {
+          slug: 'formationsSection',
+          labels: {
+            singular: { en: 'Formations', fr: 'Formations' },
+            plural: { en: 'Formations Sections', fr: 'Sections Formations' },
+          },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: { fr: 'Titre de la section', en: 'Section title' },
+              defaultValue: 'Formations',
+            },
+            {
+              name: 'category',
+              type: 'select',
+              label: { fr: 'Filtrer par catégorie', en: 'Filter by category' },
+              admin: { description: { fr: 'Laisser vide pour afficher toutes les formations', en: 'Leave empty to show all formations' } },
+              options: [
+                { label: { fr: 'Toutes', en: 'All' }, value: 'all' },
+                { label: { fr: 'Marchés publics', en: 'Public procurement' }, value: 'marches-publics' },
+                { label: { fr: 'Performance énergétique', en: 'Energy performance' }, value: 'performance-energetique' },
+                { label: { fr: 'Construction durable', en: 'Sustainable construction' }, value: 'construction-durable' },
+                { label: { fr: 'Digitalisation / BIM', en: 'Digitalisation / BIM' }, value: 'digitalisation-bim' },
+                { label: { fr: 'Autre', en: 'Other' }, value: 'autre' },
+              ],
+            },
+            {
+              name: 'showFilters',
+              type: 'checkbox',
+              label: { fr: 'Afficher les filtres de catégorie', en: 'Show category filters' },
+              defaultValue: true,
+            },
+            {
+              name: 'limit',
+              type: 'number',
+              label: { fr: 'Nombre max de formations affichées', en: 'Max formations to show' },
+              defaultValue: 12,
+            },
+          ],
+        },
+        {
+          slug: 'contactBlock',
+          labels: {
+            singular: { en: 'Contact Page', fr: 'Page Contact' },
+            plural: { en: 'Contact Pages', fr: 'Pages Contact' },
+          },
+          fields: [
+            {
+              name: 'phone',
+              type: 'text',
+              label: { fr: 'Téléphone', en: 'Phone' },
+              defaultValue: '+352 24 52 73 11',
+            },
+            {
+              name: 'email',
+              type: 'email',
+              label: { fr: 'Email', en: 'Email' },
+              defaultValue: 'contact@crtib.lu',
+            },
+            {
+              name: 'address',
+              type: 'textarea',
+              label: { fr: 'Adresse', en: 'Address' },
+              defaultValue: '2, Circuit de la Foire Internationale\nL-1347 Luxembourg\nBP 1604 – L-1016 Luxembourg',
+            },
+            {
+              name: 'hours',
+              type: 'text',
+              label: { fr: 'Horaires', en: 'Opening hours' },
+              defaultValue: 'Lundi – Vendredi · 8h30 – 17h30',
+            },
+            {
+              name: 'mapsEmbedUrl',
+              type: 'text',
+              label: { fr: 'URL Google Maps (embed)', en: 'Google Maps embed URL' },
+            },
+          ],
+        },
+        {
+          slug: 'textBlock',
+          labels: {
+            singular: { en: 'Text Block', fr: 'Bloc de texte' },
+            plural: { en: 'Text Blocks', fr: 'Blocs de texte' },
+          },
+          fields: [
+            {
+              name: 'content',
+              type: 'richText',
+              label: { en: 'Content', fr: 'Contenu' },
+              editor: lexicalEditor({
+                features: ({ defaultFeatures }) => [
+                  ...defaultFeatures,
+                  HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
+                  BoldFeature(),
+                  ItalicFeature(),
+                  UnderlineFeature(),
+                  LinkFeature({}),
+                  UnorderedListFeature(),
+                  OrderedListFeature(),
+                  BlockquoteFeature(),
+                ],
+              }),
+            },
+          ],
+        },
+        {
+          slug: 'accordionBlock',
+          labels: {
+            singular: { en: 'Accordion', fr: 'Accordéon' },
+            plural: { en: 'Accordions', fr: 'Accordéons' },
+          },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: { en: 'Section title (optional)', fr: 'Titre de section (optionnel)' },
+            },
+            {
+              name: 'items',
+              type: 'array',
+              label: { en: 'Items', fr: 'Éléments' },
+              minRows: 1,
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  required: true,
+                  label: { en: 'Title', fr: 'Titre' },
+                },
+                {
+                  name: 'content',
+                  type: 'richText',
+                  label: { en: 'Content', fr: 'Contenu' },
+                  editor: lexicalEditor({
+                    features: ({ defaultFeatures }) => [
+                      ...defaultFeatures,
+                      BoldFeature(),
+                      ItalicFeature(),
+                      UnderlineFeature(),
+                      LinkFeature({}),
+                      UnorderedListFeature(),
+                      OrderedListFeature(),
+                    ],
+                  }),
+                },
+              ],
             },
           ],
         },

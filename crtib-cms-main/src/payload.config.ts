@@ -18,6 +18,7 @@ import { ActivityReports } from './collections/ActivityReports'
 import { TimelineItems } from './collections/TimelineItems'
 import { Clauses } from './collections/Clauses'
 import { NewsletterSubscribers } from './collections/NewsletterSubscribers'
+import { Formations } from './collections/Formations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,6 +27,11 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     theme: 'light',
+    meta: {
+      titleSuffix: '– CRTI-B',
+      favicon: '/icon.svg',
+      ogImage: '/logo.svg',
+    },
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -51,6 +57,7 @@ export default buildConfig({
     Media,
     Pages,
     News,
+    Formations,
     Partners,
     Videos,
     ActivityReports,

@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     pages: Page;
     news: News;
+    formations: Formation;
     partners: Partner;
     videos: Video;
     'activity-reports': ActivityReport;
@@ -88,6 +89,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
+    formations: FormationsSelect<false> | FormationsSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
     videos: VideosSelect<false> | VideosSelect<true>;
     'activity-reports': ActivityReportsSelect<false> | ActivityReportsSelect<true>;
@@ -229,7 +231,7 @@ export interface Page {
                   image: number | Media;
                   alt?: string | null;
                   eyebrow?: string | null;
-                  title: string;
+                  title?: string | null;
                   id?: string | null;
                 }[]
               | null;
@@ -362,11 +364,17 @@ export interface Page {
                 | {
                     name: string;
                     role?: string | null;
+                    department?: string | null;
+                    phone?: string | null;
+                    email?: string | null;
                     photo?: (number | null) | Media;
                     children?:
                       | {
                           name: string;
                           role?: string | null;
+                          department?: string | null;
+                          phone?: string | null;
+                          email?: string | null;
                           photo?: (number | null) | Media;
                           id?: string | null;
                         }[]
@@ -458,6 +466,84 @@ export interface Page {
             blockName?: string | null;
             blockType: 'newsletterBlock';
           }
+        | {
+            title?: string | null;
+            /**
+             * Leave empty to show all formations
+             */
+            category?:
+              | (
+                  | 'all'
+                  | 'marches-publics'
+                  | 'performance-energetique'
+                  | 'construction-durable'
+                  | 'digitalisation-bim'
+                  | 'autre'
+                )
+              | null;
+            showFilters?: boolean | null;
+            limit?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'formationsSection';
+          }
+        | {
+            phone?: string | null;
+            email?: string | null;
+            address?: string | null;
+            hours?: string | null;
+            mapsEmbedUrl?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contactBlock';
+          }
+        | {
+            content?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textBlock';
+          }
+        | {
+            title?: string | null;
+            items?:
+              | {
+                  title: string;
+                  content?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'accordionBlock';
+          }
       )[]
     | null;
   /**
@@ -527,6 +613,12 @@ export interface News {
   slug: string;
   category: 'actualite' | 'communique' | 'evenement';
   /**
+   * Site section this news belongs to
+   */
+  rubrique?:
+    | ('marches-publics' | 'performance-energetique' | 'construction-durable' | 'digitalisation-bim' | 'general')
+    | null;
+  /**
    * Date displayed to the reader. Automatically filled on creation.
    */
   publishedAt: string;
@@ -567,6 +659,48 @@ export interface News {
    * Date of the last newsletter send for this article.
    */
   newsletterSentAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "formations".
+ */
+export interface Formation {
+  id: number;
+  title: string;
+  /**
+   * Unique URL identifier
+   */
+  slug?: string | null;
+  image?: (number | null) | Media;
+  category?:
+    | ('marches-publics' | 'performance-energetique' | 'construction-durable' | 'digitalisation-bim' | 'autre')
+    | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  duration?: string | null;
+  location?: string | null;
+  price?: string | null;
+  maxParticipants?: number | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  registrationUrl?: string | null;
+  registrationEmail?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -715,6 +849,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'news';
         value: number | News;
+      } | null)
+    | ({
+        relationTo: 'formations';
+        value: number | Formation;
       } | null)
     | ({
         relationTo: 'partners';
@@ -980,12 +1118,18 @@ export interface PagesSelect<T extends boolean = true> {
                       | {
                           name?: T;
                           role?: T;
+                          department?: T;
+                          phone?: T;
+                          email?: T;
                           photo?: T;
                           children?:
                             | T
                             | {
                                 name?: T;
                                 role?: T;
+                                department?: T;
+                                phone?: T;
+                                email?: T;
                                 photo?: T;
                                 id?: T;
                               };
@@ -1080,6 +1224,48 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        formationsSection?:
+          | T
+          | {
+              title?: T;
+              category?: T;
+              showFilters?: T;
+              limit?: T;
+              id?: T;
+              blockName?: T;
+            };
+        contactBlock?:
+          | T
+          | {
+              phone?: T;
+              email?: T;
+              address?: T;
+              hours?: T;
+              mapsEmbedUrl?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textBlock?:
+          | T
+          | {
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        accordionBlock?:
+          | T
+          | {
+              title?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    content?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
       };
   content?: T;
   seo?:
@@ -1101,6 +1287,7 @@ export interface NewsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   category?: T;
+  rubrique?: T;
   publishedAt?: T;
   featuredImage?: T;
   excerpt?: T;
@@ -1112,6 +1299,28 @@ export interface NewsSelect<T extends boolean = true> {
         metaDescription?: T;
       };
   newsletterSentAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "formations_select".
+ */
+export interface FormationsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  image?: T;
+  category?: T;
+  startDate?: T;
+  endDate?: T;
+  duration?: T;
+  location?: T;
+  price?: T;
+  maxParticipants?: T;
+  description?: T;
+  registrationUrl?: T;
+  registrationEmail?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

@@ -70,13 +70,13 @@ function DropdownChildDesktop({
         key={child.id}
         href={`/${child.slug}`}
         onClick={onCloseAll}
-        className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors group/item"
+        className="flex items-center justify-between px-5 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-200 transition-colors group/item"
       >
-        <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#08AA86] group-hover/item:text-[#068a6c] transition-colors">
+        <span className="text-[13px] font-semibold tracking-wide uppercase text-[#08AA86] group-hover/item:text-[#068a6c] transition-colors">
           {child.title}
         </span>
         <span className="text-[#08AA86] group-hover/item:text-[#068a6c] transition-colors ml-4">
-          <PageIconSvg icon={child.icon} />
+          <PageIconSvg icon={child.icon} className="w-[18px] h-[18px]" />
         </span>
       </Link>
     );
@@ -91,28 +91,28 @@ function DropdownChildDesktop({
       <Link
         href={`/${child.slug}`}
         onClick={onCloseAll}
-        className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors group/item"
+        className="flex items-center justify-between px-5 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-200 transition-colors group/item"
       >
-        <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#08AA86] group-hover/item:text-[#068a6c] transition-colors">
+        <span className="text-[13px] font-semibold tracking-wide uppercase text-[#08AA86] group-hover/item:text-[#068a6c] transition-colors">
           {child.title}
         </span>
-        <ChevronDown className="w-3.5 h-3.5 flex-shrink-0 -rotate-90 text-[#08AA86] group-hover/item:text-[#068a6c] transition-colors ml-4" />
+        <ChevronDown className="w-4 h-4 flex-shrink-0 -rotate-90 text-[#08AA86] group-hover/item:text-[#068a6c] transition-colors ml-4" />
       </Link>
 
       {subOpen && (
-        <div className="absolute left-full top-0 min-w-[220px] bg-white border border-gray-200 shadow-lg z-50">
+        <div className="absolute left-full top-0 min-w-[260px] bg-white border border-gray-200 shadow-xl z-50 rounded-r-md">
           {child.children!.map((grandchild: PageWithChildren) => (
             <Link
               key={grandchild.id}
               href={`/${grandchild.slug}`}
               onClick={onCloseAll}
-              className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors group/gc"
+              className="flex items-center justify-between px-5 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-200 transition-colors group/gc"
             >
-              <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#08AA86] group-hover/gc:text-[#068a6c] transition-colors">
+              <span className="text-[13px] font-semibold tracking-wide uppercase text-[#08AA86] group-hover/gc:text-[#068a6c] transition-colors">
                 {grandchild.title}
               </span>
               <span className="text-[#08AA86] group-hover/gc:text-[#068a6c] transition-colors ml-4">
-                <PageIconSvg icon={grandchild.icon} />
+                <PageIconSvg icon={grandchild.icon} className="w-[18px] h-[18px]" />
               </span>
             </Link>
           ))}
@@ -139,14 +139,14 @@ function NavItemDesktop({ page }: { page: PageWithChildren }) {
   }, []);
 
   const itemContent = (
-    <span className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.12em] uppercase text-[#08AA86] group-hover:text-[#068a6c] transition-colors">
+    <span className="flex items-center gap-2 text-[13.5px] font-semibold tracking-wide uppercase text-[#08AA86] group-hover:text-[#068a6c] transition-colors">
       <span>{page.title}</span>
       {hasChildren ? (
         <ChevronDown
-          className={`w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
       ) : (
-        <PageIconSvg icon={page.icon} />
+        <PageIconSvg icon={page.icon} className="w-[18px] h-[18px]" />
       )}
     </span>
   );
@@ -155,7 +155,7 @@ function NavItemDesktop({ page }: { page: PageWithChildren }) {
     return (
       <Link
         href={`/${page.slug}`}
-        className="group px-3 py-2 flex items-center border-l border-gray-200 first:border-l-0 h-full hover:bg-gray-50 transition-colors"
+        className="group px-5 py-3 flex items-center border-l border-gray-200 first:border-l-0 h-full hover:bg-gray-200 transition-colors"
       >
         {itemContent}
       </Link>
@@ -171,7 +171,7 @@ function NavItemDesktop({ page }: { page: PageWithChildren }) {
     >
       <Link
         href={`/${page.slug}`}
-        className="px-3 py-2 flex items-center border-l border-gray-200 first:border-l-0 h-full hover:bg-gray-50 transition-colors"
+        className="px-5 py-3 flex items-center border-l border-gray-200 first:border-l-0 h-full hover:bg-gray-200 transition-colors"
       >
         {itemContent}
       </Link>
@@ -180,7 +180,7 @@ function NavItemDesktop({ page }: { page: PageWithChildren }) {
         <div
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={() => setOpen(false)}
-          className="absolute left-0 top-full mt-0 min-w-[220px] bg-white border border-gray-200 shadow-lg z-50"
+          className="absolute left-0 top-full mt-0 min-w-[260px] bg-white border border-gray-200 shadow-xl z-50 rounded-b-md"
         >
           {page.children!.map((child: PageWithChildren) => (
             <DropdownChildDesktop
@@ -212,13 +212,13 @@ function MobileChildItem({
       <Link
         href={`/${child.slug}`}
         onClick={onClose}
-        className="flex items-center justify-between pl-10 pr-6 py-3.5 border-b border-gray-100 hover:bg-gray-100 transition-colors"
+        className="flex items-center justify-between pl-12 pr-6 py-4 border-b border-gray-100 hover:bg-gray-200 transition-colors"
       >
-        <span className="text-[10px] font-semibold tracking-[0.12em] uppercase text-[#08AA86]">
+        <span className="text-[12px] font-semibold tracking-wide uppercase text-[#08AA86]">
           {child.title}
         </span>
         <span className="text-[#08AA86]">
-          <PageIconSvg icon={child.icon} />
+          <PageIconSvg icon={child.icon} className="w-[18px] h-[18px]" />
         </span>
       </Link>
     );
@@ -226,19 +226,19 @@ function MobileChildItem({
 
   return (
     <>
-      <div className="flex items-center justify-between border-b border-gray-100 hover:bg-gray-100 transition-colors">
+      <div className="flex items-center justify-between border-b border-gray-100 hover:bg-gray-200 transition-colors">
         <Link
           href={`/${child.slug}`}
           onClick={onClose}
-          className="flex-1 pl-10 pr-2 py-3.5"
+          className="flex-1 pl-12 pr-2 py-4"
         >
-          <span className="text-[10px] font-semibold tracking-[0.12em] uppercase text-[#08AA86]">
+          <span className="text-[12px] font-semibold tracking-wide uppercase text-[#08AA86]">
             {child.title}
           </span>
         </Link>
         <button
           onClick={() => setSubOpen((v) => !v)}
-          className="pr-6 py-3.5 text-[#08AA86]"
+          className="pr-6 py-4 text-[#08AA86]"
           aria-label="Expandir"
         >
           <ChevronDown
@@ -248,19 +248,19 @@ function MobileChildItem({
       </div>
 
       {subOpen && (
-        <div className="bg-gray-100">
+        <div className="bg-[#f0fdf9]">
           {child.children!.map((grandchild: PageWithChildren) => (
             <Link
               key={grandchild.id}
               href={`/${grandchild.slug}`}
               onClick={onClose}
-              className="flex items-center justify-between pl-14 pr-6 py-3 border-b border-gray-200 hover:bg-gray-200 transition-colors"
+              className="flex items-center justify-between pl-16 pr-6 py-3.5 border-b border-gray-200 hover:bg-gray-200 transition-colors"
             >
-              <span className="text-[10px] font-semibold tracking-[0.12em] uppercase text-[#08AA86]">
+              <span className="text-[12px] font-semibold tracking-wide uppercase text-[#08AA86]">
                 {grandchild.title}
               </span>
               <span className="text-[#08AA86]">
-                <PageIconSvg icon={grandchild.icon} />
+                <PageIconSvg icon={grandchild.icon} className="w-[18px] h-[18px]" />
               </span>
             </Link>
           ))}
@@ -285,13 +285,13 @@ function NavItemMobile({
       <Link
         href={`/${page.slug}`}
         onClick={onClose}
-        className="flex items-center justify-between px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors group"
+        className="flex items-center justify-between px-6 py-5 border-b border-gray-100 hover:bg-gray-200 transition-colors group"
       >
-        <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#08AA86]">
+        <span className="text-[13px] font-semibold tracking-wide uppercase text-[#08AA86]">
           {page.title}
         </span>
         <span className="text-[#08AA86]">
-          <PageIconSvg icon={page.icon} />
+          <PageIconSvg icon={page.icon} className="w-5 h-5" />
         </span>
       </Link>
     );
@@ -299,19 +299,19 @@ function NavItemMobile({
 
   return (
     <>
-      <div className="flex items-center justify-between border-b border-gray-100 hover:bg-gray-50 transition-colors">
+      <div className="flex items-center justify-between border-b border-gray-100 hover:bg-gray-200 transition-colors">
         <Link
           href={`/${page.slug}`}
           onClick={onClose}
-          className="flex-1 px-6 py-4"
+          className="flex-1 px-6 py-5"
         >
-          <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#08AA86]">
+          <span className="text-[13px] font-semibold tracking-wide uppercase text-[#08AA86]">
             {page.title}
           </span>
         </Link>
         <button
           onClick={() => setOpen((v) => !v)}
-          className="px-4 py-4 text-[#08AA86]"
+          className="px-5 py-5 text-[#08AA86]"
           aria-label="Expandir"
         >
           <ChevronDown
@@ -321,7 +321,7 @@ function NavItemMobile({
       </div>
 
       {open && (
-        <div className="bg-gray-50">
+        <div className="bg-[#f0fdf9]">
           {page.children!.map((child: PageWithChildren) => (
             <MobileChildItem key={child.id} child={child} onClose={onClose} />
           ))}
@@ -343,53 +343,53 @@ export function HeaderWithNav({ pages }: HeaderWithNavProps) {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         {/* Logo centralizada */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="flex justify-center py-5">
             <Link href="/">
               <Image
                 src="/logo.svg"
                 alt="CRTI-B"
-                width={220}
-                height={52}
+                width={260}
+                height={62}
                 priority
-                className="h-14 w-auto"
+                className="h-16 w-auto"
               />
             </Link>
           </div>
 
-          {/* Hamburger mobile + lupa - posicao absoluta no canto direito */}
-          <div className="lg:hidden absolute right-4 top-5 flex items-center gap-1">
+          {/* Hamburger mobile + lupa */}
+          <div className="lg:hidden absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1">
             <button
               onClick={() => setSearchOpen(true)}
-              className="p-2 text-[#08AA86] hover:bg-gray-50 rounded transition-colors"
-              aria-label="Pesquisar"
+              className="p-2.5 text-[#08AA86] hover:bg-gray-200 rounded-lg transition-colors"
+              aria-label="Rechercher"
             >
               <Search className="w-5 h-5" />
             </button>
             <button
               onClick={() => setMobileOpen(true)}
-              className="p-2 text-[#08AA86] hover:bg-gray-50 rounded transition-colors"
-              aria-label="Abrir menu"
+              className="p-2.5 text-[#08AA86] hover:bg-gray-200 rounded-lg transition-colors"
+              aria-label="Ouvrir le menu"
             >
               <Menu className="w-6 h-6" />
             </button>
           </div>
         </div>
 
-        {/* Menu desktop - full width para acomodar todos os itens */}
-        <nav className="hidden lg:flex items-center justify-center pb-3 px-4">
+        {/* Barre de navigation desktop */}
+        <nav className="hidden lg:flex items-center justify-center border-t border-gray-100 bg-gray-50/60 px-4">
           <div className="flex items-stretch flex-wrap justify-center divide-x divide-gray-200">
             {pages.map((page) => (
               <NavItemDesktop key={page.id} page={page} />
             ))}
             <button
               onClick={() => setSearchOpen(true)}
-              className="px-3 py-2 flex items-center border-l border-gray-200 h-full hover:bg-gray-50 transition-colors group"
-              aria-label="Pesquisar"
+              className="px-5 py-3 flex items-center border-l border-gray-200 h-full hover:bg-gray-200 transition-colors group"
+              aria-label="Rechercher"
             >
-              <Search className="w-4 h-4 text-[#08AA86] group-hover:text-[#068a6c] transition-colors" />
+              <Search className="w-[18px] h-[18px] text-[#08AA86] group-hover:text-[#068a6c] transition-colors" />
             </button>
           </div>
         </nav>
@@ -404,20 +404,20 @@ export function HeaderWithNav({ pages }: HeaderWithNavProps) {
             className="absolute inset-0 bg-black/40"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute right-0 top-0 h-full w-[300px] bg-white flex flex-col shadow-2xl">
-            {/* Topo do drawer */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <div className="absolute right-0 top-0 h-full w-[340px] bg-white flex flex-col shadow-2xl">
+            {/* En-tête du drawer */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200 bg-gray-50">
               <Image
                 src="/logo.svg"
                 alt="CRTI-B"
-                width={140}
-                height={33}
-                className="h-8 w-auto"
+                width={160}
+                height={38}
+                className="h-10 w-auto"
               />
               <button
                 onClick={() => setMobileOpen(false)}
-                className="p-1 text-gray-500 hover:text-[#08AA86] transition-colors"
-                aria-label="Fechar menu"
+                className="p-2 text-gray-400 hover:text-[#08AA86] hover:bg-gray-200 rounded-lg transition-colors"
+                aria-label="Fermer le menu"
               >
                 <X className="w-5 h-5" />
               </button>

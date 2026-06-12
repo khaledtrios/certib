@@ -164,6 +164,21 @@ export const News: CollectionConfig = {
       ],
     },
     {
+      name: 'rubrique',
+      type: 'select',
+      label: { en: 'Section', fr: 'Rubrique' },
+      admin: {
+        description: { fr: 'Rubrique du site à laquelle cette actualité appartient', en: 'Site section this news belongs to' },
+      },
+      options: [
+        { label: { fr: 'Marchés publics', en: 'Public procurement' }, value: 'marches-publics' },
+        { label: { fr: 'Performance énergétique', en: 'Energy performance' }, value: 'performance-energetique' },
+        { label: { fr: 'Construction durable', en: 'Sustainable construction' }, value: 'construction-durable' },
+        { label: { fr: 'Digitalisation / BIM', en: 'Digitalisation / BIM' }, value: 'digitalisation-bim' },
+        { label: { fr: 'Général', en: 'General' }, value: 'general' },
+      ],
+    },
+    {
       name: 'publishedAt',
       type: 'date',
       required: true,

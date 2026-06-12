@@ -80,8 +80,14 @@ function renderNode(node: any, key: number): React.ReactNode {
       );
     }
 
-    case "paragraph":
-      return <p key={key}>{renderNodes(node.children)}</p>;
+    case "paragraph": {
+      const hasBlockChild = Array.isArray(node.children) &&
+        node.children.some((c: any) => c?.type === "upload" || c?.type === "block");
+      const children = renderNodes(node.children);
+      return hasBlockChild
+        ? <div key={key} className="paragraph">{children}</div>
+        : <p key={key}>{children}</p>;
+    }
 
     case "heading": {
       const Tag = (node.tag || "h2") as React.ElementType;

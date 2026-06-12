@@ -1,5 +1,6 @@
 import { getPages } from "@/lib/payload";
 import { HeaderWithNav } from "./HeaderWithNav";
+import { Footer } from "./Footer";
 import type { Page, PageWithChildren } from "@/types/payload";
 
 /**
@@ -47,7 +48,7 @@ function organizePageHierarchy(pages: Page[]): PageWithChildren[] {
   };
 
   sortRecursive(rootPages);
-  return rootPages;
+  return rootPages.filter((p) => (p.menuOrder ?? 0) < 900);
 }
 
 /**
@@ -75,15 +76,16 @@ export async function GlobalLayout({
       <div className="min-h-screen flex flex-col bg-white">
         <HeaderWithNav pages={hierarchyPages} />
         <main className="flex-1">{children}</main>
+        <Footer />
       </div>
     );
   } catch (error) {
     console.error("Erro ao carregar layout global:", error);
 
-    // Renderiza sem navegação em caso de erro
     return (
       <div className="min-h-screen flex flex-col bg-white">
         <main className="flex-1">{children}</main>
+        <Footer />
       </div>
     );
   }

@@ -35,7 +35,7 @@ export function PdfViewerModal({
 
   return (
     <>
-      <Button
+      <Button 
         label={triggerLabel}
         onClick={() => setOpen(true)}
         size="sm"

@@ -4,10 +4,33 @@ import { VideoViewerModal } from "@/components/video/VideoViewerModal";
 import { VideoEmbedSection } from "@/components/video/VideoEmbedSection";
 import { CalculatorSection } from "@/components/calculator/CalculatorSection";
 import { ClickableCard } from "@/components/cards/ClickableCard";
+import {
+  Scale, Monitor, Zap, BookOpen, Building2, Users,
+  FileText, BarChart3, Cpu, Sprout, type LucideIcon,
+} from "lucide-react";
+
+// Mapping titre → icône Lucide (insensible à la casse et aux accents)
+const CATEGORY_ICONS: Array<{ patterns: RegExp; Icon: LucideIcon }> = [
+  { patterns: /march[eé]|public|appel.offre|soumission/i,    Icon: Scale        },
+  { patterns: /digital|bim|num[eé]rique|informatique|cloud/i, Icon: Cpu         },
+  { patterns: /construc.*durable|durable|[eé]colog|vert/i,    Icon: Sprout      },
+  { patterns: /[eé]nerg[eé]tique|[eé]nergie|performance/i,   Icon: Zap          },
+  { patterns: /dictionnaire|glossaire/i,                      Icon: BookOpen    },
+  { patterns: /partenaire|partner/i,                          Icon: Users        },
+  { patterns: /qui sommes|[àa] propos|crti/i,                 Icon: Building2   },
+  { patterns: /rapport|activit[eé]/i,                         Icon: BarChart3   },
+  { patterns: /formation|training/i,                          Icon: Monitor     },
+];
+
+function resolveIcon(title: string): LucideIcon {
+  for (const { patterns, Icon } of CATEGORY_ICONS) {
+    if (patterns.test(title)) return Icon;
+  }
+  return FileText;
+}
 import { PartnersSection } from "@/components/partners/PartnersSection";
 import { VideoCardsSection } from "@/components/video/VideoCardsSection";
 import { ActivityReportsSection } from "@/components/reports/ActivityReportsSection";
-import { OrganogramChart } from "@/components/organogram";
 import { Timeline } from "@/components/timeline/Timeline";
 import { ClausesGrid } from "@/components/blocks/ClausesGrid";
 import { DynamicGrid } from "@/components/blocks/DynamicGrid";
@@ -16,21 +39,12 @@ import { DownloadLink } from "@/components/ui";
 import { getMediaUrl } from "@/lib/payload";
 import { PhotoHeroCarousel } from "@/components/home/PhotoHeroCarousel";
 import { NewsletterBlock } from "@/components/blocks/NewsletterBlock";
+import { AccordionBlock } from "@/components/blocks/AccordionBlock";
+import { TeamGrid } from "@/components/team/TeamGrid";
+import { FormationsSection } from "@/components/formations/FormationsSection";
+import { ContactBlock } from "@/components/contact/ContactBlock";
+import RichText from "@/components/RichText";
 
-// ─── Helpers de mapeamento ────────────────────────────────────────────────────
-
-function mapOrganogramNode(node: any): any {
-  if (!node) return null;
-  return {
-    id: node.id ?? node.name,
-    name: node.name,
-    role: node.role,
-    photoUrl: node.photo ? getMediaUrl(node.photo) : undefined,
-    children: Array.isArray(node.children)
-      ? node.children.map(mapOrganogramNode)
-      : undefined,
-  };
-}
 
 // ─── Renderizador de blocos ────────────────────────────────────────────────────
 
@@ -232,11 +246,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
                         key={j}
                         title={item.title}
                         href={item.href}
-                        icon={
-                          item.icon ? (
-                            <span className="text-xl">{item.icon}</span>
-                          ) : undefined
-                        }
+                        Icon={resolveIcon(item.title ?? "")}
                       />
                     ))}
                   </div>
@@ -246,18 +256,8 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
           }
 
           case "organogram": {
-            const root = mapOrganogramNode(block.root);
-            if (!root) return null;
-            return (
-              <section key={key} className="w-full bg-white">
-                <div className="mx-auto w-full max-w-6xl px-6 py-12">
-                  <h2 className="mb-8 text-lg font-semibold uppercase tracking-[0.25em] text-crtib-gray-dark">
-                    Organigramme
-                  </h2>
-                  <OrganogramChart root={root} />
-                </div>
-              </section>
-            );
+            if (!block.root) return null;
+            return <TeamGrid key={key} root={block.root} />;
           }
 
           case "timeline": {
@@ -356,13 +356,47 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
             );
           }
 
-          case "newsletterBlock": {
+          case "formationsSection": {
             return (
-              <NewsletterBlock
+              <FormationsSection
                 key={key}
-                heading={block.heading}
-                description={block.description}
-                buttonLabel={block.buttonLabel}
+                title={block.title}
+                category={block.category}
+                showFilters={block.showFilters !== false}
+                limit={block.limit ?? 12}
+              />
+            );
+          }
+
+          case "textBlock": {
+            return (
+              <section key={key} className="w-full bg-white py-8">
+                <div className="mx-auto max-w-3xl px-6">
+                  <RichText content={block.content} />
+                </div>
+              </section>
+            );
+          }
+
+          case "accordionBlock": {
+            return (
+              <AccordionBlock
+                key={key}
+                title={block.title}
+                items={block.items ?? []}
+              />
+            );
+          }
+
+          case "contactBlock": {
+            return (
+              <ContactBlock
+                key={key}
+                phone={block.phone}
+                email={block.email}
+                address={block.address}
+                hours={block.hours}
+                mapsEmbedUrl={block.mapsEmbedUrl}
               />
             );
           }

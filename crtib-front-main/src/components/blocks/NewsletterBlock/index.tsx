@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import React, { useState } from "react";
 
 interface NewsletterBlockProps {
   heading: string;
@@ -27,7 +27,7 @@ export function NewsletterBlock({
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<FormStatus>("idle");
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email || status === "loading") return;
 
@@ -62,53 +62,55 @@ export function NewsletterBlock({
     status !== "idle" && status !== "loading" ? status : null;
 
   return (
-    <section className="w-full bg-[#1a365d] py-16">
-      <div className="mx-auto max-w-2xl px-6 text-center">
-        <h2 className="mb-4 text-2xl font-bold text-white">{heading}</h2>
-        {description && (
-          <p className="mb-8 text-base text-blue-200">{description}</p>
-        )}
+    <section className="w-full bg-white py-12">
+      <div className="mx-auto max-w-xl px-6">
+        <div className="rounded-xl bg-[#08AA86] px-8 py-10">
+          <h2 className="mb-2 text-xl font-bold text-white">{heading}</h2>
+          {description && (
+            <p className="mb-6 text-sm text-white/80">{description}</p>
+          )}
 
-        {status === "success" ? (
-          <p className="rounded-md bg-green-100 px-6 py-4 text-sm font-medium text-green-800">
-            {STATUS_MESSAGES.success}
-          </p>
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            noValidate
-            className="flex flex-col gap-3 sm:flex-row"
-          >
-            <label htmlFor="newsletter-email" className="sr-only">
-              Adresse e-mail
-            </label>
-            <input
-              id="newsletter-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Votre adresse e-mail"
-              required
-              disabled={status === "loading"}
-              className="flex-1 rounded-md border border-transparent bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-60"
-            />
-            <button
-              type="submit"
-              disabled={status === "loading"}
-              className="rounded-md bg-white px-6 py-3 text-sm font-semibold text-[#1a365d] transition-opacity hover:opacity-90 disabled:opacity-60"
+          {status === "success" ? (
+            <p className="rounded-md bg-white/20 px-5 py-3 text-sm font-medium text-white">
+              {STATUS_MESSAGES.success}
+            </p>
+          ) : (
+            <form
+              onSubmit={handleSubmit}
+              noValidate
+              className="flex flex-col gap-3 sm:flex-row"
             >
-              {status === "loading" ? "Envoi…" : label}
-            </button>
-          </form>
-        )}
+              <label htmlFor="newsletter-email" className="sr-only">
+                Adresse e-mail
+              </label>
+              <input
+                id="newsletter-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Votre adresse e-mail"
+                required
+                disabled={status === "loading"}
+                className="flex-1 rounded-md border border-transparent bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/60 disabled:opacity-60"
+              />
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="rounded-md bg-white px-6 py-3 text-sm font-semibold text-[#08AA86] transition-opacity hover:opacity-90 disabled:opacity-60 whitespace-nowrap"
+              >
+                {status === "loading" ? "Envoi…" : label}
+              </button>
+            </form>
+          )}
 
-        {feedbackStatus && feedbackStatus !== "success" && (
-          <p
-            className={`mt-4 text-sm ${feedbackStatus === "duplicate" ? "text-yellow-300" : "text-red-300"}`}
-          >
-            {STATUS_MESSAGES[feedbackStatus]}
-          </p>
-        )}
+          {feedbackStatus && feedbackStatus !== "success" && (
+            <p
+              className={`mt-4 text-sm ${feedbackStatus === "duplicate" ? "text-yellow-200" : "text-red-200"}`}
+            >
+              {STATUS_MESSAGES[feedbackStatus]}
+            </p>
+          )}
+        </div>
       </div>
     </section>
   );
