@@ -43,8 +43,6 @@ next-env.d.ts
 .env.example
 .test.env
 
-/media
-
 # Playwright
 node_modules/
 /test-results/
