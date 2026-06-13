@@ -83,3 +83,17 @@
 .login-form {
   padding-top: 8px;
 }
+
+// ── Fix logo/icon clipping in admin nav ─────────────────────
+.nav__logo,
+.step-nav__home,
+.app-header__step-nav {
+  overflow: visible !important;
+
+  img,
+  svg {
+    display: block;
+    overflow: visible;
+    max-width: none;
+  }
+}
