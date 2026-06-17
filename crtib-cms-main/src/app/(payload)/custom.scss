@@ -202,8 +202,54 @@
   }
 }
 
-// ── Page de login ──────────────────────────────────────────
-.login__form,
-.login-form {
-  padding-top: 8px;
+// ── Pages minimales (login, forgot, reset) ────────────────
+
+// Fond dégradé CRTIB
+.template-minimal {
+  background: linear-gradient(135deg, #f0fdf9 0%, #f5f9f8 50%, #eef4f7 100%) !important;
+}
+
+// Masquer le logo Payload par défaut (BeforeLogin est l'unique logo sur /login)
+.login__brand {
+  display: none !important;
+}
+
+// Carte blanche — login, forgot, reset : même carte, même padding
+.template-minimal__wrap {
+  background: #fff !important;
+  border-radius: 18px !important;
+  box-shadow: 0 16px 48px rgba(8, 170, 134, 0.10), 0 2px 12px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid rgba(8, 170, 134, 0.14) !important;
+  overflow: hidden !important;
+  padding: 36px 32px 32px !important;
+
+  // Logo CRTIB injecté en haut de TOUTES les pages minimales
+  &::before {
+    content: '';
+    display: block;
+    width: 160px;
+    height: 38px;
+    background: url('/logo.svg') center / contain no-repeat;
+    margin: 0 auto 20px;
+  }
+}
+
+// Le formulaire login n'ajoute pas de padding propre (la carte s'en charge)
+.login__form {
+  padding: 0 !important;
+  margin-top: 4px !important;
+}
+
+// Liens colorés CRTIB sur toutes les pages minimales
+.template-minimal a {
+  color: var(--crtib-primary) !important;
+  font-weight: 500 !important;
+  &:hover { color: var(--crtib-primary-dark) !important; }
+}
+
+// Bouton submit CRTIB
+.template-minimal .form-submit .btn--style-primary {
+  background: var(--crtib-primary) !important;
+  border-color: var(--crtib-primary) !important;
+  &:hover { background: var(--crtib-primary-dark) !important; }
 }
