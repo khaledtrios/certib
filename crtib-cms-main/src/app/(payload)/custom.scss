@@ -1,44 +1,49 @@
 // ============================================================
-// CRTIB CMS — Personalização do Painel Administrativo
+// CRTIB CMS — Admin UI Theme
 // ============================================================
 
-// ── Variáveis de marca ──────────────────────────────────────
+// ── Variables de marque ────────────────────────────────────
 :root {
-  --crtib-primary: #2c8c5b;
-  --crtib-primary-dark: #22704a;
-  --crtib-primary-hover: #237a4e;
-  --crtib-accent: #31af91;
+  --crtib-primary:       #08AA86;
+  --crtib-primary-dark:  #068a6c;
+  --crtib-primary-hover: #07976f;
+  --crtib-primary-light: rgba(8, 170, 134, 0.09);
+  --crtib-accent:        #31af91;
+  --crtib-sidebar-bg:    #f8fafb;
+  --crtib-border:        #e5e7eb;
+  --crtib-text-muted:    #9ca3af;
+  --crtib-text-dark:     #1f2937;
 }
 
-// ── Botões principais (Salvar, Publicar, etc.) ───────────────
-.btn.btn--style-primary {
-  background-color: var(--crtib-primary) !important;
-  border-color: var(--crtib-primary) !important;
-  color: #fff !important;
-
-  &:hover,
-  &:focus-visible {
-    background-color: var(--crtib-primary-hover) !important;
-    border-color: var(--crtib-primary-hover) !important;
-    color: #fff !important;
-  }
+// ── App Header ─────────────────────────────────────────────
+.app-header {
+  background: #fff !important;
+  border-bottom: 1px solid var(--crtib-border) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
 }
 
-// ── Nav: estado ativo dos links ──────────────────────────────
-.nav__link--active,
-.nav__sub-link--active {
-  color: var(--crtib-primary) !important;
+.app-header__bg {
+  background: #fff !important;
+  opacity: 1 !important;
 }
 
-.nav__link:hover,
-.nav__sub-link:hover {
-  color: var(--crtib-primary) !important;
+// Bouton compte dans l'en-tête : taille et alignement
+.app-header__account {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  margin-left: 4px !important;
+  border-radius: 50% !important;
+  line-height: 1 !important;
 }
 
-// ── Barra de destaque no topo da nav ────────────────────────
+// ── Sidebar nav ────────────────────────────────────────────
 .nav {
   position: relative;
+  background: var(--crtib-sidebar-bg) !important;
+  border-right: 1px solid var(--crtib-border) !important;
 
+  // Barre d'accent CRTIB en haut
   &::before {
     content: '';
     display: block;
@@ -48,52 +53,157 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1;
+    z-index: 10;
+  }
+
+  // Scroll container becomes flex column so nav__wrap grows and user footer sticks bottom
+  .nav__scroll {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100% !important;
+  }
+
+  // Nav links area fills available height
+  .nav__wrap {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding-bottom: 0 !important;
+  }
+
+  // nav__controls: hide empty logout slot (settings button stays)
+  .nav__controls {
+    padding: 0 8px 8px !important;
+
+    // hide the empty logout button placeholder
+    > .nav__logout:empty,
+    > a:empty { display: none !important; }
   }
 }
 
-// ── Pill/tag com cor de sucesso → verde CRTIB ────────────────
+// ── Logo dans la sidebar ───────────────────────────────────
+.nav__logo,
+.step-nav__home,
+.app-header__step-nav {
+  overflow: visible !important;
+  img, svg { display: block; overflow: visible; max-width: none; }
+}
+
+// ── Groupes de navigation ──────────────────────────────────
+.nav-group {
+  width: 100%;
+  margin-bottom: 2px !important;
+  padding: 0 8px !important;
+}
+
+.nav-group__toggle {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--crtib-text-muted) !important;
+  padding: 14px 8px 6px !important;
+  margin-bottom: 2px !important;
+
+  &:hover,
+  &:focus-visible {
+    color: #6b7280 !important;
+  }
+}
+
+.nav-group__toggle svg .stroke {
+  stroke: var(--crtib-text-muted) !important;
+}
+
+// ── Liens de navigation ────────────────────────────────────
+.nav__link,
+.nav__sub-link {
+  display: flex !important;
+  align-items: center !important;
+  padding: 7px 12px !important;
+  border-radius: 6px !important;
+  margin-bottom: 1px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #374151 !important;
+  transition: background 0.12s ease, color 0.12s ease !important;
+  text-decoration: none !important;
+
+  &:hover {
+    background: var(--crtib-primary-light) !important;
+    color: var(--crtib-primary-dark) !important;
+  }
+}
+
+.nav__link--active,
+.nav__sub-link--active {
+  background: var(--crtib-primary-light) !important;
+  color: var(--crtib-primary) !important;
+  font-weight: 600 !important;
+  position: relative !important;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20%;
+    bottom: 20%;
+    width: 3px;
+    border-radius: 0 2px 2px 0;
+    background: var(--crtib-primary);
+  }
+}
+
+// ── Boutons principaux ─────────────────────────────────────
+.btn.btn--style-primary {
+  background-color: var(--crtib-primary) !important;
+  border-color: var(--crtib-primary) !important;
+  color: #fff !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  transition: background 0.15s ease !important;
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--crtib-primary-dark) !important;
+    border-color: var(--crtib-primary-dark) !important;
+    color: #fff !important;
+  }
+}
+
+// ── Pill / statut ──────────────────────────────────────────
 .pill--style-success {
   background-color: var(--crtib-primary) !important;
   border-color: var(--crtib-primary) !important;
 }
 
-// ── Cards do dashboard customizado ──────────────────────────
+// ── Breadcrumb step-nav ────────────────────────────────────
+.step-nav__home {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+// ── Cards du dashboard ─────────────────────────────────────
 .crtib-card {
   display: block;
-  padding: 20px;
+  padding: 18px 20px;
   border-radius: 8px;
-  border: 1px solid var(--theme-elevation-100, #e4e4e7);
+  border: 1px solid var(--crtib-border);
   text-decoration: none !important;
-  background: var(--theme-elevation-0, #fff);
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
   color: inherit;
 
   &:hover {
     border-color: var(--crtib-primary) !important;
-    box-shadow: 0 0 0 3px rgba(44, 140, 91, 0.1);
+    box-shadow: 0 0 0 3px var(--crtib-primary-light);
+    transform: translateY(-1px);
     text-decoration: none !important;
   }
 }
 
-// ── Login: espaçamento antes do formulário ───────────────────
+// ── Page de login ──────────────────────────────────────────
 .login__form,
 .login-form {
   padding-top: 8px;
-}
-
-// ── Fix logo/icon clipping in admin nav ─────────────────────
-.nav__logo,
-.step-nav__home,
-.app-header__step-nav {
-  overflow: visible !important;
-
-  img,
-  svg {
-    display: block;
-    overflow: visible;
-    max-width: none;
-  }
 }

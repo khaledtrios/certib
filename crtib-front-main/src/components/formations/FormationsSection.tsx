@@ -162,9 +162,8 @@ export function FormationsSection({ title, category, showFilters = true, limit =
     const fetchFormations = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams({ limit: String(limit), sort: "startDate" });
+        const params = new URLSearchParams({ limit: String(limit), sort: "title" });
         if (activeFilter !== "all") params.set("where[category][equals]", activeFilter);
-        params.set("where[_status][equals]", "published");
         const res = await fetch(`/api/cms/formations?${params}`);
         const data = await res.json();
         setFormations(data.docs ?? []);

@@ -38,6 +38,12 @@ const GROUPS = [
     ],
   },
   {
+    label: { fr: 'Formations', en: 'Trainings' },
+    collections: [
+      { slug: 'formations', label: { fr: 'Formations', en: 'Trainings' }, description: { fr: 'Gérer les formations et inscriptions', en: 'Manage trainings and registrations' }, icon: '🎓' },
+    ],
+  },
+  {
     label: { fr: 'Administration', en: 'Administration' },
     collections: [
       { slug: 'users', label: { fr: 'Utilisateurs', en: 'Users' }, description: { fr: 'Gestion des utilisateurs', en: 'User management' }, icon: '👤' },

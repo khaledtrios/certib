@@ -18,10 +18,14 @@ export const Formations: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'startDate', 'location', '_status'],
-    hidden: true,
+    group: { fr: 'Formations', en: 'Trainings' },
+    hidden: false,
   },
   access: {
     read: () => true,
+    create: ({ req: { user } }) => Boolean(user),
+    update: ({ req: { user } }) => Boolean(user),
+    delete: ({ req: { user } }) => Boolean(user),
   },
   versions: { drafts: true },
   fields: [

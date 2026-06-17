@@ -161,9 +161,9 @@ export async function getPages(params: PayloadQueryParams = {}) {
  */
 export async function getPageBySlug(slug: string) {
   const response = await getCollection("pages", {
-    depth: 2,
+    depth: 1,
     limit: 1,
-    where: { slug: { equals: slug }, _status: { equals: "published" } },
+    where: { slug: { equals: slug } },
   });
   return response.docs[0] || null;
 }
@@ -176,7 +176,6 @@ export async function getNewsArticles(params: PayloadQueryParams = {}) {
     depth: 1,
     limit: 10,
     sort: "-publishedAt",
-    where: { _status: { equals: "published" } },
     ...params,
   });
 }
@@ -188,7 +187,7 @@ export async function getNewsBySlug(slug: string) {
   const response = await getCollection("news", {
     depth: 1,
     limit: 1,
-    where: { slug: { equals: slug }, _status: { equals: "published" } },
+    where: { slug: { equals: slug } },
   });
   return response.docs[0] || null;
 }
@@ -271,4 +270,28 @@ export async function getTimelineItems(params: PayloadQueryParams = {}) {
     sort: "order",
     ...params,
   });
+}
+
+/**
+ * Busca formations publiées triées par titre
+ */
+export async function getFormations(params: PayloadQueryParams = {}) {
+  return getCollection("formations", {
+    depth: 1,
+    limit: 100,
+    sort: "title",
+    ...params,
+  });
+}
+
+/**
+ * Busca une formation par slug (publiée uniquement)
+ */
+export async function getFormationBySlug(slug: string) {
+  const response = await getCollection("formations", {
+    depth: 1,
+    limit: 1,
+    where: { slug: { equals: slug } },
+  });
+  return response.docs[0] || null;
 }

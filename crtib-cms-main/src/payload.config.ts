@@ -27,6 +27,7 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     theme: 'light',
+    avatar: { Component: '/components/HeaderAvatarDropdown' },
     meta: {
       titleSuffix: '– CRTI-B',
       favicon: '/icon.svg',
@@ -39,6 +40,10 @@ export default buildConfig({
       graphics: {
         Logo: '/components/Logo',
         Icon: '/components/Icon',
+      },
+      afterNav: ['/components/NavUserFooter'],
+      logout: {
+        Button: '/components/NavLogoutHidden',
       },
       beforeLogin: ['/components/BeforeLogin'],
       views: {
