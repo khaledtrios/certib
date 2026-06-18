@@ -27,8 +27,10 @@ import { default as default_61f60fc02113e6fcdc9fba55c8461891 } from '../../../co
 import { default as default_14c91ccbbbea3e7bad8a580de5b851c6 } from '../../../components/NavLogoutHidden'
 import { default as default_a02a4abfb5c9da17149cbadc8057c129 } from '../../../components/Icon'
 import { default as default_919492c8e60179286a0f183c0a5b652e } from '../../../components/Logo'
+import { default as default_9083a17d994696c795624c75f7fd62be } from '../../../components/HeaderSiteButton'
 import { default as default_3479fb1617409cfb1c9f046627965212 } from '../../../components/NavUserFooter'
 import { default as default_01d809f8b80f9b2f728eaaa8a4fcc420 } from '../../../components/BeforeLogin'
+import { default as default_b1e6aec30bcd2e3a6961e0da3d9be170 } from '../../../components/NavDashboardLink'
 import { default as default_9a680279bc487e655cb510fd8d9dadff } from '../../../components/Dashboard'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
@@ -62,8 +64,10 @@ export const importMap = {
   "/components/NavLogoutHidden#default": default_14c91ccbbbea3e7bad8a580de5b851c6,
   "/components/Icon#default": default_a02a4abfb5c9da17149cbadc8057c129,
   "/components/Logo#default": default_919492c8e60179286a0f183c0a5b652e,
+  "/components/HeaderSiteButton#default": default_9083a17d994696c795624c75f7fd62be,
   "/components/NavUserFooter#default": default_3479fb1617409cfb1c9f046627965212,
   "/components/BeforeLogin#default": default_01d809f8b80f9b2f728eaaa8a4fcc420,
+  "/components/NavDashboardLink#default": default_b1e6aec30bcd2e3a6961e0da3d9be170,
   "/components/Dashboard#default": default_9a680279bc487e655cb510fd8d9dadff,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

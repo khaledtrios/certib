@@ -41,11 +41,13 @@ export default buildConfig({
         Logo: '/components/Logo',
         Icon: '/components/Icon',
       },
+      beforeNavLinks: ['/components/NavDashboardLink'],
       afterNav: ['/components/NavUserFooter'],
       logout: {
         Button: '/components/NavLogoutHidden',
       },
       beforeLogin: ['/components/BeforeLogin'],
+      actions: ['/components/HeaderSiteButton'],
       views: {
         dashboard: {
           Component: '/components/Dashboard',
