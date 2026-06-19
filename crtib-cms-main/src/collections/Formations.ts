@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateFormations } from '../hooks/revalidateFrontend'
 import {
   lexicalEditor,
   BoldFeature,
@@ -138,4 +139,7 @@ export const Formations: CollectionConfig = {
       label: { fr: 'Email d\'inscription', en: 'Registration email' },
     },
   ],
+  hooks: {
+    afterChange: [revalidateFormations],
+  },
 }
