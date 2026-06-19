@@ -45,16 +45,21 @@ async function fetchPayload<T>(
 
   const url = endpoint.startsWith("http") ? endpoint : `${API_URL}${endpoint}`;
 
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+
   try {
     const response = await fetch(url, {
       ...fetchOptions,
       headers,
-      // Next.js 15+ cache control
+      signal: fetchOptions.signal ?? controller.signal,
       next: {
-        revalidate: process.env.NODE_ENV === "development" ? 0 : 60, // Sem cache em dev
+        revalidate: process.env.NODE_ENV === "development" ? 0 : 60,
         ...fetchOptions.next,
       },
     });
+
+    clearTimeout(timer);
 
     if (!response.ok) {
       throw new Error(
@@ -64,7 +69,7 @@ async function fetchPayload<T>(
 
     return await response.json();
   } catch (error) {
-    console.error("Error fetching from Payload:", error);
+    clearTimeout(timer);
     throw error;
   }
 }

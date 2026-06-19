@@ -13,13 +13,12 @@ export function buildNewsletterEmail(
       ? `${frontendUrl}/api/media/file/${(news.featuredImage as Media).filename}`
       : null
 
-  const categoryLabel: Record<string, string> = {
+  const CATEGORY_LABELS: Record<string, string> = {
     actualite: 'Actualité',
     communique: 'Communiqué',
     evenement: 'Événement',
   }
-
-  const category = categoryLabel[news.category] ?? 'Actualité'
+  const category = news.category ? (CATEGORY_LABELS[news.category as string] ?? String(news.category)) : 'Actualité'
 
   return {
     subject: `[CRTIB] ${news.title}`,

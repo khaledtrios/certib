@@ -63,9 +63,9 @@ export interface Page {
   slug: string;
   parent?: Page | string | null;
   menuOrder?: number | null;
+  isHidden?: boolean | null;
   icon?: PageIcon | null;
   layout?: any[]; // Blocos de layout (page builder)
-  content?: any; // RichText do Lexical
   seo?: {
     metaTitle?: string;
     metaDescription?: string;
@@ -100,7 +100,7 @@ export interface NewsArticle {
   id: string;
   title: string;
   slug: string;
-  category: "actualite" | "communique" | "evenement";
+  category?: string | null;
   publishedAt: string;
   featuredImage?: PayloadMedia | string;
   excerpt?: string;

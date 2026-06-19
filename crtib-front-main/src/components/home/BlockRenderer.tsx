@@ -7,22 +7,40 @@ import { ClickableCard } from "@/components/cards/ClickableCard";
 import {
   Scale, Monitor, Zap, BookOpen, Building2, Users,
   FileText, BarChart3, Cpu, Sprout, type LucideIcon,
+  HardHat, Hammer, Ruler, Wrench, Factory, Clipboard, Award, GraduationCap,
+  Briefcase, Globe, Database, Server, Leaf, Wind, Thermometer, Droplets, Sun,
+  Handshake, PieChart, TrendingUp, Activity, Search, MapPin, Calendar, Phone,
+  Mail, Home, Download, Shield, Target, Lightbulb, Video, File, Folder, Flag,
+  Clock, CheckCircle, ArrowRight, Star, ExternalLink,
 } from "lucide-react";
 
-// Mapping titre → icône Lucide (insensible à la casse et aux accents)
+// Map icon name (stored in CMS) → Lucide component
+const ICON_MAP: Record<string, LucideIcon> = {
+  Building2, HardHat, Hammer, Ruler, Wrench, Factory,
+  Scale, FileText, Clipboard, BookOpen, Award, GraduationCap, Briefcase,
+  Cpu, Monitor, Globe, Database, Server,
+  Sprout, Leaf, Zap, Wind, Thermometer, Droplets, Sun,
+  Users, Handshake, BarChart3, PieChart, TrendingUp, Activity,
+  Search, MapPin, Calendar, Phone, Mail, Home, Download, Shield,
+  Target, Lightbulb, Video, File, Folder, Flag,
+  Clock, CheckCircle, ArrowRight, Star, ExternalLink,
+};
+
+// Fallback: resolve icon from title text when no icon is stored in CMS
 const CATEGORY_ICONS: Array<{ patterns: RegExp; Icon: LucideIcon }> = [
-  { patterns: /march[eé]|public|appel.offre|soumission/i,    Icon: Scale        },
-  { patterns: /digital|bim|num[eé]rique|informatique|cloud/i, Icon: Cpu         },
-  { patterns: /construc.*durable|durable|[eé]colog|vert/i,    Icon: Sprout      },
-  { patterns: /[eé]nerg[eé]tique|[eé]nergie|performance/i,   Icon: Zap          },
-  { patterns: /dictionnaire|glossaire/i,                      Icon: BookOpen    },
-  { patterns: /partenaire|partner/i,                          Icon: Users        },
-  { patterns: /qui sommes|[àa] propos|crti/i,                 Icon: Building2   },
-  { patterns: /rapport|activit[eé]/i,                         Icon: BarChart3   },
-  { patterns: /formation|training/i,                          Icon: Monitor     },
+  { patterns: /march[eé]|public|appel.offre|soumission/i,    Icon: Scale     },
+  { patterns: /digital|bim|num[eé]rique|informatique|cloud/i, Icon: Cpu      },
+  { patterns: /construc.*durable|durable|[eé]colog|vert/i,    Icon: Sprout   },
+  { patterns: /[eé]nerg[eé]tique|[eé]nergie|performance/i,   Icon: Zap       },
+  { patterns: /dictionnaire|glossaire/i,                      Icon: BookOpen  },
+  { patterns: /partenaire|partner/i,                          Icon: Users     },
+  { patterns: /qui sommes|[àa] propos|crti/i,                 Icon: Building2 },
+  { patterns: /rapport|activit[eé]/i,                         Icon: BarChart3 },
+  { patterns: /formation|training/i,                          Icon: Monitor   },
 ];
 
-function resolveIcon(title: string): LucideIcon {
+function resolveIcon(iconName: string | undefined, title: string): LucideIcon {
+  if (iconName && ICON_MAP[iconName]) return ICON_MAP[iconName];
   for (const { patterns, Icon } of CATEGORY_ICONS) {
     if (patterns.test(title)) return Icon;
   }
@@ -209,7 +227,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
           }
 
           case "downloadLinks": {
-            const items: any[] = block.items ?? [];
+            const items: any[] = (block.items ?? []).filter((i: any) => i.label);
             return (
               <section key={key} className="w-full bg-white">
                 <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -236,7 +254,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
           }
 
           case "quickLinks": {
-            const items: any[] = block.items ?? [];
+            const items: any[] = (block.items ?? []).filter((i: any) => i.title && i.href);
             return (
               <section key={key} className="w-full bg-[#F5F5F5]">
                 <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -246,7 +264,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
                         key={j}
                         title={item.title}
                         href={item.href}
-                        Icon={resolveIcon(item.title ?? "")}
+                        Icon={resolveIcon(item.icon, item.title ?? "")}
                       />
                     ))}
                   </div>

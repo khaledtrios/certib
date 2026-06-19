@@ -40,6 +40,11 @@ function organizePageHierarchy(pages: Page[]): PageWithChildren[] {
   const byOrder = (a: PageWithChildren, b: PageWithChildren) =>
     (a.menuOrder ?? 9999) - (b.menuOrder ?? 9999);
 
+  const filterVisible = (items: PageWithChildren[]): PageWithChildren[] =>
+    items
+      .filter((p) => !p.isHidden)
+      .map((p) => ({ ...p, children: filterVisible(p.children ?? []) }));
+
   const sortRecursive = (items: PageWithChildren[]) => {
     items.sort(byOrder);
     items.forEach((p) => {
@@ -48,7 +53,7 @@ function organizePageHierarchy(pages: Page[]): PageWithChildren[] {
   };
 
   sortRecursive(rootPages);
-  return rootPages.filter((p) => (p.menuOrder ?? 0) < 900);
+  return filterVisible(rootPages).filter((p) => (p.menuOrder ?? 0) < 900);
 }
 
 /**
@@ -79,8 +84,11 @@ export async function GlobalLayout({
         <Footer />
       </div>
     );
-  } catch (error) {
-    console.error("Erro ao carregar layout global:", error);
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    if (process.env.NODE_ENV === "development") {
+      console.warn("[GlobalLayout] CMS unreachable — rendering without nav:", msg);
+    }
 
     return (
       <div className="min-h-screen flex flex-col bg-white">

@@ -12,11 +12,16 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-const CATEGORY_LABELS: Record<NewsArticle["category"], string> = {
+const CATEGORY_LABELS: Record<string, string> = {
   actualite: "Actualité",
   communique: "Communiqué",
   evenement: "Événement",
 };
+
+function resolveCategoryLabel(category: NewsArticle["category"]): string | null {
+  if (!category) return null;
+  return CATEGORY_LABELS[category] ?? null;
+}
 
 function formatDate(value: string) {
   const parsed = new Date(value);
@@ -75,7 +80,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
       : undefined;
 
   const imageUrl = image ? getMediaUrl(image) : undefined;
-  const categoryLabel = CATEGORY_LABELS[article.category] ?? article.category;
+  const categoryLabel = resolveCategoryLabel(article.category);
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -92,9 +97,11 @@ export default async function NewsDetailPage({ params }: PageProps) {
       {/* Hero */}
       <section className="bg-white relative pb-8 md:pb-10">
         <div className="container mx-auto px-4 md:px-8 max-w-6xl py-8 md:py-12 text-center">
-          <span className="inline-block mb-4 font-sans text-[12px] font-medium uppercase tracking-[0.18em] text-crtib-green-blue">
-            {categoryLabel}
-          </span>
+          {categoryLabel && (
+            <span className="inline-block mb-4 font-sans text-[12px] font-medium uppercase tracking-[0.18em] text-crtib-green-blue">
+              {categoryLabel}
+            </span>
+          )}
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-light tracking-wider text-gray-800">
             {article.title}
           </h1>

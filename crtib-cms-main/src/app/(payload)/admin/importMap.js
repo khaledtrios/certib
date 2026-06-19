@@ -1,3 +1,4 @@
+import { default as default_da3b373a276c153dce234a7b6af2f237 } from '../../../components/IconPickerField'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -21,7 +22,6 @@ import { RelationshipFeatureClient as RelationshipFeatureClient_e70f5e05f09f93e0
 import { UploadFeatureClient as UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { InlineToolbarFeatureClient as InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { BlocksFeatureClient as BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { default as default_47093b7a645ba31706f6916f0de9eb1b } from '../../../components/SendNewsletterButton'
 import { default as default_61f60fc02113e6fcdc9fba55c8461891 } from '../../../components/HeaderAvatarDropdown'
 import { default as default_14c91ccbbbea3e7bad8a580de5b851c6 } from '../../../components/NavLogoutHidden'
@@ -32,9 +32,11 @@ import { default as default_3479fb1617409cfb1c9f046627965212 } from '../../../co
 import { default as default_01d809f8b80f9b2f728eaaa8a4fcc420 } from '../../../components/BeforeLogin'
 import { default as default_b1e6aec30bcd2e3a6961e0da3d9be170 } from '../../../components/NavDashboardLink'
 import { default as default_9a680279bc487e655cb510fd8d9dadff } from '../../../components/Dashboard'
+import { default as default_402ccc6e1ce2f14c39fdd07c005999ca } from '../../../components/PageOrderView'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 export const importMap = {
+  "/components/IconPickerField#default": default_da3b373a276c153dce234a7b6af2f237,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -58,7 +60,6 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UploadFeatureClient": UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#InlineToolbarFeatureClient": InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "@payloadcms/richtext-lexical/client#BlocksFeatureClient": BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "/components/SendNewsletterButton#default": default_47093b7a645ba31706f6916f0de9eb1b,
   "/components/HeaderAvatarDropdown#default": default_61f60fc02113e6fcdc9fba55c8461891,
   "/components/NavLogoutHidden#default": default_14c91ccbbbea3e7bad8a580de5b851c6,
@@ -69,5 +70,6 @@ export const importMap = {
   "/components/BeforeLogin#default": default_01d809f8b80f9b2f728eaaa8a4fcc420,
   "/components/NavDashboardLink#default": default_b1e6aec30bcd2e3a6961e0da3d9be170,
   "/components/Dashboard#default": default_9a680279bc487e655cb510fd8d9dadff,
+  "/components/PageOrderView#default": default_402ccc6e1ce2f14c39fdd07c005999ca,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

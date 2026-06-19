@@ -197,10 +197,8 @@ export interface Page {
    * Leave blank if it is a root page
    */
   parent?: (number | null) | Page;
-  /**
-   * Position in the menu (lowest number appears first)
-   */
   menuOrder?: number | null;
+  isHidden?: boolean | null;
   /**
    * Icon displayed next to the title in the navigation menu
    */
@@ -333,7 +331,7 @@ export interface Page {
             title?: string | null;
             items?:
               | {
-                  label: string;
+                  label?: string | null;
                   file?: (number | null) | Media;
                   id?: string | null;
                 }[]
@@ -345,8 +343,8 @@ export interface Page {
         | {
             items?:
               | {
-                  title: string;
-                  href: string;
+                  title?: string | null;
+                  href?: string | null;
                   icon?: string | null;
                   id?: string | null;
                 }[]
@@ -546,24 +544,6 @@ export interface Page {
           }
       )[]
     | null;
-  /**
-   * Content with text, images and mixed custom components
-   */
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
   seo?: {
     /**
      * Title for SEO (if empty, uses the page title)
@@ -969,6 +949,7 @@ export interface PagesSelect<T extends boolean = true> {
   slug?: T;
   parent?: T;
   menuOrder?: T;
+  isHidden?: T;
   icon?: T;
   layout?:
     | T
@@ -1267,7 +1248,6 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
-  content?: T;
   seo?:
     | T
     | {

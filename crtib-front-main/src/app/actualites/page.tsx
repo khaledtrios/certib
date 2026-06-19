@@ -135,8 +135,21 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
       <div className="pb-6 pt-16">
         <div className="mx-auto w-full max-w-[1320px] px-8">
           <div className="flex flex-wrap items-center gap-3">
-            {CATEGORIES.map((cat) => {
-              const isActive = (cat.value || "") === (category || "");
+            {/* "Tout" tab */}
+            <Link
+              href={buildUrl(1, "")}
+              className={[
+                "inline-flex h-10 items-center justify-center rounded-[2px] border px-6 font-sans text-[12px] font-semibold uppercase tracking-[0.08em] transition-colors duration-150",
+                !category
+                  ? "border-[#37C2A2] bg-[#37C2A2] text-white"
+                  : "border-gray-300 bg-white text-crtib-gray-dark hover:border-[#37C2A2] hover:text-[#37C2A2]",
+              ].join(" ")}
+            >
+              Tout
+            </Link>
+            {/* Category tabs */}
+            {CATEGORIES.slice(1).map((cat) => {
+              const isActive = cat.value === (category || "");
               return (
                 <Link
                   key={cat.value}

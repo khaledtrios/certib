@@ -17,9 +17,18 @@
 
 // ── App Header ─────────────────────────────────────────────
 .app-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
   background: #fff !important;
   border-bottom: 1px solid var(--crtib-border) !important;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+// Allow .template-default__wrap to scroll so sticky header works
+.template-default__wrap {
+  overflow-y: auto !important;
+  height: 100vh !important;
 }
 
 .app-header__bg {

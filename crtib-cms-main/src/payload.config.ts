@@ -28,11 +28,12 @@ export default buildConfig({
     user: Users.slug,
     theme: 'light',
     avatar: { Component: '/components/HeaderAvatarDropdown' },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     meta: {
       titleSuffix: '– CRTI-B',
       favicon: '/icon.svg',
       ogImage: '/logo.svg',
-    },
+    } as any,
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -51,6 +52,10 @@ export default buildConfig({
       views: {
         dashboard: {
           Component: '/components/Dashboard',
+        },
+        pageOrder: {
+          Component: '/components/PageOrderView',
+          path: '/page-order',
         },
       },
     },
@@ -72,19 +77,21 @@ export default buildConfig({
     Clauses,
     NewsletterSubscribers,
   ],
-  email: nodemailerAdapter({
-    defaultFromAddress: process.env.SMTP_FROM_ADDRESS || 'no-reply@crtib.org',
-    defaultFromName: process.env.SMTP_FROM_NAME || 'CRTIB',
-    transportOptions: {
-      host: process.env.SMTP_HOST || '',
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: process.env.SMTP_SECURE === 'true',
-      auth: {
-        user: process.env.SMTP_USER || '',
-        pass: process.env.SMTP_PASS || '',
-      },
-    },
-  }),
+  email: process.env.SMTP_HOST
+    ? nodemailerAdapter({
+        defaultFromAddress: process.env.SMTP_FROM_ADDRESS || 'no-reply@crtib.org',
+        defaultFromName: process.env.SMTP_FROM_NAME || 'CRTIB',
+        transportOptions: {
+          host: process.env.SMTP_HOST,
+          port: Number(process.env.SMTP_PORT || 587),
+          secure: process.env.SMTP_SECURE === 'true',
+          auth: {
+            user: process.env.SMTP_USER || '',
+            pass: process.env.SMTP_PASS || '',
+          },
+        },
+      })
+    : undefined,
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

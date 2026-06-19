@@ -68,7 +68,6 @@ export default async function FormationDetailPage({ params }: PageProps) {
           <Breadcrumb
             slug={`formations/${formation.slug}`}
             currentTitle={formation.title}
-            ancestors={[{ label: "Formations", href: "/toutes-les-formations" }]}
           />
         </div>
       </div>
