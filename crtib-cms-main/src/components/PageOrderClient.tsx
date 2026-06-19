@@ -312,29 +312,33 @@ export function PageOrderClient() {
   }
 
   const handleToggleHide = useCallback(async (id: string) => {
-    // Optimistic update
-    let newHidden = false
-    setTree((prev) => {
-      const next = updateInTree(prev, id, (p) => {
-        newHidden = !p.isHidden
-        return { ...p, isHidden: !p.isHidden }
-      })
-      return next
-    })
+    // Find current value directly from tree closure
+    const findPage = (pages: Page[]): Page | undefined => {
+      for (const p of pages) {
+        if (p.id === id) return p
+        const found = findPage(p.children)
+        if (found) return found
+      }
+    }
+    const page = findPage(tree)
+    if (!page) return
+    const newHidden = !page.isHidden
+
+    // Optimistic UI update
+    setTree((prev) => updateInTree(prev, id, (p) => ({ ...p, isHidden: newHidden })))
 
     try {
-      await fetch(`/api/pages/${id}`, {
+      const res = await fetch(`/api/pages/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isHidden: newHidden }),
+        body: JSON.stringify({ isHidden: newHidden, _status: 'published' }),
       })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
     } catch {
       // Revert on error
-      setTree((prev) =>
-        updateInTree(prev, id, (p) => ({ ...p, isHidden: !p.isHidden })),
-      )
+      setTree((prev) => updateInTree(prev, id, (p) => ({ ...p, isHidden: !newHidden })))
     }
-  }, [])
+  }, [tree])
 
   const handleSave = async () => {
     setSaving(true)
@@ -342,15 +346,17 @@ export function PageOrderClient() {
     try {
       const patches: { id: string; menuOrder: number }[] = []
       collectPatches(tree, patches)
-      await Promise.all(
+      const results = await Promise.all(
         patches.map(({ id, menuOrder }) =>
           fetch(`/api/pages/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ menuOrder }),
+            body: JSON.stringify({ menuOrder, _status: 'published' }),
           }),
         ),
       )
+      const hasError = results.some((r) => !r.ok)
+      if (hasError) throw new Error('One or more pages failed to save')
       setDirty(false)
       setStatus('saved')
       setTimeout(() => setStatus('idle'), 3000)
