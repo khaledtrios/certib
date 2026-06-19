@@ -83,16 +83,15 @@ function MemberCard({ member }: { member: TeamMember }) {
 }
 
 interface TeamGridProps {
-  root: {
-    name?: string;
-    role?: string;
-    photo?: any;
-    children?: TeamMember[];
-  };
+  root: TeamMember;
 }
 
 export function TeamGrid({ root }: TeamGridProps) {
   const members: TeamMember[] = [];
+
+  if (root.name) {
+    members.push(root);
+  }
 
   if (root.children?.length) {
     members.push(...root.children);
