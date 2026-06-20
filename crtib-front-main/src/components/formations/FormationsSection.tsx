@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Calendar, MapPin, Clock, Users, Euro, Mail, ExternalLink } from "lucide-react";
+import { getMediaUrl } from "@/lib/payload";
 
 interface Formation {
   id: string;
@@ -48,11 +49,7 @@ function formatDate(dateStr?: string) {
 }
 
 function FormationCard({ formation }: { formation: Formation }) {
-  const imageUrl = formation.image?.url
-    ? formation.image.url.startsWith("http")
-      ? formation.image.url
-      : `http://localhost:3000${formation.image.url}`
-    : null;
+  const imageUrl = formation.image?.url ? getMediaUrl(formation.image) : null;
 
   const categoryLabel = formation.category ? CATEGORY_LABELS[formation.category] : null;
   const categoryColor = formation.category ? CATEGORY_COLORS[formation.category] ?? "bg-gray-100 text-gray-600" : "";

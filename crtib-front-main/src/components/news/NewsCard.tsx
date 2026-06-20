@@ -59,39 +59,51 @@ export function NewsCard({ item, variant = "default" }: NewsCardProps) {
       aria-hidden={isPlaceholder}
     >
       {/* IMAGEM */}
-      <Link
-        href={item?.href || "#"}
-        aria-label={
-          item?.title ? `Lire la suite: ${item.title}` : "Lire la suite"
-        }
-        className={[
-          "group relative w-full overflow-hidden bg-crtib-gray-light",
-          "aspect-square",
-          "lg:h-[260px] lg:w-[260px] lg:shrink-0",
-        ].join(" ")}
-      >
-        {item?.imageUrl ? (
-          <Image
-            src={item.imageUrl}
-            alt={item.imageAlt || item.title}
-            fill
-            sizes="(max-width: 1024px) 100vw, 260px"
-            className="object-cover"
-            priority
-          />
-        ) : null}
+      <div className={[
+        "relative shrink-0 w-full lg:w-[260px] lg:h-[260px]",
+        "aspect-square lg:aspect-auto",
+      ].join(" ")}>
+        {/* Decorative offset frame */}
+        <div className={[
+          "absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-sm",
+          isBlock ? "bg-white/20" : "bg-[#08AA86]/25",
+        ].join(" ")} />
 
-        {/* Overlay */}
-        <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-          <div className="absolute inset-0 bg-crtib-green-blue/80 ring-8 ring-white/70" />
-          <div className="absolute inset-8 border border-white/80" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-sans text-[16px] font-medium uppercase tracking-[0.08em] text-white">
-              LIRE LA SUITE
-            </span>
+        <Link
+          href={item?.href || "#"}
+          aria-label={
+            item?.title ? `Lire la suite: ${item.title}` : "Lire la suite"
+          }
+          className={[
+            "group relative block w-full h-full overflow-hidden bg-crtib-gray-light",
+            "rounded-sm border",
+            isBlock ? "border-white/20" : "border-gray-200",
+            "shadow-md transition-transform duration-200 hover:-translate-x-[2px] hover:-translate-y-[2px]",
+          ].join(" ")}
+        >
+          {item?.imageUrl ? (
+            <Image
+              src={item.imageUrl}
+              alt={item.imageAlt || item.title}
+              fill
+              sizes="(max-width: 1024px) 100vw, 260px"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              priority
+            />
+          ) : null}
+
+          {/* Overlay */}
+          <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+            <div className="absolute inset-0 bg-crtib-green-blue/80 ring-8 ring-white/70" />
+            <div className="absolute inset-8 border border-white/80" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-sans text-[16px] font-medium uppercase tracking-[0.08em] text-white">
+                LIRE LA SUITE
+              </span>
+            </div>
           </div>
-        </div>
-      </Link>
+        </Link>
+      </div>
 
       {/* TEXTO */}
       <div className="min-w-0 font-sans">

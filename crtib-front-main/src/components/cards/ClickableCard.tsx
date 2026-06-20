@@ -19,7 +19,7 @@ export function ClickableCard({
       href={href}
       aria-label={title}
       className={[
-        "group flex min-h-[160px] w-[170px] min-w-[150px] flex-col items-center justify-center",
+        "group flex h-[160px] w-[170px] min-w-[150px] flex-col items-center justify-center",
         "border border-[#E4E4E4] bg-white shadow-sm transition-all duration-200 px-5 py-6",
         "hover:border-[#08AA86] hover:shadow-lg hover:-translate-y-1",
         className,

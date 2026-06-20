@@ -88,8 +88,10 @@ export default async function NewsDetailPage({ params }: PageProps) {
       <div className="bg-white py-4 border-b border-gray-200">
         <div className="container mx-auto px-4 md:px-8 max-w-6xl">
           <Breadcrumb
-            slug={`actualites/${slug}`}
-            currentTitle={article.title}
+            items={[
+              { href: "/actualites", title: "Actualités" },
+              { href: `/actualites/${slug}`, title: article.title },
+            ]}
           />
         </div>
       </div>

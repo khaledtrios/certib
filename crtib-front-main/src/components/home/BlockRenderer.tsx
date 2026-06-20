@@ -258,7 +258,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
             return (
               <section key={key} className="w-full bg-[#F5F5F5]">
                 <div className="mx-auto w-full max-w-6xl px-6 py-12">
-                  <div className="flex flex-wrap items-center justify-center gap-6">
+                  <div className="flex flex-wrap items-stretch justify-center gap-6">
                     {items.map((item, j) => (
                       <ClickableCard
                         key={j}

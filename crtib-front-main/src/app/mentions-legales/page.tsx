@@ -159,7 +159,7 @@ export default function MentionsLegalesPage() {
       {/* Breadcrumb */}
       <div className="border-b border-gray-200 bg-white py-4">
         <div className="container mx-auto max-w-6xl px-4 md:px-8">
-          <Breadcrumb slug="mentions-legales" currentTitle="Mentions légales" />
+          <Breadcrumb items={[{ href: "/mentions-legales", title: "Mentions légales" }]} />
         </div>
       </div>
 

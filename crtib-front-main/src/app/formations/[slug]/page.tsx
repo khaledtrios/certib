@@ -66,8 +66,10 @@ export default async function FormationDetailPage({ params }: PageProps) {
       <div className="border-b border-gray-200 bg-white py-4">
         <div className="container mx-auto max-w-6xl px-4 md:px-8">
           <Breadcrumb
-            slug={`formations/${formation.slug}`}
-            currentTitle={formation.title}
+            items={[
+              { href: "/toutes-les-formations", title: "Formations" },
+              { href: `/formations/${formation.slug}`, title: formation.title },
+            ]}
           />
         </div>
       </div>

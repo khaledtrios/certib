@@ -1,20 +1,36 @@
 import type { Page } from "@/types/payload";
-import Breadcrumb from "./Breadcrumb";
+import Breadcrumb, { type BreadcrumbItem } from "./Breadcrumb";
 import { BlockRenderer } from "@/components/home/BlockRenderer";
 
 interface PageLayoutProps {
   page: Page;
 }
 
+function buildBreadcrumbItems(page: Page): BreadcrumbItem[] {
+  const items: BreadcrumbItem[] = [];
+
+  // Add parent if available (depth=1 from API)
+  if (page.parent && typeof page.parent === "object") {
+    const parent = page.parent as Page;
+    if (parent.slug && parent.title) {
+      items.push({ href: `/${parent.slug}`, title: parent.title });
+    }
+  }
+
+  items.push({ href: `/${page.slug}`, title: page.title });
+  return items;
+}
+
 export default function PageLayout({ page }: PageLayoutProps) {
-  const { title, layout, slug } = page;
+  const { title, layout } = page;
+  const breadcrumbItems = buildBreadcrumbItems(page);
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
       {/* Breadcrumb */}
       <div className="bg-white py-4 border-b border-gray-200">
         <div className="container mx-auto px-4 md:px-8 max-w-6xl">
-          <Breadcrumb slug={slug} currentTitle={title} />
+          <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
 

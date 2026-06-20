@@ -65,7 +65,7 @@ export default async function FormationsPage() {
       {/* Breadcrumb */}
       <div className="border-b border-gray-200 bg-white py-4">
         <div className="container mx-auto max-w-6xl px-4 md:px-8">
-          <Breadcrumb slug="toutes-les-formations" currentTitle="Formations" />
+          <Breadcrumb items={[{ href: "/toutes-les-formations", title: "Formations" }]} />
         </div>
       </div>
 
