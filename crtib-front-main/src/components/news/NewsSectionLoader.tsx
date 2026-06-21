@@ -1,7 +1,9 @@
 import { getNewsArticles, getMediaUrl } from "@/lib/payload";
 import { NewsSection } from "./NewsSection";
 import type { NewsItem } from "./NewsCard";
-import type { NewsArticle } from "@/types/payload";
+import type { NewsArticle, WhereClause } from "@/types/payload";
+
+type RelationRef = { id: string | number } | string | number;
 
 type Props = {
   title?: string;
@@ -9,6 +11,8 @@ type Props = {
   variant?: "default" | "block";
   ctaHref?: string;
   excludeSlug?: string;
+  filterCategories?: RelationRef[] | null;
+  filterRubriques?: RelationRef[] | null;
 };
 
 function shuffleSeed<T>(arr: T[]): T[] {
@@ -46,9 +50,18 @@ function mixByRubrique(docs: NewsArticle[], limit: number): NewsArticle[] {
   return result;
 }
 
+function extractIds(refs: RelationRef[] | null | undefined): string[] {
+  if (!refs?.length) return [];
+  return refs
+    .map((r) => (typeof r === "object" && "id" in r ? String(r.id) : String(r)))
+    .filter(Boolean);
+}
+
 export async function NewsSectionLoader({
   maxItems = 2,
   excludeSlug,
+  filterCategories,
+  filterRubriques,
   ...props
 }: Props) {
   const limit = Math.max(2, Math.min(maxItems, 6));
@@ -56,8 +69,22 @@ export async function NewsSectionLoader({
   let items: NewsItem[] = [];
 
   try {
-    // Récupère un grand pool pour avoir de la diversité de rubriques
-    const result = await getNewsArticles({ limit: 12 });
+    // Build where clause — only filter when selections are non-empty
+    const catIds = extractIds(filterCategories);
+    const rubIds = extractIds(filterRubriques);
+
+    const conditions: WhereClause[] = [{ _status: { equals: "published" } }];
+    if (catIds.length > 0) conditions.push({ category: { in: catIds } });
+    if (rubIds.length > 0) conditions.push({ rubrique: { in: rubIds } });
+
+    const where: WhereClause =
+      conditions.length > 1 ? { and: conditions } : conditions[0];
+
+    // Fetch a pool large enough for rubrique diversity mixing
+    const result = await getNewsArticles({
+      limit: Math.max(limit * 4, 12),
+      where,
+    });
     const allDocs = (result.docs as NewsArticle[])
       .filter((doc) => !excludeSlug || doc.slug !== excludeSlug);
 

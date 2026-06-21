@@ -220,6 +220,34 @@ export const Pages: CollectionConfig = {
               label: { en: 'CTA Link', fr: 'Lien CTA' },
               defaultValue: '/actualites',
             },
+            {
+              name: 'filterCategories',
+              type: 'relationship',
+              relationTo: 'actualite-categories',
+              hasMany: true,
+              required: false,
+              label: { en: 'Filter by categories', fr: 'Filtrer par catégories' },
+              admin: {
+                description: {
+                  en: 'Leave empty to show all categories.',
+                  fr: 'Laisser vide = toutes les catégories.',
+                },
+              },
+            },
+            {
+              name: 'filterRubriques',
+              type: 'relationship',
+              relationTo: 'actualite-rubriques',
+              hasMany: true,
+              required: false,
+              label: { en: 'Filter by sections', fr: 'Filtrer par rubriques' },
+              admin: {
+                description: {
+                  en: 'Leave empty to show all sections.',
+                  fr: 'Laisser vide = toutes les rubriques.',
+                },
+              },
+            },
           ],
         },
         {

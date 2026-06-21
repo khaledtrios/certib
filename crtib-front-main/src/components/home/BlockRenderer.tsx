@@ -101,6 +101,8 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
                 maxItems={block.maxItems ?? 3}
                 variant={block.variant}
                 ctaHref={block.ctaHref}
+                filterCategories={block.filterCategories ?? null}
+                filterRubriques={block.filterRubriques ?? null}
               />
             );
 

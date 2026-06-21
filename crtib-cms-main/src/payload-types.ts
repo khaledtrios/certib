@@ -249,6 +249,14 @@ export interface Page {
             maxItems?: number | null;
             variant?: ('default' | 'block') | null;
             ctaHref?: string | null;
+            /**
+             * Leave empty to show all categories.
+             */
+            filterCategories?: (number | ActualiteCategory)[] | null;
+            /**
+             * Leave empty to show all sections.
+             */
+            filterRubriques?: (number | ActualiteRubrique)[] | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'newsSection';
@@ -570,6 +578,42 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "actualite-categories".
+ */
+export interface ActualiteCategory {
+  id: number;
+  name: string;
+  /**
+   * Unique identifier — used in URLs (e.g. actualite)
+   */
+  slug: string;
+  /**
+   * Sort in filters (optional)
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "actualite-rubriques".
+ */
+export interface ActualiteRubrique {
+  id: number;
+  name: string;
+  /**
+   * Unique identifier — used in filters (e.g. marches-publics)
+   */
+  slug: string;
+  /**
+   * Sort in filters (optional)
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "clauses".
  */
 export interface Clause {
@@ -646,42 +690,6 @@ export interface News {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "actualite-categories".
- */
-export interface ActualiteCategory {
-  id: number;
-  name: string;
-  /**
-   * Unique identifier — used in URLs (e.g. actualite)
-   */
-  slug: string;
-  /**
-   * Sort in filters (optional)
-   */
-  order?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "actualite-rubriques".
- */
-export interface ActualiteRubrique {
-  id: number;
-  name: string;
-  /**
-   * Unique identifier — used in filters (e.g. marches-publics)
-   */
-  slug: string;
-  /**
-   * Sort in filters (optional)
-   */
-  order?: number | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1044,6 +1052,8 @@ export interface PagesSelect<T extends boolean = true> {
               maxItems?: T;
               variant?: T;
               ctaHref?: T;
+              filterCategories?: T;
+              filterRubriques?: T;
               id?: T;
               blockName?: T;
             };
