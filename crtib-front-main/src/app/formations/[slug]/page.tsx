@@ -7,7 +7,7 @@ import RichText from "@/components/RichText";
 import Breadcrumb from "@/components/Breadcrumb";
 import { Calendar, MapPin, Clock, Users, Euro, Mail, ExternalLink, ArrowLeft } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -57,6 +57,20 @@ export default async function FormationDetailPage({ params }: PageProps) {
   if (!formation) notFound();
 
   const imageUrl = formation.image ? getMediaUrl(formation.image) : null;
+  const base = process.env.NEXT_PUBLIC_SERVER_URL ?? "https://crtib.lu";
+
+  const jsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: formation.title,
+    description: `Formation CRTI-B : ${formation.title}${formation.location ? ` — ${formation.location}` : ""}`,
+    url: `${base}/formations/${formation.slug ?? formation.id}`,
+    provider: { "@type": "Organization", name: "CRTI-B", url: base },
+    ...(formation.startDate ? { startDate: formation.startDate } : {}),
+    ...(formation.endDate ? { endDate: formation.endDate } : {}),
+    ...(formation.location ? { location: { "@type": "Place", name: formation.location } } : {}),
+  };
+
   const catSlug = formation.category
     ? (typeof formation.category === 'string' ? formation.category : formation.category?.slug)
     : null;
@@ -66,7 +80,12 @@ export default async function FormationDetailPage({ params }: PageProps) {
   const catColor = catSlug ? CATEGORY_COLORS[catSlug] ?? "bg-gray-100 text-gray-600" : "";
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f5f5f5]">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="flex flex-col min-h-screen bg-[#f5f5f5]">
       {/* Breadcrumb */}
       <div className="border-b border-gray-200 bg-white py-4">
         <div className="container mx-auto max-w-6xl px-4 md:px-8">
@@ -211,5 +230,6 @@ export default async function FormationDetailPage({ params }: PageProps) {
         </div>
       </div>
     </div>
+    </>
   );
 }

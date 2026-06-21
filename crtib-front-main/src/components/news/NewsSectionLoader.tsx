@@ -57,7 +57,7 @@ export async function NewsSectionLoader({
 
   try {
     // Récupère un grand pool pour avoir de la diversité de rubriques
-    const result = await getNewsArticles({ limit: 50 });
+    const result = await getNewsArticles({ limit: 12 });
     const allDocs = (result.docs as NewsArticle[])
       .filter((doc) => !excludeSlug || doc.slug !== excludeSlug);
 

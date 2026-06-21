@@ -46,7 +46,8 @@ async function fetchPayload<T>(
   const url = endpoint.startsWith("http") ? endpoint : `${API_URL}${endpoint}`;
 
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 8000);
+  const timeoutMs = process.env.NODE_ENV === "development" ? 3000 : 8000;
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const response = await fetch(url, {
@@ -158,7 +159,7 @@ export async function getPages(params: PayloadQueryParams = {}) {
     depth: 2,
     limit: 10,
     ...params,
-  });
+  }, { next: { tags: ["pages"], revalidate: 3600 } });
 }
 
 /**
@@ -286,7 +287,7 @@ export async function getFormations(params: PayloadQueryParams = {}) {
     limit: 100,
     sort: "title",
     ...params,
-  });
+  }, { next: { tags: ["formations"], revalidate: 3600 } });
 }
 
 /**
@@ -297,6 +298,6 @@ export async function getFormationBySlug(slug: string) {
     depth: 1,
     limit: 1,
     where: { slug: { equals: slug } },
-  });
+  }, { next: { tags: ["formations"], revalidate: 3600 } });
   return response.docs[0] || null;
 }

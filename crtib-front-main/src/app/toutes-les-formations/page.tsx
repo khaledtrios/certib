@@ -5,11 +5,16 @@ import { getFormations, getMediaUrl } from "@/lib/payload";
 import Breadcrumb from "@/components/Breadcrumb";
 import { Calendar, MapPin, Clock, Users, Euro } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Formations | CRTI-B",
   description: "Découvrez toutes les formations proposées par le CRTI-B",
+  openGraph: {
+    title: "Formations | CRTI-B",
+    description: "Découvrez toutes les formations proposées par le CRTI-B",
+    images: [{ url: "/og-default.png", width: 1200, height: 630, alt: "CRTI-B Formations" }],
+  },
 };
 
 const CATEGORY_LABELS: Record<string, string> = {

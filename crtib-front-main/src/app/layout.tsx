@@ -27,6 +27,15 @@ export const metadata: Metadata = {
     siteName: "CRTI-B",
     locale: "fr_LU",
     type: "website",
+    url: process.env.NEXT_PUBLIC_SERVER_URL,
+    images: [
+      {
+        url: "/og-default.png",
+        width: 1200,
+        height: 630,
+        alt: "CRTI-B – Centre de Ressources des Technologies et de l'Innovation pour le Bâtiment",
+      },
+    ],
   },
 };
 

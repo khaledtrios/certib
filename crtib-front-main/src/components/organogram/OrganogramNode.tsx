@@ -23,7 +23,7 @@ export function OrganogramNode({ name, photoUrl, role }: OrganogramNodeProps) {
         {photoUrl ? (
           <Image
             src={photoUrl}
-            alt=""
+            alt={name}
             fill
             sizes={`${PHOTO_SIZE}px`}
             className="object-cover object-center"

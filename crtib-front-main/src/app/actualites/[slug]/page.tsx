@@ -82,9 +82,31 @@ export default async function NewsDetailPage({ params }: PageProps) {
 
   const imageUrl = image ? getMediaUrl(image) : undefined;
   const categoryLabel = resolveCategoryLabel(article.category);
+  const base = process.env.NEXT_PUBLIC_SERVER_URL ?? "https://crtib.lu";
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    description: article.excerpt,
+    datePublished: article.publishedAt,
+    dateModified: article.updatedAt,
+    image: imageUrl ? [imageUrl] : undefined,
+    url: `${base}/actualites/${slug}`,
+    publisher: {
+      "@type": "Organization",
+      name: "CRTI-B",
+      url: base,
+    },
+  };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5]">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="min-h-screen bg-[#f5f5f5]">
       {/* Breadcrumb */}
       <div className="bg-white py-4 border-b border-gray-200">
         <div className="container mx-auto px-4 md:px-8 max-w-6xl">
@@ -165,5 +187,6 @@ export default async function NewsDetailPage({ params }: PageProps) {
         excludeSlug={slug}
       />
     </div>
+    </>
   );
 }

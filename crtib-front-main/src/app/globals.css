@@ -17,11 +17,13 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Cores CRTIB (alinhadas ao tailwind.config.ts) para as utilities funcionarem */
+  /* Palette CRTIB complète — alignée avec tailwind.config.ts et :root */
   --color-crtib-green: #2c8c5b;
   --color-crtib-gray-light: #f5f5f5;
   --color-crtib-gray-dark: #3b3b3b;
   --color-crtib-white: #ffffff;
+  --color-crtib-green-blue: #37c2a2;
+  --color-crtib-green-back: #31af91;
 
   --font-sans: var(--font-dosis);
   --font-clauses: var(--font-dosis), Impact, sans-serif;
@@ -33,6 +35,20 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+/* Focus visible — navigation clavier (WCAG 2.1 AA) */
+:focus-visible {
+  outline: 2px solid #37c2a2;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Estilos para conteúdo rico do Lexical Editor */

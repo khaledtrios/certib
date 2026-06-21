@@ -127,13 +127,31 @@ export interface NewsArticle {
   updatedAt: string;
 }
 
+export type WhereOperator = {
+  equals?: string | number | boolean | null;
+  not_equals?: string | number | boolean | null;
+  like?: string;
+  contains?: string;
+  in?: (string | number | boolean)[];
+  not_in?: (string | number | boolean)[];
+  exists?: boolean;
+  greater_than?: string | number;
+  less_than?: string | number;
+};
+
+export type WhereClause = {
+  and?: WhereClause[];
+  or?: WhereClause[];
+  [field: string]: WhereOperator | WhereClause[] | undefined;
+};
+
 // Parâmetros de query para buscar dados
 export interface PayloadQueryParams {
   depth?: number;
   limit?: number;
   page?: number;
   sort?: string;
-  where?: Record<string, any>;
+  where?: WhereClause;
   locale?: string;
   draft?: boolean;
 }

@@ -38,6 +38,11 @@ export const metadata: Metadata = {
   title: "Actualités | CRTI-B",
   description:
     "Retrouvez toutes les actualités, communiqués et événements du CRTI-B",
+  openGraph: {
+    title: "Actualités | CRTI-B",
+    description: "Retrouvez toutes les actualités, communiqués et événements du CRTI-B",
+    images: [{ url: "/og-default.png", width: 1200, height: 630, alt: "CRTI-B Actualités" }],
+  },
 };
 
 function buildUrl(page: number, category?: string): string {
