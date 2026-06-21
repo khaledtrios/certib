@@ -179,17 +179,6 @@ export const News: CollectionConfig = {
       },
     },
     {
-      name: 'categoryLegacy',
-      type: 'select',
-      label: { en: 'Category (legacy)', fr: 'Catégorie (ancien)' },
-      admin: { hidden: true },
-      options: [
-        { label: { en: 'News', fr: 'Actualité' }, value: 'actualite' },
-        { label: { en: 'Press Release', fr: 'Communiqué' }, value: 'communique' },
-        { label: { en: 'Event', fr: 'Événement' }, value: 'evenement' },
-      ],
-    },
-    {
       name: 'rubrique',
       type: 'relationship',
       relationTo: 'actualite-rubriques',
@@ -199,19 +188,6 @@ export const News: CollectionConfig = {
         allowCreate: true,
         description: { fr: 'Rubrique du site à laquelle cette actualité appartient', en: 'Site section this news belongs to' },
       },
-    },
-    {
-      name: 'rubriqueLegacy',
-      type: 'select',
-      label: { fr: 'Rubrique (ancien)', en: 'Section (legacy)' },
-      admin: { hidden: true },
-      options: [
-        { label: { fr: 'Marchés publics', en: 'Public procurement' }, value: 'marches-publics' },
-        { label: { fr: 'Performance énergétique', en: 'Energy performance' }, value: 'performance-energetique' },
-        { label: { fr: 'Construction durable', en: 'Sustainable construction' }, value: 'construction-durable' },
-        { label: { fr: 'Digitalisation / BIM', en: 'Digitalisation / BIM' }, value: 'digitalisation-bim' },
-        { label: { fr: 'Général', en: 'General' }, value: 'general' },
-      ],
     },
     {
       name: 'publishedAt',

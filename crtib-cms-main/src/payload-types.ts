@@ -598,7 +598,6 @@ export interface News {
    */
   slug: string;
   category: number | ActualiteCategory;
-  categoryLegacy?: ('actualite' | 'communique' | 'evenement') | null;
   /**
    * Site section this news belongs to
    */
@@ -1338,7 +1337,6 @@ export interface NewsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   category?: T;
-  categoryLegacy?: T;
   rubrique?: T;
   rubriqueLegacy?: T;
   publishedAt?: T;
