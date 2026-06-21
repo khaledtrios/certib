@@ -5,11 +5,17 @@ import Image from "next/image";
 import { Calendar, MapPin, Clock, Users, Euro, Mail, ExternalLink } from "lucide-react";
 import { getMediaUrl } from "@/lib/payload";
 
+interface FormationCategory {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 interface Formation {
   id: string;
   title: string;
   slug?: string;
-  category?: string;
+  category?: FormationCategory | string | null;
   startDate?: string;
   endDate?: string;
   duration?: string;
@@ -48,11 +54,24 @@ function formatDate(dateStr?: string) {
   });
 }
 
+function resolveCategorySlug(cat: FormationCategory | string | null | undefined): string | null {
+  if (!cat) return null;
+  if (typeof cat === 'string') return cat;
+  return cat.slug ?? null;
+}
+
+function resolveCategoryName(cat: FormationCategory | string | null | undefined): string | null {
+  if (!cat) return null;
+  if (typeof cat === 'string') return CATEGORY_LABELS[cat] ?? cat;
+  return cat.name ?? null;
+}
+
 function FormationCard({ formation }: { formation: Formation }) {
   const imageUrl = formation.image?.url ? getMediaUrl(formation.image) : null;
 
-  const categoryLabel = formation.category ? CATEGORY_LABELS[formation.category] : null;
-  const categoryColor = formation.category ? CATEGORY_COLORS[formation.category] ?? "bg-gray-100 text-gray-600" : "";
+  const catSlug = resolveCategorySlug(formation.category);
+  const categoryLabel = resolveCategoryName(formation.category);
+  const categoryColor = catSlug ? CATEGORY_COLORS[catSlug] ?? "bg-gray-100 text-gray-600" : "";
 
   return (
     <div className="flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
@@ -159,8 +178,8 @@ export function FormationsSection({ title, category, showFilters = true, limit =
     const fetchFormations = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams({ limit: String(limit), sort: "title" });
-        if (activeFilter !== "all") params.set("where[category][equals]", activeFilter);
+        const params = new URLSearchParams({ limit: String(limit), sort: "title", depth: "1" });
+        if (activeFilter !== "all") params.set("where[category.slug][equals]", activeFilter);
         const res = await fetch(`/api/cms/formations?${params}`);
         const data = await res.json();
         setFormations(data.docs ?? []);

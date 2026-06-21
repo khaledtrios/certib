@@ -19,6 +19,7 @@ import { TimelineItems } from './collections/TimelineItems'
 import { Clauses } from './collections/Clauses'
 import { NewsletterSubscribers } from './collections/NewsletterSubscribers'
 import { Formations } from './collections/Formations'
+import { FormationCategories } from './collections/FormationCategories'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -70,6 +71,7 @@ export default buildConfig({
     Pages,
     News,
     Formations,
+    FormationCategories,
     Partners,
     Videos,
     ActivityReports,

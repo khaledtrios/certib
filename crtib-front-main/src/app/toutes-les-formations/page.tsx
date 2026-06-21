@@ -106,11 +106,15 @@ export default async function FormationsPage() {
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {formations.map((formation: any) => {
                 const imageUrl = formation.image ? getMediaUrl(formation.image) : null;
-                const catLabel = formation.category ? CATEGORY_LABELS[formation.category] : null;
-                const catColor =
-                  formation.category
-                    ? CATEGORY_COLORS[formation.category] ?? "bg-gray-100 text-gray-600"
-                    : "";
+                const catSlug = formation.category
+                  ? (typeof formation.category === 'string' ? formation.category : formation.category?.slug)
+                  : null;
+                const catLabel = formation.category
+                  ? (typeof formation.category === 'string' ? CATEGORY_LABELS[formation.category] : formation.category?.name)
+                  : null;
+                const catColor = catSlug
+                  ? CATEGORY_COLORS[catSlug] ?? "bg-gray-100 text-gray-600"
+                  : "";
 
                 return (
                   <Link

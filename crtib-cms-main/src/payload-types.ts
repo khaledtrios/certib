@@ -72,6 +72,7 @@ export interface Config {
     pages: Page;
     news: News;
     formations: Formation;
+    'formation-categories': FormationCategory;
     partners: Partner;
     videos: Video;
     'activity-reports': ActivityReport;
@@ -90,6 +91,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
     formations: FormationsSelect<false> | FormationsSelect<true>;
+    'formation-categories': FormationCategoriesSelect<false> | FormationCategoriesSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
     videos: VideosSelect<false> | VideosSelect<true>;
     'activity-reports': ActivityReportsSelect<false> | ActivityReportsSelect<true>;
@@ -655,7 +657,8 @@ export interface Formation {
    */
   slug?: string | null;
   image?: (number | null) | Media;
-  category?:
+  category?: (number | null) | FormationCategory;
+  categoryLegacy?:
     | ('marches-publics' | 'performance-energetique' | 'construction-durable' | 'digitalisation-bim' | 'autre')
     | null;
   startDate?: string | null;
@@ -684,6 +687,20 @@ export interface Formation {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "formation-categories".
+ */
+export interface FormationCategory {
+  id: number;
+  name: string;
+  /**
+   * Unique URL identifier (e.g. marches-publics)
+   */
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * Manage the partners and associations displayed on the homepage.
@@ -833,6 +850,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'formations';
         value: number | Formation;
+      } | null)
+    | ({
+        relationTo: 'formation-categories';
+        value: number | FormationCategory;
       } | null)
     | ({
         relationTo: 'partners';
@@ -1292,6 +1313,7 @@ export interface FormationsSelect<T extends boolean = true> {
   slug?: T;
   image?: T;
   category?: T;
+  categoryLegacy?: T;
   startDate?: T;
   endDate?: T;
   duration?: T;
@@ -1304,6 +1326,16 @@ export interface FormationsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "formation-categories_select".
+ */
+export interface FormationCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

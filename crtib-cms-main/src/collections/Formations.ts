@@ -51,8 +51,15 @@ export const Formations: CollectionConfig = {
     },
     {
       name: 'category',
-      type: 'select',
+      type: 'relationship',
+      relationTo: 'formation-categories',
       label: { fr: 'Catégorie', en: 'Category' },
+    },
+    {
+      name: 'categoryLegacy',
+      type: 'select',
+      label: { fr: 'Catégorie (ancien)', en: 'Category (legacy)' },
+      admin: { hidden: true },
       options: [
         { label: { fr: 'Marchés publics', en: 'Public procurement' }, value: 'marches-publics' },
         { label: { fr: 'Performance énergétique', en: 'Energy performance' }, value: 'performance-energetique' },
