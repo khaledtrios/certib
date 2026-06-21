@@ -133,7 +133,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
               alt={image?.alt || article.title}
               fill
               sizes="(max-width: 768px) 100vw, 896px"
-              className="object-cover"
+              style={{ objectFit: "contain" }}
               priority
             />
           </div>

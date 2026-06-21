@@ -124,17 +124,17 @@ export default async function FormationsPage() {
                   >
                     {/* Image */}
                     {imageUrl ? (
-                      <div className="relative w-full h-44 bg-gray-100">
+                      <div className="relative w-full h-48 overflow-hidden bg-gray-100">
                         <Image
                           src={imageUrl}
                           alt={formation.title}
                           fill
-                          className="object-cover"
+                          style={{ objectFit: "cover" }}
                           sizes="(max-width:768px) 100vw, 33vw"
                         />
                       </div>
                     ) : (
-                      <div className="w-full h-44 bg-gradient-to-br from-[#08AA86]/10 to-[#08AA86]/20 flex items-center justify-center">
+                      <div className="w-full h-48 bg-gradient-to-br from-[#08AA86]/10 to-[#08AA86]/20 flex items-center justify-center">
                         <span className="text-4xl">🎓</span>
                       </div>
                     )}

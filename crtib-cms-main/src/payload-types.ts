@@ -602,9 +602,6 @@ export interface News {
    * Site section this news belongs to
    */
   rubrique?: (number | null) | ActualiteRubrique;
-  rubriqueLegacy?:
-    | ('marches-publics' | 'performance-energetique' | 'construction-durable' | 'digitalisation-bim' | 'general')
-    | null;
   /**
    * Date displayed to the reader. Automatically filled on creation.
    */
@@ -1338,7 +1335,6 @@ export interface NewsSelect<T extends boolean = true> {
   slug?: T;
   category?: T;
   rubrique?: T;
-  rubriqueLegacy?: T;
   publishedAt?: T;
   featuredImage?: T;
   excerpt?: T;

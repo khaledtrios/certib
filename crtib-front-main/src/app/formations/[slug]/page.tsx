@@ -86,7 +86,7 @@ export default async function FormationDetailPage({ params }: PageProps) {
             src={imageUrl}
             alt={formation.title}
             fill
-            className="object-cover"
+            style={{ objectFit: "cover" }}
             priority
             sizes="100vw"
           />

@@ -14,11 +14,11 @@ export type NewsItem = {
 };
 
 const RUBRIQUE_LABELS: Record<string, string> = {
-  "marches-publics":        "Marchés publics",
-  "performance-energetique":"Performance énergétique",
-  "construction-durable":   "Construction durable",
-  "digitalisation-bim":     "Digitalisation / BIM",
-  "general":                "Général",
+  "marches-publics": "Marchés publics",
+  "performance-energetique": "Performance énergétique",
+  "construction-durable": "Construction durable",
+  "digitalisation-bim": "Digitalisation / BIM",
+  general: "Général",
 };
 
 type NewsCardProps = {
@@ -31,7 +31,7 @@ function formatDate(value: string) {
   if (Number.isNaN(parsed.getTime())) return value;
   return new Intl.DateTimeFormat("fr-FR", {
     day: "2-digit",
-    month: "2-digit",
+    month: "long",
     year: "numeric",
   }).format(parsed);
 }
@@ -40,121 +40,107 @@ export function NewsCard({ item, variant = "default" }: NewsCardProps) {
   const isPlaceholder = !item;
   const isBlock = variant === "block";
 
-  const titleColor = isBlock ? "text-white" : "text-crtib-gray-dark";
-  const dotColor = isBlock ? "bg-white" : "bg-crtib-green-blue";
-  const dateColor = isBlock ? "text-white" : "text-crtib-green-blue";
-  const excerptColor = isBlock ? "text-white" : "text-[#6B6B6B]";
-  const buttonVariant = isBlock ? "ghost" : "primary";
-  const buttonClass = isBlock
-    ? "border-white text-white bg-crtib-green-back hover:bg-crtib-green-back/90"
-    : "";
+  const rubriqueLabel = item?.rubrique
+    ? typeof item.rubrique === "object"
+      ? item.rubrique.name
+      : (RUBRIQUE_LABELS[item.rubrique as string] ?? null)
+    : null;
 
   return (
     <article
       className={[
-        "flex flex-col gap-6",
+        "flex flex-col gap-6 transition-transform duration-200 hover:-translate-y-0.5",
         "lg:flex-row lg:items-start lg:gap-10",
         isPlaceholder ? "opacity-0" : "opacity-100",
       ].join(" ")}
       aria-hidden={isPlaceholder}
     >
-      {/* IMAGEM */}
-      <div className={[
-        "relative shrink-0 w-full lg:w-[260px] lg:h-[260px]",
-        "aspect-square lg:aspect-auto",
-      ].join(" ")}>
-        {/* Decorative offset frame */}
-        <div className={[
-          "absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-sm",
-          isBlock ? "bg-white/20" : "bg-[#08AA86]/25",
-        ].join(" ")} />
-
+      {/* ── IMAGE ───────────────────────────────────────────── */}
+      <div className="relative shrink-0 w-full h-[220px] lg:w-[260px] lg:h-[260px]">
+        {/* Offset accent — léger, construction-industry shadow */}
+        <div
+          className={`absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-sm ${
+            isBlock ? "bg-white/20" : "bg-crtib-green-blue/20"
+          }`}
+        />
         <Link
           href={item?.href || "#"}
-          aria-label={
-            item?.title ? `Lire la suite: ${item.title}` : "Lire la suite"
-          }
-          className={[
-            "group relative block w-full h-full overflow-hidden bg-crtib-gray-light",
-            "rounded-sm border",
-            isBlock ? "border-white/20" : "border-gray-200",
-            "shadow-md transition-transform duration-200 hover:-translate-x-[2px] hover:-translate-y-[2px]",
-          ].join(" ")}
+          aria-label={item?.title ? `Lire la suite : ${item.title}` : "Lire la suite"}
+          className={`absolute inset-0 overflow-hidden rounded-sm border shadow-lg ${
+            isBlock
+              ? "border-white/20 bg-white/10"
+              : "border-crtib-green-blue/30 bg-crtib-gray-light"
+          }`}
         >
-          {item?.imageUrl ? (
+          {item?.imageUrl && (
             <Image
               src={item.imageUrl}
               alt={item.imageAlt || item.title}
               fill
               sizes="(max-width: 1024px) 100vw, 260px"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              style={{ objectFit: "contain", objectPosition: "center" }}
               priority
             />
-          ) : null}
-
-          {/* Overlay */}
-          <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-            <div className="absolute inset-0 bg-crtib-green-blue/80 ring-8 ring-white/70" />
-            <div className="absolute inset-8 border border-white/80" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-sans text-[16px] font-medium uppercase tracking-[0.08em] text-white">
-                LIRE LA SUITE
-              </span>
-            </div>
-          </div>
+          )}
         </Link>
       </div>
 
-      {/* TEXTO */}
-      <div className="min-w-0 font-sans">
-        {item?.rubrique && (() => {
-          const label = typeof item.rubrique === 'object'
-            ? item.rubrique.name
-            : RUBRIQUE_LABELS[item.rubrique as string];
-          return label ? (
-            <span className="mb-2 inline-block text-[11px] font-semibold uppercase tracking-[0.12em] text-[#08AA86] border border-[#08AA86]/40 rounded-full px-2.5 py-0.5">
-              {label}
-            </span>
-          ) : null;
-        })()}
-        <div className="flex items-start gap-4">
-          <span
-            className={`mt-[10px] h-2 w-2 shrink-0 rounded-full ${dotColor}`}
-            aria-hidden="true"
-          />
-          <Link
-            href={item?.href || "#"}
-            className={`block text-[18px] font-medium uppercase leading-[1.25] tracking-[0.02em] hover:underline sm:text-[20px] ${titleColor}`}
-          >
-            {item?.title || " "}
-          </Link>
+      {/* ── TEXTE — barre d'accent gauche : joint I-beam ──────── */}
+      <div
+        className={`min-w-0 font-sans border-l-[3px] pl-4 ${
+          isBlock ? "border-white/60" : "border-crtib-green-blue"
+        }`}
+      >
+        {/* Métadonnées : rubrique · date */}
+        <div
+          className={`flex flex-wrap items-center gap-x-2 gap-y-1 mb-3 text-[11px] font-semibold uppercase tracking-[0.13em] ${
+            isBlock ? "text-white/65" : "text-crtib-green-blue"
+          }`}
+        >
+          {rubriqueLabel && <span>{rubriqueLabel}</span>}
+          {rubriqueLabel && item?.date && (
+            <span aria-hidden="true" className="opacity-40">·</span>
+          )}
+          {item?.date && <time dateTime={item.date}>{formatDate(item.date)}</time>}
         </div>
 
-        <time
-          className={`mt-2 block text-[16px] font-medium sm:text-[18px] ${dateColor}`}
+        {/* Titre */}
+        <Link
+          href={item?.href || "#"}
+          className={`block text-[18px] font-bold uppercase leading-[1.2] tracking-[0.03em] hover:underline sm:text-[20px] ${
+            isBlock ? "text-white" : "text-crtib-gray-dark"
+          }`}
         >
-          {item ? formatDate(item.date) : " "}
-        </time>
+          {item?.title || " "}
+        </Link>
 
-        {item?.excerpt ? (
+        {/* Résumé */}
+        {item?.excerpt && (
           <p
-            className={`mt-3 text-[14px] leading-[1.65] sm:text-[15px] ${excerptColor}`}
+            className={`mt-3 text-[14px] leading-[1.7] sm:text-[15px] ${
+              isBlock ? "text-white/75" : "text-[#6B6B6B]"
+            }`}
           >
             {item.excerpt}
           </p>
-        ) : null}
+        )}
 
-        {item ? (
-          <div className="mt-5">
+        {/* CTA */}
+        {item && (
+          <div className="mt-4">
             <ButtonLink
               href={item.href}
               label="LIRE L'ARTICLE"
               size="sm"
-              variant={buttonVariant}
-              className={buttonClass}
+              variant={isBlock ? "ghost" : "primary"}
+              className={
+                isBlock
+                  ? "border-white text-white bg-crtib-green-back hover:bg-crtib-green-back/90"
+                  : ""
+              }
             />
           </div>
-        ) : null}
+        )}
       </div>
     </article>
   );
