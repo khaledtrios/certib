@@ -56,7 +56,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
     ? {
         and: [
           { _status: { equals: "published" } },
-          { category: { equals: category } },
+          { "category.slug": { equals: category } },
         ],
       }
     : { _status: { equals: "published" } };

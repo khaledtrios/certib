@@ -153,10 +153,36 @@ export const News: CollectionConfig = {
     },
     {
       name: 'category',
-      type: 'select',
+      type: 'relationship',
+      relationTo: 'actualite-categories',
       required: true,
-      label: { en: 'Category', fr: 'Catégorie' },
-      defaultValue: 'actualite',
+      label: { fr: 'Catégorie', en: 'Category' },
+      admin: { allowCreate: true },
+      hooks: {
+        beforeValidate: [
+          async ({ value, req }) => {
+            if (value) return value
+            try {
+              const result = await req.payload.find({
+                collection: 'actualite-categories',
+                where: { slug: { equals: 'actualite' } },
+                limit: 1,
+                depth: 0,
+                overrideAccess: true,
+              })
+              return result.docs[0]?.id ?? value
+            } catch {
+              return value
+            }
+          },
+        ],
+      },
+    },
+    {
+      name: 'categoryLegacy',
+      type: 'select',
+      label: { en: 'Category (legacy)', fr: 'Catégorie (ancien)' },
+      admin: { hidden: true },
       options: [
         { label: { en: 'News', fr: 'Actualité' }, value: 'actualite' },
         { label: { en: 'Press Release', fr: 'Communiqué' }, value: 'communique' },
@@ -165,11 +191,20 @@ export const News: CollectionConfig = {
     },
     {
       name: 'rubrique',
-      type: 'select',
-      label: { en: 'Section', fr: 'Rubrique' },
+      type: 'relationship',
+      relationTo: 'actualite-rubriques',
+      required: false,
+      label: { fr: 'Rubrique', en: 'Section' },
       admin: {
+        allowCreate: true,
         description: { fr: 'Rubrique du site à laquelle cette actualité appartient', en: 'Site section this news belongs to' },
       },
+    },
+    {
+      name: 'rubriqueLegacy',
+      type: 'select',
+      label: { fr: 'Rubrique (ancien)', en: 'Section (legacy)' },
+      admin: { hidden: true },
       options: [
         { label: { fr: 'Marchés publics', en: 'Public procurement' }, value: 'marches-publics' },
         { label: { fr: 'Performance énergétique', en: 'Energy performance' }, value: 'performance-energetique' },

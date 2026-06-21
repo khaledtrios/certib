@@ -20,6 +20,8 @@ import { Clauses } from './collections/Clauses'
 import { NewsletterSubscribers } from './collections/NewsletterSubscribers'
 import { Formations } from './collections/Formations'
 import { FormationCategories } from './collections/FormationCategories'
+import { ActualiteCategories } from './collections/ActualiteCategories'
+import { ActualiteRubriques } from './collections/ActualiteRubriques'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -70,6 +72,8 @@ export default buildConfig({
     Media,
     Pages,
     News,
+    ActualiteCategories,
+    ActualiteRubriques,
     Formations,
     FormationCategories,
     Partners,

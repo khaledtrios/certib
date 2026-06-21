@@ -71,6 +71,8 @@ export interface Config {
     media: Media;
     pages: Page;
     news: News;
+    'actualite-categories': ActualiteCategory;
+    'actualite-rubriques': ActualiteRubrique;
     formations: Formation;
     'formation-categories': FormationCategory;
     partners: Partner;
@@ -90,6 +92,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
+    'actualite-categories': ActualiteCategoriesSelect<false> | ActualiteCategoriesSelect<true>;
+    'actualite-rubriques': ActualiteRubriquesSelect<false> | ActualiteRubriquesSelect<true>;
     formations: FormationsSelect<false> | FormationsSelect<true>;
     'formation-categories': FormationCategoriesSelect<false> | FormationCategoriesSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
@@ -593,11 +597,13 @@ export interface News {
    * Automatically generated from the title
    */
   slug: string;
-  category: 'actualite' | 'communique' | 'evenement';
+  category: number | ActualiteCategory;
+  categoryLegacy?: ('actualite' | 'communique' | 'evenement') | null;
   /**
    * Site section this news belongs to
    */
-  rubrique?:
+  rubrique?: (number | null) | ActualiteRubrique;
+  rubriqueLegacy?:
     | ('marches-publics' | 'performance-energetique' | 'construction-durable' | 'digitalisation-bim' | 'general')
     | null;
   /**
@@ -644,6 +650,42 @@ export interface News {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "actualite-categories".
+ */
+export interface ActualiteCategory {
+  id: number;
+  name: string;
+  /**
+   * Unique identifier — used in URLs (e.g. actualite)
+   */
+  slug: string;
+  /**
+   * Sort in filters (optional)
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "actualite-rubriques".
+ */
+export interface ActualiteRubrique {
+  id: number;
+  name: string;
+  /**
+   * Unique identifier — used in filters (e.g. marches-publics)
+   */
+  slug: string;
+  /**
+   * Sort in filters (optional)
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -846,6 +888,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'news';
         value: number | News;
+      } | null)
+    | ({
+        relationTo: 'actualite-categories';
+        value: number | ActualiteCategory;
+      } | null)
+    | ({
+        relationTo: 'actualite-rubriques';
+        value: number | ActualiteRubrique;
       } | null)
     | ({
         relationTo: 'formations';
@@ -1288,7 +1338,9 @@ export interface NewsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   category?: T;
+  categoryLegacy?: T;
   rubrique?: T;
+  rubriqueLegacy?: T;
   publishedAt?: T;
   featuredImage?: T;
   excerpt?: T;
@@ -1303,6 +1355,28 @@ export interface NewsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "actualite-categories_select".
+ */
+export interface ActualiteCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "actualite-rubriques_select".
+ */
+export interface ActualiteRubriquesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

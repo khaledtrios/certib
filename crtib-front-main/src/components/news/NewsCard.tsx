@@ -10,7 +10,7 @@ export type NewsItem = {
   excerpt?: string;
   imageUrl?: string;
   imageAlt?: string;
-  rubrique?: string | null;
+  rubrique?: { id: number; name: string; slug: string } | string | null;
 };
 
 const RUBRIQUE_LABELS: Record<string, string> = {
@@ -107,11 +107,16 @@ export function NewsCard({ item, variant = "default" }: NewsCardProps) {
 
       {/* TEXTO */}
       <div className="min-w-0 font-sans">
-        {item?.rubrique && RUBRIQUE_LABELS[item.rubrique] && (
-          <span className="mb-2 inline-block text-[11px] font-semibold uppercase tracking-[0.12em] text-[#08AA86] border border-[#08AA86]/40 rounded-full px-2.5 py-0.5">
-            {RUBRIQUE_LABELS[item.rubrique]}
-          </span>
-        )}
+        {item?.rubrique && (() => {
+          const label = typeof item.rubrique === 'object'
+            ? item.rubrique.name
+            : RUBRIQUE_LABELS[item.rubrique as string];
+          return label ? (
+            <span className="mb-2 inline-block text-[11px] font-semibold uppercase tracking-[0.12em] text-[#08AA86] border border-[#08AA86]/40 rounded-full px-2.5 py-0.5">
+              {label}
+            </span>
+          ) : null;
+        })()}
         <div className="flex items-start gap-4">
           <span
             className={`mt-[10px] h-2 w-2 shrink-0 rounded-full ${dotColor}`}

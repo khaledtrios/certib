@@ -18,7 +18,13 @@ export function buildNewsletterEmail(
     communique: 'Communiqué',
     evenement: 'Événement',
   }
-  const category = news.category ? (CATEGORY_LABELS[news.category as string] ?? String(news.category)) : 'Actualité'
+  const rawCategory = news.category
+  const category =
+    rawCategory && typeof rawCategory === 'object' && 'name' in rawCategory
+      ? (rawCategory as { name: string }).name
+      : rawCategory && typeof rawCategory === 'string'
+        ? (CATEGORY_LABELS[rawCategory] ?? rawCategory)
+        : 'Actualité'
 
   return {
     subject: `[CRTIB] ${news.title}`,

@@ -20,7 +20,8 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 function resolveCategoryLabel(category: NewsArticle["category"]): string | null {
   if (!category) return null;
-  return CATEGORY_LABELS[category] ?? null;
+  if (typeof category === "object") return category.name ?? null;
+  return CATEGORY_LABELS[category] ?? category;
 }
 
 function formatDate(value: string) {

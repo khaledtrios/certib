@@ -27,7 +27,8 @@ export function NewsSectionClient({ maxItems = 2, ...props }: Props) {
         // Round-robin par rubrique
         const groups = new Map<string, NewsArticle[]>();
         for (const doc of shuffled) {
-          const key = (doc as any).rubrique || "general";
+          const r = (doc as any).rubrique;
+          const key = (r && typeof r === 'object' ? r.slug : r) || "general";
           if (!groups.has(key)) groups.set(key, []);
           groups.get(key)!.push(doc);
         }
@@ -57,7 +58,7 @@ export function NewsSectionClient({ maxItems = 2, ...props }: Props) {
               excerpt: article.excerpt,
               imageUrl: image ? getMediaUrl(image) : undefined,
               imageAlt: image?.alt || article.title,
-              rubrique: (article as any).rubrique ?? null,
+              rubrique: (article as any).rubrique ?? null,  // object {id,name,slug} or null
             };
           }),
         );

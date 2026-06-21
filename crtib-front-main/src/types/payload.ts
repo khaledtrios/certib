@@ -95,12 +95,25 @@ export interface SiteSettings {
   };
 }
 
+export interface NewsCategory {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+export interface NewsRubrique {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 // Collection - News
 export interface NewsArticle {
   id: string;
   title: string;
   slug: string;
-  category?: string | null;
+  category?: NewsCategory | string | null;
+  rubrique?: NewsRubrique | string | null;
   publishedAt: string;
   featuredImage?: PayloadMedia | string;
   excerpt?: string;
