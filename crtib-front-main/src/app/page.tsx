@@ -2,6 +2,8 @@ import { BlockRenderer } from "@/components/home/BlockRenderer";
 import RichText from "@/components/RichText";
 import { getPageBySlug } from "@/lib/payload";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   let page: any = null;
   try {

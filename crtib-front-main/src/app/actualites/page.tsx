@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getNewsArticles, getMediaUrl } from "@/lib/payload";
+
+export const dynamic = "force-dynamic";
 import type { NewsArticle } from "@/types/payload";
 import { NewsCard } from "@/components/news/NewsCard";
 import type { NewsItem } from "@/components/news/NewsCard";

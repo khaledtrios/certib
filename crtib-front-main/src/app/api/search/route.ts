@@ -20,7 +20,7 @@ async function queryCMS(
   try {
     const res = await fetch(url, {
       headers: { "Content-Type": "application/json" },
-      next: { revalidate: 0 },
+      cache: "no-store",
     });
     if (!res.ok) return [];
     const data = (await res.json()) as { docs?: unknown[] };

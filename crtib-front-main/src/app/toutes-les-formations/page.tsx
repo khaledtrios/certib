@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+
+export const dynamic = "force-dynamic";
 import { getFormations, getMediaUrl } from "@/lib/payload";
 import Breadcrumb from "@/components/Breadcrumb";
 import { Calendar, MapPin, Clock, Users, Euro } from "lucide-react";

@@ -18,8 +18,7 @@ export async function GET(
 
   try {
     const response = await fetch(url, {
-      // Cache de 1 hora; ativos de mídia raramente mudam
-      next: { revalidate: 3600 },
+      cache: "no-store",
     });
 
     if (!response.ok) {
@@ -33,7 +32,7 @@ export async function GET(
     return new Response(body, {
       headers: {
         "Content-Type": contentType,
-        "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
+        "Cache-Control": "no-store",
       },
     });
   } catch {

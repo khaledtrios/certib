@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { getNewsBySlug, getMediaUrl } from "@/lib/payload";
+
+export const dynamic = "force-dynamic";
 import type { NewsArticle } from "@/types/payload";
 import type { PayloadMedia } from "@/types/payload";
 import RichText from "@/components/RichText";

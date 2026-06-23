@@ -4,6 +4,8 @@ import PageLayout from "@/components/PageLayout";
 import type { Metadata } from "next";
 import type { Page } from "@/types/payload";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: Promise<{
     slug: string[];

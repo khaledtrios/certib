@@ -4,6 +4,8 @@ import PageLayout from "@/components/PageLayout";
 import type { Metadata } from "next";
 import type { Page } from "@/types/payload";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const page = (await getPageBySlug("downloads")) as Page | null;
