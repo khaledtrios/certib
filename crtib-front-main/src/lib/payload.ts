@@ -54,10 +54,7 @@ async function fetchPayload<T>(
       ...fetchOptions,
       headers,
       signal: fetchOptions.signal ?? controller.signal,
-      next: {
-        revalidate: process.env.NODE_ENV === "development" ? 0 : 60,
-        ...fetchOptions.next,
-      },
+      cache: "no-store",
     });
 
     clearTimeout(timer);
@@ -159,7 +156,7 @@ export async function getPages(params: PayloadQueryParams = {}) {
     depth: 2,
     limit: 10,
     ...params,
-  }, { next: { tags: ["pages"], revalidate: 3600 } });
+  });
 }
 
 /**
@@ -287,7 +284,7 @@ export async function getFormations(params: PayloadQueryParams = {}) {
     limit: 100,
     sort: "title",
     ...params,
-  }, { next: { tags: ["formations"], revalidate: 3600 } });
+  });
 }
 
 /**
@@ -298,6 +295,6 @@ export async function getFormationBySlug(slug: string) {
     depth: 1,
     limit: 1,
     where: { slug: { equals: slug } },
-  }, { next: { tags: ["formations"], revalidate: 3600 } });
+  });
   return response.docs[0] || null;
 }

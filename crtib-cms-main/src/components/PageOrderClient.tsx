@@ -328,10 +328,10 @@ export function PageOrderClient() {
     setTree((prev) => updateInTree(prev, id, (p) => ({ ...p, isHidden: newHidden })))
 
     try {
-      const res = await fetch(`/api/pages/${id}`, {
+      const res = await fetch('/api/page-meta', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isHidden: newHidden, _status: 'published' }),
+        body: JSON.stringify({ id, isHidden: newHidden }),
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
     } catch {
@@ -348,10 +348,10 @@ export function PageOrderClient() {
       collectPatches(tree, patches)
       const results = await Promise.all(
         patches.map(({ id, menuOrder }) =>
-          fetch(`/api/pages/${id}`, {
+          fetch('/api/page-meta', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ menuOrder, _status: 'published' }),
+            body: JSON.stringify({ id, menuOrder }),
           }),
         ),
       )

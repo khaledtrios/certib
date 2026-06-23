@@ -7,7 +7,7 @@ import RichText from "@/components/RichText";
 import Breadcrumb from "@/components/Breadcrumb";
 import { Calendar, MapPin, Clock, Users, Euro, Mail, ExternalLink, ArrowLeft } from "lucide-react";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

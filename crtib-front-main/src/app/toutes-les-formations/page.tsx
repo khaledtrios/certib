@@ -5,8 +5,6 @@ import { getFormations, getMediaUrl } from "@/lib/payload";
 import Breadcrumb from "@/components/Breadcrumb";
 import { Calendar, MapPin, Clock, Users, Euro } from "lucide-react";
 
-export const revalidate = 3600;
-
 export const metadata: Metadata = {
   title: "Formations | CRTI-B",
   description: "Découvrez toutes les formations proposées par le CRTI-B",
