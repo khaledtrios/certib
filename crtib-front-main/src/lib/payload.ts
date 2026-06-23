@@ -163,12 +163,20 @@ export async function getPages(params: PayloadQueryParams = {}) {
  * Busca uma página por slug (apenas publicadas)
  */
 export async function getPageBySlug(slug: string) {
+  const normalized = decodeURIComponent(slug).trim().replace(/\s+/g, "-");
   const response = await getCollection("pages", {
     depth: 1,
     limit: 1,
-    where: { slug: { equals: slug } },
+    where: { slug: { equals: normalized } },
   });
-  return response.docs[0] || null;
+  if (response.docs[0]) return response.docs[0];
+  // fallback: try the raw decoded slug (spaces, trailing spaces) for legacy entries
+  const fallback = await getCollection("pages", {
+    depth: 1,
+    limit: 1,
+    where: { slug: { equals: decodeURIComponent(slug).trim() } },
+  });
+  return fallback.docs[0] || null;
 }
 
 /**
