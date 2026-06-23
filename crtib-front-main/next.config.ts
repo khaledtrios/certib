@@ -21,7 +21,6 @@ const remotePatterns: RemotePattern[] = [
   },
 ];
 
-// Em desenvolvimento, garante que localhost está permitido (caso o CMS seja externo)
 if (cmsHostname !== "localhost") {
   remotePatterns.push({
     protocol: "http",
@@ -31,12 +30,33 @@ if (cmsHostname !== "localhost") {
 }
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
   images: {
     remotePatterns,
-    // Em desenvolvimento, desativa otimização para evitar bloqueio de IPs privados (localhost)
     unoptimized: process.env.NODE_ENV === "development",
+  },
+  // Disable client-side router cache for all pages
+  experimental: {
+    staleTimes: {
+      dynamic: 0,
+      static: 0,
+    },
+  },
+  // Send no-cache headers on every response so browsers and proxies never cache pages
+  async headers() {
+    return [
+      {
+        source: "/((?!_next/static|_next/image|favicon.ico).*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-store, no-cache, must-revalidate, proxy-revalidate",
+          },
+          { key: "Pragma", value: "no-cache" },
+          { key: "Expires", value: "0" },
+        ],
+      },
+    ];
   },
 };
 

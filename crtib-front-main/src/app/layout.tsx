@@ -4,6 +4,8 @@ import { Providers } from "@/lib/providers";
 import { GlobalLayout } from "@/components/layout/GlobalLayout";
 import "./globals.css";
 
+export const dynamic = "force-dynamic";
+
 const dosis = Dosis({
   variable: "--font-dosis",
   subsets: ["latin"],
