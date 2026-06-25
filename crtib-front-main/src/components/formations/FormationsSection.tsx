@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Calendar, MapPin, Clock, Users, Euro, Mail, ExternalLink } from "lucide-react";
 import { getMediaUrl } from "@/lib/payload";
 
@@ -73,12 +74,17 @@ function FormationCard({ formation }: { formation: Formation }) {
   const categoryLabel = resolveCategoryName(formation.category);
   const categoryColor = catSlug ? CATEGORY_COLORS[catSlug] ?? "bg-gray-100 text-gray-600" : "";
 
+  const href = `/formations/${formation.slug || formation.id}`;
+
   return (
-    <div className="flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <div className="relative flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      {/* Stretched link covering the whole card (behind buttons) */}
+      <Link href={href} className="absolute inset-0 z-0" aria-label={formation.title} />
+
       {/* Image */}
       {imageUrl ? (
         <div className="relative w-full h-48 overflow-hidden bg-gray-100">
-          <Image src={imageUrl} alt={formation.title} fill style={{ objectFit: "cover" }} sizes="(max-width:768px) 100vw, 33vw" />
+          <Image src={imageUrl} alt={formation.title} fill style={{ objectFit: "contain" }} sizes="(max-width:768px) 100vw, 33vw" />
         </div>
       ) : (
         <div className="w-full h-48 bg-gradient-to-br from-[#08AA86]/10 to-[#08AA86]/20 flex items-center justify-center">
@@ -86,7 +92,7 @@ function FormationCard({ formation }: { formation: Formation }) {
         </div>
       )}
 
-      <div className="flex flex-col flex-1 p-5 gap-3">
+      <div className="relative z-10 flex flex-col flex-1 p-5 gap-3">
         {/* Catégorie */}
         {categoryLabel && (
           <span className={`self-start text-[11px] font-semibold uppercase tracking-wide px-2.5 py-1 rounded-full ${categoryColor}`}>
@@ -141,7 +147,7 @@ function FormationCard({ formation }: { formation: Formation }) {
               href={formation.registrationUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-[#08AA86] text-white text-[12px] font-semibold px-4 py-2 rounded hover:bg-[#068a6c] transition-colors"
+              className="relative z-10 flex items-center gap-1.5 bg-[#08AA86] text-white text-[12px] font-semibold px-4 py-2 rounded hover:bg-[#068a6c] transition-colors"
             >
               <ExternalLink className="w-3.5 h-3.5" />
               S'inscrire
@@ -150,7 +156,7 @@ function FormationCard({ formation }: { formation: Formation }) {
           {formation.registrationEmail && (
             <a
               href={`mailto:${formation.registrationEmail}`}
-              className="flex items-center gap-1.5 border border-[#08AA86] text-[#08AA86] text-[12px] font-semibold px-4 py-2 rounded hover:bg-[#f0fdf9] transition-colors"
+              className="relative z-10 flex items-center gap-1.5 border border-[#08AA86] text-[#08AA86] text-[12px] font-semibold px-4 py-2 rounded hover:bg-[#f0fdf9] transition-colors"
             >
               <Mail className="w-3.5 h-3.5" />
               Contacter

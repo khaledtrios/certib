@@ -9,6 +9,7 @@ import {
   UnorderedListFeature,
   OrderedListFeature,
   BlockquoteFeature,
+  UploadFeature,
 } from '@payloadcms/richtext-lexical'
 import { revalidatePage } from '../hooks/revalidateFrontend'
 
@@ -916,7 +917,48 @@ export const Pages: CollectionConfig = {
               label: { en: 'Content', fr: 'Contenu' },
               editor: lexicalEditor({
                 features: ({ defaultFeatures }) => [
-                  ...defaultFeatures,
+                  ...defaultFeatures.filter((f: any) => f.key !== 'upload'),
+                  UploadFeature({
+                    collections: {
+                      media: {
+                        fields: [
+                          {
+                            name: 'caption',
+                            type: 'text',
+                            label: { en: 'Caption', fr: 'Légende' },
+                          },
+                          {
+                            name: 'position',
+                            type: 'select',
+                            defaultValue: 'center',
+                            options: ['left', 'center', 'right'],
+                            label: { en: 'Position', fr: 'Position' },
+                          },
+                          {
+                            name: 'width',
+                            type: 'select',
+                            defaultValue: '100',
+                            options: [
+                              { label: '25%', value: '25' },
+                              { label: '33%', value: '33' },
+                              { label: '50%', value: '50' },
+                              { label: '75%', value: '75' },
+                              { label: '100%', value: '100' },
+                            ],
+                            label: { en: 'Width', fr: 'Largeur' },
+                          },
+                          {
+                            name: 'href',
+                            type: 'text',
+                            label: { en: 'Link URL', fr: 'URL du lien' },
+                            admin: {
+                              description: { en: 'Optional: make image clickable', fr: 'Optionnel : rendre l\'image cliquable' },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  }),
                   HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
                   BoldFeature(),
                   ItalicFeature(),

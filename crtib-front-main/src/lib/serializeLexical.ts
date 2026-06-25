@@ -77,13 +77,19 @@ function serializeNode(node: any): string {
 
   // Nó de parágrafo
   if (type === "paragraph") {
-    return `<p>${serializeNodes(children)}</p>`;
+    const alignAttr = typeof format === "string" && ["center", "right", "justify"].includes(format)
+      ? ` style="text-align:${format}"`
+      : "";
+    return `<p${alignAttr}>${serializeNodes(children)}</p>`;
   }
 
   // Nó de heading
   if (type === "heading") {
     const headingTag = tag || "h2";
-    return `<${headingTag}>${serializeNodes(children)}</${headingTag}>`;
+    const alignAttr = typeof format === "string" && ["center", "right", "justify"].includes(format)
+      ? ` style="text-align:${format}"`
+      : "";
+    return `<${headingTag}${alignAttr}>${serializeNodes(children)}</${headingTag}>`;
   }
 
   // Nó de lista
@@ -132,6 +138,7 @@ function serializeNode(node: any): string {
       const alt = value.alt || "";
       const caption = fields?.caption || value.caption || "";
       const position = fields?.position || value.position || "center";
+      const widthPct = fields?.width || "100";
 
       const positionClasses = {
         left: "float-left mr-6 mb-4",
@@ -143,16 +150,13 @@ function serializeNode(node: any): string {
         positionClasses[position as keyof typeof positionClasses] ||
         positionClasses.center;
 
-      let html = `<img src="${imageUrl}" alt="${alt}" class="${posClass}" />`;
+      const widthStyle = widthPct !== "100" ? ` style="width:${widthPct}%"` : "";
+      const imgTag = `<img src="${imageUrl}" alt="${alt}" style="width:100%;height:auto;display:block" />`;
 
       if (caption) {
-        html = `<figure class="${posClass}">
-          <img src="${imageUrl}" alt="${alt}" />
-          <figcaption class="text-sm text-gray-600 italic mt-2">${caption}</figcaption>
-        </figure>`;
+        return `<figure class="${posClass}"${widthStyle}>${imgTag}<figcaption class="text-sm text-gray-600 italic mt-2">${caption}</figcaption></figure>`;
       }
-
-      return html;
+      return `<div class="${posClass}"${widthStyle}>${imgTag}</div>`;
     }
     return "";
   }

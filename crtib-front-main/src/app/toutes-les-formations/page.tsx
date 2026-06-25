@@ -134,7 +134,7 @@ export default async function FormationsPage() {
                           src={imageUrl}
                           alt={formation.title}
                           fill
-                          style={{ objectFit: "cover" }}
+                          style={{ objectFit: "contain" }}
                           sizes="(max-width:768px) 100vw, 33vw"
                         />
                       </div>

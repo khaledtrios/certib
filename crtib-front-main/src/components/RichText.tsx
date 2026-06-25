@@ -48,6 +48,14 @@ function getUploadUrl(value: unknown): string {
   return "";
 }
 
+function alignStyle(format?: string | null): React.CSSProperties | undefined {
+  if (!format || format === "left") return undefined;
+  if (format === "center" || format === "right" || format === "justify") {
+    return { textAlign: format };
+  }
+  return undefined;
+}
+
 function applyFormat(text: string, format: number): React.ReactNode {
   let node: React.ReactNode = text;
   if (format & 1) node = <strong>{node}</strong>;
@@ -84,14 +92,15 @@ function renderNode(node: any, key: number): React.ReactNode {
       const hasBlockChild = Array.isArray(node.children) &&
         node.children.some((c: any) => c?.type === "upload" || c?.type === "block");
       const children = renderNodes(node.children);
+      const style = alignStyle(node.format);
       return hasBlockChild
-        ? <div key={key} className="paragraph">{children}</div>
-        : <p key={key}>{children}</p>;
+        ? <div key={key} className="paragraph" style={style}>{children}</div>
+        : <p key={key} style={style}>{children}</p>;
     }
 
     case "heading": {
       const Tag = (node.tag || "h2") as React.ElementType;
-      return <Tag key={key}>{renderNodes(node.children)}</Tag>;
+      return <Tag key={key} style={alignStyle(node.format)}>{renderNodes(node.children)}</Tag>;
     }
 
     case "list": {
@@ -137,6 +146,8 @@ function renderNode(node: any, key: number): React.ReactNode {
       const caption = node.fields?.caption || "";
       const pos = node.fields?.position || "center";
       const href = node.fields?.href || "";
+      const widthPct = node.fields?.width || "100";
+
       const posClass =
         (
           {
@@ -146,7 +157,12 @@ function renderNode(node: any, key: number): React.ReactNode {
           } as Record<string, string>
         )[pos] ?? "mx-auto block";
 
-      const imgEl = <img src={imageUrl} alt={alt} />;
+      const containerStyle: React.CSSProperties =
+        widthPct !== "100" ? { width: `${widthPct}%` } : {};
+
+      const imgEl = (
+        <img src={imageUrl} alt={alt} style={{ width: "100%", height: "auto", display: "block" }} />
+      );
       const linked = href ? (
         <a href={href} target="_blank" rel="noopener noreferrer">
           {imgEl}
@@ -157,7 +173,7 @@ function renderNode(node: any, key: number): React.ReactNode {
 
       if (caption) {
         return (
-          <figure key={key} className={posClass}>
+          <figure key={key} className={posClass} style={containerStyle}>
             {linked}
             <figcaption className="text-sm text-gray-600 italic mt-2">
               {caption}
@@ -166,7 +182,7 @@ function renderNode(node: any, key: number): React.ReactNode {
         );
       }
       return (
-        <div key={key} className={posClass}>
+        <div key={key} className={posClass} style={containerStyle}>
           {linked}
         </div>
       );
