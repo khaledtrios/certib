@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Calendar, MapPin, Clock, Users, Euro, Mail, ExternalLink } from "lucide-react";
 import { getMediaUrl } from "@/lib/payload";
 
@@ -68,6 +68,7 @@ function resolveCategoryName(cat: FormationCategory | string | null | undefined)
 }
 
 function FormationCard({ formation }: { formation: Formation }) {
+  const router = useRouter();
   const imageUrl = formation.image?.url ? getMediaUrl(formation.image) : null;
 
   const catSlug = resolveCategorySlug(formation.category);
@@ -77,10 +78,10 @@ function FormationCard({ formation }: { formation: Formation }) {
   const href = `/formations/${formation.slug || formation.id}`;
 
   return (
-    <div className="relative flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      {/* Stretched link covering the whole card (behind buttons) */}
-      <Link href={href} className="absolute inset-0 z-0" aria-label={formation.title} />
-
+    <div
+      onClick={() => router.push(href)}
+      className="flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+    >
       {/* Image */}
       {imageUrl ? (
         <div className="relative w-full h-48 overflow-hidden bg-gray-100">
@@ -92,7 +93,7 @@ function FormationCard({ formation }: { formation: Formation }) {
         </div>
       )}
 
-      <div className="relative z-10 flex flex-col flex-1 p-5 gap-3">
+      <div className="flex flex-col flex-1 p-5 gap-3">
         {/* Catégorie */}
         {categoryLabel && (
           <span className={`self-start text-[11px] font-semibold uppercase tracking-wide px-2.5 py-1 rounded-full ${categoryColor}`}>
@@ -147,7 +148,8 @@ function FormationCard({ formation }: { formation: Formation }) {
               href={formation.registrationUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="relative z-10 flex items-center gap-1.5 bg-[#08AA86] text-white text-[12px] font-semibold px-4 py-2 rounded hover:bg-[#068a6c] transition-colors"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1.5 bg-[#08AA86] text-white text-[12px] font-semibold px-4 py-2 rounded hover:bg-[#068a6c] transition-colors"
             >
               <ExternalLink className="w-3.5 h-3.5" />
               S'inscrire
@@ -156,7 +158,8 @@ function FormationCard({ formation }: { formation: Formation }) {
           {formation.registrationEmail && (
             <a
               href={`mailto:${formation.registrationEmail}`}
-              className="relative z-10 flex items-center gap-1.5 border border-[#08AA86] text-[#08AA86] text-[12px] font-semibold px-4 py-2 rounded hover:bg-[#f0fdf9] transition-colors"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1.5 border border-[#08AA86] text-[#08AA86] text-[12px] font-semibold px-4 py-2 rounded hover:bg-[#f0fdf9] transition-colors"
             >
               <Mail className="w-3.5 h-3.5" />
               Contacter
