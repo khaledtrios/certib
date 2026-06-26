@@ -401,7 +401,10 @@ function serializeNode(node: any): string {
           mapNode(child, `${prefix}-child-${i}`),
         ),
       });
-      const data = { root: mapNode(node.fields?.root || {}, "org") };
+      const members = (node.fields?.members || []).map((m: any, i: number) =>
+        mapNode(m, `org-${i}`),
+      );
+      const data = { members };
       return `<div class="organogram-block" data-organogram='${JSON.stringify(data).replace(/'/g, "&apos;")}'></div>`;
     }
 

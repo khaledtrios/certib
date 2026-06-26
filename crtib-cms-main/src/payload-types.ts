@@ -206,25 +206,6 @@ export interface Page {
   menuOrder?: number | null;
   isHidden?: boolean | null;
   /**
-   * Icon displayed next to the title in the navigation menu
-   */
-  icon?:
-    | (
-        | 'user'
-        | 'document'
-        | 'globe'
-        | 'leaf'
-        | 'calendar'
-        | 'building'
-        | 'book'
-        | 'graduation'
-        | 'external-link'
-        | 'star'
-        | 'settings'
-        | 'list'
-      )
-    | null;
-  /**
    * Page builder: add, order, and configure each section.
    */
   layout?:
@@ -368,33 +349,28 @@ export interface Page {
             blockType: 'quickLinks';
           }
         | {
-            root: {
-              name: string;
-              role?: string | null;
-              photo?: (number | null) | Media;
-              children?:
-                | {
-                    name: string;
-                    role?: string | null;
-                    department?: string | null;
-                    phone?: string | null;
-                    email?: string | null;
-                    photo?: (number | null) | Media;
-                    children?:
-                      | {
-                          name: string;
-                          role?: string | null;
-                          department?: string | null;
-                          phone?: string | null;
-                          email?: string | null;
-                          photo?: (number | null) | Media;
-                          id?: string | null;
-                        }[]
-                      | null;
-                    id?: string | null;
-                  }[]
-                | null;
-            };
+            members?:
+              | {
+                  name: string;
+                  role?: string | null;
+                  department?: string | null;
+                  phone?: string | null;
+                  email?: string | null;
+                  photo?: (number | null) | Media;
+                  children?:
+                    | {
+                        name: string;
+                        role?: string | null;
+                        department?: string | null;
+                        phone?: string | null;
+                        email?: string | null;
+                        photo?: (number | null) | Media;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'organogram';
@@ -1025,7 +1001,6 @@ export interface PagesSelect<T extends boolean = true> {
   parent?: T;
   menuOrder?: T;
   isHidden?: T;
-  icon?: T;
   layout?:
     | T
     | {
@@ -1165,11 +1140,14 @@ export interface PagesSelect<T extends boolean = true> {
         organogram?:
           | T
           | {
-              root?:
+              members?:
                 | T
                 | {
                     name?: T;
                     role?: T;
+                    department?: T;
+                    phone?: T;
+                    email?: T;
                     photo?: T;
                     children?:
                       | T
@@ -1180,19 +1158,9 @@ export interface PagesSelect<T extends boolean = true> {
                           phone?: T;
                           email?: T;
                           photo?: T;
-                          children?:
-                            | T
-                            | {
-                                name?: T;
-                                role?: T;
-                                department?: T;
-                                phone?: T;
-                                email?: T;
-                                photo?: T;
-                                id?: T;
-                              };
                           id?: T;
                         };
+                    id?: T;
                   };
               id?: T;
               blockName?: T;

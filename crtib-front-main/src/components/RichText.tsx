@@ -474,9 +474,10 @@ function renderBlock(blockType: string, f: any, key: number): React.ReactNode {
           mapOrgNode(child, `${prefix}-child-${i}`),
         ),
       });
-      return (
-        <OrganogramChart key={key} root={mapOrgNode(f.root || {}, "org")} />
+      const members = (f.members || []).map((m: any, i: number) =>
+        mapOrgNode(m, `org-${i}`),
       );
+      return <OrganogramChart key={key} members={members} />;
     }
 
     default:

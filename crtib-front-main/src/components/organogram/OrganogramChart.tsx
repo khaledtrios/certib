@@ -8,16 +8,12 @@ const LINE_COLOR = "#37C2A2"; // crtib-green-blue
 const LINE_WIDTH =    1;
 
 type OrganogramChartProps = {
-  /**
-   * Nó raiz do organograma (formato hierárquico).
-   * O nó aparece no topo; os níveis seguintes são os filhos, recursivamente.
-   */
-  root: OrganogramEmployee;
+  members: OrganogramEmployee[];
   className?: string;
 };
 
-export function OrganogramChart({ root, className = "" }: OrganogramChartProps) {
-  if (!root) return null;
+export function OrganogramChart({ members, className = "" }: OrganogramChartProps) {
+  if (!members?.length) return null;
 
   return (
     <div
@@ -25,7 +21,13 @@ export function OrganogramChart({ root, className = "" }: OrganogramChartProps) 
       role="img"
       aria-label="Organograma de funcionários"
     >
-      <HierarchyLevel node={root} />
+      <div className="flex gap-4 flex-wrap justify-center">
+        {members.map((node) => (
+          <div key={node.id} className="flex min-w-0 flex-col items-center">
+            <HierarchyLevel node={node} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

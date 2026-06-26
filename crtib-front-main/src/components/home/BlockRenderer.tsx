@@ -276,8 +276,8 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
           }
 
           case "organogram": {
-            if (!block.root) return null;
-            return <TeamGrid key={key} root={block.root} />;
+            if (!block.members?.length) return null;
+            return <TeamGrid key={key} members={block.members} />;
           }
 
           case "timeline": {

@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
 
 export const dynamic = "force-dynamic";
-import { getFormations, getMediaUrl } from "@/lib/payload";
+import { getFormations } from "@/lib/payload";
 import Breadcrumb from "@/components/Breadcrumb";
-import { Calendar, MapPin, Clock, Users, Euro } from "lucide-react";
+import { FormationCard } from "@/components/formations/FormationsSection";
 
 export const metadata: Metadata = {
   title: "Formations | CRTI-B",
@@ -16,31 +14,6 @@ export const metadata: Metadata = {
     images: [{ url: "/og-default.png", width: 1200, height: 630, alt: "CRTI-B Formations" }],
   },
 };
-
-const CATEGORY_LABELS: Record<string, string> = {
-  "marches-publics": "Marchés publics",
-  "performance-energetique": "Performance énergétique",
-  "construction-durable": "Construction durable",
-  "digitalisation-bim": "Digitalisation / BIM",
-  autre: "Autre",
-};
-
-const CATEGORY_COLORS: Record<string, string> = {
-  "marches-publics": "bg-blue-100 text-blue-700",
-  "performance-energetique": "bg-green-100 text-green-700",
-  "construction-durable": "bg-emerald-100 text-emerald-700",
-  "digitalisation-bim": "bg-purple-100 text-purple-700",
-  autre: "bg-gray-100 text-gray-600",
-};
-
-function formatDate(dateStr?: string | null) {
-  if (!dateStr) return null;
-  return new Date(dateStr).toLocaleDateString("fr-LU", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 function sortFormations(list: any[]): any[] {
   const now = Date.now();
@@ -109,100 +82,9 @@ export default async function FormationsPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {formations.map((formation: any) => {
-                const imageUrl = formation.image ? getMediaUrl(formation.image) : null;
-                const catSlug = formation.category
-                  ? (typeof formation.category === 'string' ? formation.category : formation.category?.slug)
-                  : null;
-                const catLabel = formation.category
-                  ? (typeof formation.category === 'string' ? CATEGORY_LABELS[formation.category] : formation.category?.name)
-                  : null;
-                const catColor = catSlug
-                  ? CATEGORY_COLORS[catSlug] ?? "bg-gray-100 text-gray-600"
-                  : "";
-
-                return (
-                  <Link
-                    key={formation.id}
-                    href={`/formations/${formation.slug || formation.id}`}
-                    className="flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-                  >
-                    {/* Image */}
-                    {imageUrl ? (
-                      <div className="relative w-full h-48 overflow-hidden bg-gray-100">
-                        <Image
-                          src={imageUrl}
-                          alt={formation.title}
-                          fill
-                          style={{ objectFit: "contain" }}
-                          sizes="(max-width:768px) 100vw, 33vw"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-full h-48 bg-gradient-to-br from-[#08AA86]/10 to-[#08AA86]/20 flex items-center justify-center">
-                        <span className="text-4xl">🎓</span>
-                      </div>
-                    )}
-
-                    <div className="flex flex-col flex-1 p-5 gap-3">
-                      {catLabel && (
-                        <span
-                          className={`self-start text-[11px] font-semibold uppercase tracking-wide px-2.5 py-1 rounded-full ${catColor}`}
-                        >
-                          {catLabel}
-                        </span>
-                      )}
-
-                      <h3 className="text-[15px] font-bold text-[#2F2F2F] leading-snug">
-                        {formation.title}
-                      </h3>
-
-                      <div className="flex flex-col gap-1.5 text-[12px] text-gray-500">
-                        {formation.startDate && (
-                          <span className="flex items-center gap-2">
-                            <Calendar className="w-3.5 h-3.5 text-[#08AA86] flex-shrink-0" />
-                            {formatDate(formation.startDate)}
-                            {formation.endDate &&
-                              formation.endDate !== formation.startDate && (
-                                <> → {formatDate(formation.endDate)}</>
-                              )}
-                          </span>
-                        )}
-                        {formation.duration && (
-                          <span className="flex items-center gap-2">
-                            <Clock className="w-3.5 h-3.5 text-[#08AA86] flex-shrink-0" />
-                            {formation.duration}
-                          </span>
-                        )}
-                        {formation.location && (
-                          <span className="flex items-center gap-2">
-                            <MapPin className="w-3.5 h-3.5 text-[#08AA86] flex-shrink-0" />
-                            {formation.location}
-                          </span>
-                        )}
-                        {formation.maxParticipants && (
-                          <span className="flex items-center gap-2">
-                            <Users className="w-3.5 h-3.5 text-[#08AA86] flex-shrink-0" />
-                            Max {formation.maxParticipants} participants
-                          </span>
-                        )}
-                        {formation.price && (
-                          <span className="flex items-center gap-2 font-semibold text-[#2F2F2F]">
-                            <Euro className="w-3.5 h-3.5 text-[#08AA86] flex-shrink-0" />
-                            {formation.price}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="mt-auto pt-3 border-t border-gray-100">
-                        <span className="text-[#08AA86] text-[12px] font-semibold">
-                          Voir le détail →
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
+              {formations.map((formation: any) => (
+                <FormationCard key={formation.id} formation={formation} />
+              ))}
             </div>
           )}
         </div>

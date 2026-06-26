@@ -12,7 +12,7 @@ interface FormationCategory {
   slug: string;
 }
 
-interface Formation {
+export interface Formation {
   id: string;
   title: string;
   slug?: string;
@@ -67,7 +67,7 @@ function resolveCategoryName(cat: FormationCategory | string | null | undefined)
   return cat.name ?? null;
 }
 
-function FormationCard({ formation }: { formation: Formation }) {
+export function FormationCard({ formation }: { formation: Formation }) {
   const router = useRouter();
   const imageUrl = formation.image?.url ? getMediaUrl(formation.image) : null;
 
@@ -141,17 +141,17 @@ function FormationCard({ formation }: { formation: Formation }) {
           )}
         </div>
 
-        {/* Boutons inscription */}
-        <div className="mt-auto pt-3 flex flex-wrap gap-2">
+        {/* Boutons inscription + Voir le détail */}
+        <div className="mt-auto pt-3 border-t border-gray-100 flex items-center gap-2">
           {formation.registrationUrl && (
             <a
               href={formation.registrationUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 bg-[#08AA86] text-white text-[12px] font-semibold px-4 py-2 rounded hover:bg-[#068a6c] transition-colors"
+              className="shrink-0 flex items-center gap-1 bg-[#08AA86] text-white text-[11px] font-semibold px-3 py-1.5 rounded hover:bg-[#068a6c] transition-colors"
             >
-              <ExternalLink className="w-3.5 h-3.5" />
+              <ExternalLink className="w-3 h-3" />
               S'inscrire
             </a>
           )}
@@ -159,12 +159,15 @@ function FormationCard({ formation }: { formation: Formation }) {
             <a
               href={`mailto:${formation.registrationEmail}`}
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 border border-[#08AA86] text-[#08AA86] text-[12px] font-semibold px-4 py-2 rounded hover:bg-[#f0fdf9] transition-colors"
+              className="shrink-0 flex items-center gap-1 border border-[#08AA86] text-[#08AA86] text-[11px] font-semibold px-3 py-1.5 rounded hover:bg-[#f0fdf9] transition-colors"
             >
-              <Mail className="w-3.5 h-3.5" />
+              <Mail className="w-3 h-3" />
               Contacter
             </a>
           )}
+          <span className="ml-auto shrink-0 whitespace-nowrap text-[#08AA86] text-[12px] font-semibold">
+            Voir le détail →
+          </span>
         </div>
       </div>
     </div>

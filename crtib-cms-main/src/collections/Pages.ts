@@ -106,34 +106,6 @@ export const Pages: CollectionConfig = {
       },
     },
     {
-      name: 'icon',
-      type: 'select',
-      label: { en: 'Menu Icon', fr: 'Icône du Menu' },
-      admin: {
-        description: {
-          en: 'Icon displayed next to the title in the navigation menu',
-          fr: 'Icône affichée à côté du titre dans le menu de navigation',
-        },
-      },
-      options: [
-        { label: { en: 'Person', fr: 'Personne' }, value: 'user' },
-        { label: { en: 'Document', fr: 'Document' }, value: 'document' },
-        { label: { en: 'Globe / Digitalization', fr: 'Globe / Numérisation' }, value: 'globe' },
-        { label: { en: 'Leaf / Sustainability', fr: 'Feuille / Durabilité' }, value: 'leaf' },
-        { label: { en: 'Calendar / Events', fr: 'Calendrier / Événements' }, value: 'calendar' },
-        { label: { en: 'Building', fr: 'Bâtiment' }, value: 'building' },
-        { label: { en: 'Book / Library', fr: 'Livre / Bibliothèque' }, value: 'book' },
-        {
-          label: { en: 'Graduation / Education', fr: 'Graduation / Formation' },
-          value: 'graduation',
-        },
-        { label: { en: 'External Link', fr: 'Lien Externe' }, value: 'external-link' },
-        { label: { en: 'Star', fr: 'Étoile' }, value: 'star' },
-        { label: { en: 'Gear', fr: 'Engrenage' }, value: 'settings' },
-        { label: { en: 'List', fr: 'Liste' }, value: 'list' },
-      ],
-    },
-    {
       name: 'layout',
       type: 'blocks',
       label: { fr: 'Sections de la page', en: 'Page Sections' },
@@ -555,12 +527,15 @@ export const Pages: CollectionConfig = {
           },
           fields: [
             {
-              name: 'root',
-              type: 'group',
-              label: { en: 'Root Node', fr: 'Nœud racine' },
+              name: 'members',
+              type: 'array',
+              label: { en: 'Members', fr: 'Membres' },
               fields: [
                 { name: 'name', type: 'text', required: true, label: { en: 'Name', fr: 'Nom' } },
-                { name: 'role', type: 'text', label: { en: 'Role', fr: 'Rôle' } },
+                { name: 'role', type: 'text', label: { en: 'Role / Function', fr: 'Rôle / Fonction' } },
+                { name: 'department', type: 'text', label: { en: 'Department', fr: 'Département' } },
+                { name: 'phone', type: 'text', label: { en: 'Phone', fr: 'Téléphone' } },
+                { name: 'email', type: 'email', label: { en: 'Email', fr: 'Email' } },
                 {
                   name: 'photo',
                   type: 'upload',
@@ -570,7 +545,7 @@ export const Pages: CollectionConfig = {
                 {
                   name: 'children',
                   type: 'array',
-                  label: { en: 'Direct Reports', fr: 'Membres de l\'équipe' },
+                  label: { en: 'Sub-members', fr: 'Sous-membres' },
                   fields: [
                     { name: 'name', type: 'text', required: true, label: { en: 'Name', fr: 'Nom' } },
                     { name: 'role', type: 'text', label: { en: 'Role / Function', fr: 'Rôle / Fonction' } },
@@ -582,24 +557,6 @@ export const Pages: CollectionConfig = {
                       type: 'upload',
                       relationTo: 'media',
                       label: { en: 'Photo', fr: 'Photo' },
-                    },
-                    {
-                      name: 'children',
-                      type: 'array',
-                      label: { en: 'Sub-reports', fr: 'Sous-membres' },
-                      fields: [
-                        { name: 'name', type: 'text', required: true, label: { en: 'Name', fr: 'Nom' } },
-                        { name: 'role', type: 'text', label: { en: 'Role / Function', fr: 'Rôle / Fonction' } },
-                        { name: 'department', type: 'text', label: { en: 'Department', fr: 'Département' } },
-                        { name: 'phone', type: 'text', label: { en: 'Phone', fr: 'Téléphone' } },
-                        { name: 'email', type: 'email', label: { en: 'Email', fr: 'Email' } },
-                        {
-                          name: 'photo',
-                          type: 'upload',
-                          relationTo: 'media',
-                          label: { en: 'Photo', fr: 'Photo' },
-                        },
-                      ],
                     },
                   ],
                 },
