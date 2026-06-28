@@ -292,7 +292,7 @@ export function HeaderWithNav({ pages }: HeaderWithNavProps) {
                 width={260}
                 height={62}
                 priority
-                className="h-16 w-auto"
+                className="h-10 w-auto lg:h-16"
               />
             </Link>
           </div>
@@ -344,14 +344,7 @@ export function HeaderWithNav({ pages }: HeaderWithNavProps) {
           />
           <div className="absolute right-0 top-0 h-full w-[340px] bg-white flex flex-col shadow-2xl">
             {/* En-tête du drawer */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200 bg-gray-50">
-              <Image
-                src="/logo.svg"
-                alt="CRTI-B"
-                width={160}
-                height={38}
-                className="h-10 w-auto"
-              />
+            <div className="flex items-center justify-end px-6 py-5 border-b border-gray-200 bg-gray-50">
               <button
                 onClick={() => setMobileOpen(false)}
                 className="p-2 text-gray-400 hover:text-[#08AA86] hover:bg-gray-200 rounded-lg transition-colors"

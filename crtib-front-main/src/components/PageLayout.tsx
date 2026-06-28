@@ -1,6 +1,8 @@
+import Image from "next/image";
 import type { Page } from "@/types/payload";
 import Breadcrumb, { type BreadcrumbItem } from "./Breadcrumb";
 import { BlockRenderer } from "@/components/home/BlockRenderer";
+import { getMediaUrl } from "@/lib/payload";
 
 interface PageLayoutProps {
   page: Page;
@@ -9,7 +11,6 @@ interface PageLayoutProps {
 function buildBreadcrumbItems(page: Page): BreadcrumbItem[] {
   const items: BreadcrumbItem[] = [];
 
-  // Add parent if available (depth=1 from API)
   if (page.parent && typeof page.parent === "object") {
     const parent = page.parent as Page;
     if (parent.slug && parent.title) {
@@ -24,6 +25,9 @@ function buildBreadcrumbItems(page: Page): BreadcrumbItem[] {
 export default function PageLayout({ page }: PageLayoutProps) {
   const { title, layout } = page;
   const breadcrumbItems = buildBreadcrumbItems(page);
+
+  const headerImage = (page as any).headerImage;
+  const imageUrl = headerImage ? getMediaUrl(headerImage) : null;
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -42,13 +46,25 @@ export default function PageLayout({ page }: PageLayoutProps) {
           </h1>
         </div>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
-          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-            <div className="w-6 h-6 bg-teal-500 rounded-full"></div>
-          </div>
+          {imageUrl ? (
+            <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm overflow-hidden ring-2 ring-white">
+              <Image
+                src={imageUrl}
+                alt={title}
+                width={56}
+                height={56}
+                className="object-cover w-full h-full rounded-full"
+              />
+            </div>
+          ) : (
+            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm">
+              <div className="w-6 h-6 bg-[#08AA86] rounded-full" />
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Sections de la page (draggable dans l'admin) */}
+      {/* Sections de la page */}
       {layout && layout.length > 0 && (
         <div className="pt-12 md:pt-14">
           <BlockRenderer blocks={layout} />

@@ -148,6 +148,14 @@ export async function getGlobal<T>(
   return fetchPayload<T>(`/globals/${slug}${queryString}`, options);
 }
 
+export async function getFooterSettings() {
+  try {
+    return await getGlobal<any>("footer-settings");
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Busca páginas
  */

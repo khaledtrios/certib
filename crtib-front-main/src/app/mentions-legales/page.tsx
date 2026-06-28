@@ -182,18 +182,7 @@ export default function MentionsLegalesPage() {
 
       {/* Content */}
       <div className="mx-auto w-full max-w-4xl px-4 md:px-8 py-16 pb-20">
-        {/* Quick nav */}
-        <div className="mb-10 flex flex-wrap gap-2">
-          {SECTIONS.map((section) => (
-            <a
-              key={section.id}
-              href={`#${section.id}`}
-              className="inline-flex items-center rounded-full border border-[#08AA86]/30 bg-white px-4 py-1.5 text-[12px] font-semibold text-[#08AA86] uppercase tracking-wide hover:bg-[#08AA86] hover:text-white transition-colors"
-            >
-              {section.title}
-            </a>
-          ))}
-        </div>
+        
 
         {/* Sections */}
         <div className="space-y-6">

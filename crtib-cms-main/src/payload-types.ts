@@ -111,8 +111,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'footer-settings': FooterSetting;
+  };
+  globalsSelect: {
+    'footer-settings': FooterSettingsSelect<false> | FooterSettingsSelect<true>;
+  };
   locale: null;
   user: User;
   jobs: {
@@ -205,6 +209,10 @@ export interface Page {
   parent?: (number | null) | Page;
   menuOrder?: number | null;
   isHidden?: boolean | null;
+  /**
+   * Optional image displayed in the page header (replaces the green dot).
+   */
+  headerImage?: (number | null) | Media;
   /**
    * Page builder: add, order, and configure each section.
    */
@@ -1001,6 +1009,7 @@ export interface PagesSelect<T extends boolean = true> {
   parent?: T;
   menuOrder?: T;
   isHidden?: T;
+  headerImage?: T;
   layout?:
     | T
     | {
@@ -1494,6 +1503,61 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * Manage the footer content (contact info, links, description).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer-settings".
+ */
+export interface FooterSetting {
+  id: number;
+  /**
+   * Short text displayed under the logo
+   */
+  description?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  /**
+   * Physical address (line breaks supported)
+   */
+  address?: string | null;
+  addressUrl?: string | null;
+  links?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Displayed as "© 2025 [name] – Tous droits réservés"
+   */
+  copyrightName?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer-settings_select".
+ */
+export interface FooterSettingsSelect<T extends boolean = true> {
+  description?: T;
+  phone?: T;
+  email?: T;
+  address?: T;
+  addressUrl?: T;
+  links?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  copyrightName?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -106,6 +106,18 @@ export const Pages: CollectionConfig = {
       },
     },
     {
+      name: 'headerImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: { en: 'Header Image', fr: 'Image d\'en-tête' },
+      admin: {
+        description: {
+          en: 'Optional image displayed in the page header (replaces the green dot).',
+          fr: 'Image optionnelle affichée dans l\'en-tête de la page (remplace le point vert).',
+        },
+      },
+    },
+    {
       name: 'layout',
       type: 'blocks',
       label: { fr: 'Sections de la page', en: 'Page Sections' },
@@ -959,7 +971,23 @@ export const Pages: CollectionConfig = {
                   label: { en: 'Content', fr: 'Contenu' },
                   editor: lexicalEditor({
                     features: ({ defaultFeatures }) => [
-                      ...defaultFeatures,
+                      ...defaultFeatures.filter((f: any) => f.key !== 'upload'),
+                      UploadFeature({
+                        collections: {
+                          media: {
+                            fields: [
+                              { name: 'caption', type: 'text', label: { en: 'Caption', fr: 'Légende' } },
+                              { name: 'position', type: 'select', defaultValue: 'center', options: ['left', 'center', 'right'], label: { en: 'Position', fr: 'Position' } },
+                              { name: 'width', type: 'select', defaultValue: '100', options: [
+                                { label: '25%', value: '25' }, { label: '33%', value: '33' },
+                                { label: '50%', value: '50' }, { label: '75%', value: '75' },
+                                { label: '100%', value: '100' },
+                              ], label: { en: 'Width', fr: 'Largeur' } },
+                              { name: 'href', type: 'text', label: { en: 'Link URL', fr: 'URL du lien' } },
+                            ],
+                          },
+                        },
+                      }),
                       BoldFeature(),
                       ItalicFeature(),
                       UnderlineFeature(),

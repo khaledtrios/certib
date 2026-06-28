@@ -22,6 +22,7 @@ import { Formations } from './collections/Formations'
 import { FormationCategories } from './collections/FormationCategories'
 import { ActualiteCategories } from './collections/ActualiteCategories'
 import { ActualiteRubriques } from './collections/ActualiteRubriques'
+import { FooterSettings } from './globals/FooterSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -109,5 +110,6 @@ export default buildConfig({
     },
   }),
   sharp,
+  globals: [FooterSettings],
   plugins: [],
 })
