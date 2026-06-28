@@ -229,6 +229,13 @@ export interface Page {
                 }[]
               | null;
             autoPlayMs?: number | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'photoHeroCarousel';
@@ -246,6 +253,13 @@ export interface Page {
              * Leave empty to show all sections.
              */
             filterRubriques?: (number | ActualiteRubrique)[] | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'newsSection';
@@ -262,12 +276,26 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'documentsSection';
           }
         | {
             title?: string | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'calculator';
@@ -277,6 +305,13 @@ export interface Page {
             clauses: (number | Clause)[];
             redirectLabel?: string | null;
             redirectHref?: string | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'clausesGrid';
@@ -306,6 +341,13 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'dynamicGrid';
@@ -326,6 +368,13 @@ export interface Page {
                 }[]
               | null;
             pageSize?: number | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'downloadGrid';
@@ -339,6 +388,13 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'downloadLinks';
@@ -352,6 +408,13 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'quickLinks';
@@ -379,6 +442,13 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'organogram';
@@ -392,6 +462,13 @@ export interface Page {
                 }[]
               | null;
             highlightLast?: boolean | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'timeline';
@@ -415,6 +492,13 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'partners';
@@ -429,6 +513,13 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'videoCards';
@@ -437,6 +528,13 @@ export interface Page {
             title?: string | null;
             type: 'youtube' | 'internal';
             src: string;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'videoEmbed';
@@ -450,6 +548,13 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'activityReports';
@@ -458,6 +563,13 @@ export interface Page {
             heading: string;
             description?: string | null;
             buttonLabel?: string | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'newsletterBlock';
@@ -479,6 +591,13 @@ export interface Page {
               | null;
             showFilters?: boolean | null;
             limit?: number | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'formationsSection';
@@ -489,6 +608,13 @@ export interface Page {
             address?: string | null;
             hours?: string | null;
             mapsEmbedUrl?: string | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'contactBlock';
@@ -509,6 +635,13 @@ export interface Page {
               };
               [k: string]: unknown;
             } | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'textBlock';
@@ -536,6 +669,13 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Control on which devices this section is visible.
+             */
+            visibility?: {
+              hideOnMobile?: boolean | null;
+              hideOnDesktop?: boolean | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'accordionBlock';
@@ -1026,6 +1166,12 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               autoPlayMs?: T;
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1038,6 +1184,12 @@ export interface PagesSelect<T extends boolean = true> {
               ctaHref?: T;
               filterCategories?: T;
               filterRubriques?: T;
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1055,6 +1207,12 @@ export interface PagesSelect<T extends boolean = true> {
                     videoUrl?: T;
                     id?: T;
                   };
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1062,6 +1220,12 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               title?: T;
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1072,6 +1236,12 @@ export interface PagesSelect<T extends boolean = true> {
               clauses?: T;
               redirectLabel?: T;
               redirectHref?: T;
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1094,6 +1264,12 @@ export interface PagesSelect<T extends boolean = true> {
                     values?: T;
                     id?: T;
                   };
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1115,6 +1291,12 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               pageSize?: T;
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1129,6 +1311,12 @@ export interface PagesSelect<T extends boolean = true> {
                     file?: T;
                     id?: T;
                   };
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1142,6 +1330,12 @@ export interface PagesSelect<T extends boolean = true> {
                     href?: T;
                     icon?: T;
                     id?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1171,6 +1365,12 @@ export interface PagesSelect<T extends boolean = true> {
                         };
                     id?: T;
                   };
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1185,6 +1385,12 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               highlightLast?: T;
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1209,6 +1415,12 @@ export interface PagesSelect<T extends boolean = true> {
                     href?: T;
                     id?: T;
                   };
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1224,6 +1436,12 @@ export interface PagesSelect<T extends boolean = true> {
                     src?: T;
                     id?: T;
                   };
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1233,6 +1451,12 @@ export interface PagesSelect<T extends boolean = true> {
               title?: T;
               type?: T;
               src?: T;
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1247,6 +1471,12 @@ export interface PagesSelect<T extends boolean = true> {
                     pdf?: T;
                     id?: T;
                   };
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1256,6 +1486,12 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               description?: T;
               buttonLabel?: T;
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1266,6 +1502,12 @@ export interface PagesSelect<T extends boolean = true> {
               category?: T;
               showFilters?: T;
               limit?: T;
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1277,6 +1519,12 @@ export interface PagesSelect<T extends boolean = true> {
               address?: T;
               hours?: T;
               mapsEmbedUrl?: T;
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1284,6 +1532,12 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               content?: T;
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1297,6 +1551,12 @@ export interface PagesSelect<T extends boolean = true> {
                     title?: T;
                     content?: T;
                     id?: T;
+                  };
+              visibility?:
+                | T
+                | {
+                    hideOnMobile?: T;
+                    hideOnDesktop?: T;
                   };
               id?: T;
               blockName?: T;

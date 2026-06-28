@@ -168,6 +168,32 @@ export const Pages: CollectionConfig = {
               label: 'Intervalo (ms)',
               defaultValue: 5000,
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -233,6 +259,32 @@ export const Pages: CollectionConfig = {
                 },
               },
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -288,6 +340,32 @@ export const Pages: CollectionConfig = {
                 },
               ],
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -302,6 +380,32 @@ export const Pages: CollectionConfig = {
               type: 'text',
               label: { en: 'Title', fr: 'Titre' },
               defaultValue: 'Calculateur',
+            },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
             },
           ],
         },
@@ -334,6 +438,32 @@ export const Pages: CollectionConfig = {
               name: 'redirectHref',
               type: 'text',
               label: { en: 'Button Link (optional)', fr: 'Lien du bouton (optionnel)' },
+            },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
             },
           ],
         },
@@ -401,6 +531,32 @@ export const Pages: CollectionConfig = {
                 },
               ],
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -463,6 +619,32 @@ export const Pages: CollectionConfig = {
               label: { en: 'Items per page', fr: 'Éléments par page' },
               defaultValue: 10,
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -496,6 +678,32 @@ export const Pages: CollectionConfig = {
                 },
               ],
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -526,6 +734,32 @@ export const Pages: CollectionConfig = {
                       Field: '/components/IconPickerField',
                     },
                   },
+                },
+              ],
+            },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
                 },
               ],
             },
@@ -574,6 +808,32 @@ export const Pages: CollectionConfig = {
                 },
               ],
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -602,6 +862,32 @@ export const Pages: CollectionConfig = {
               type: 'checkbox',
               label: { en: 'Highlight Last Item', fr: 'Mettre en évidence le dernier élément' },
               defaultValue: true,
+            },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
             },
           ],
         },
@@ -654,6 +940,32 @@ export const Pages: CollectionConfig = {
                 { name: 'href', type: 'text', label: { en: 'External Link', fr: 'Lien externe' } },
               ],
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -701,6 +1013,32 @@ export const Pages: CollectionConfig = {
                 },
               ],
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -730,6 +1068,32 @@ export const Pages: CollectionConfig = {
               type: 'text',
               required: true,
               label: { en: 'YouTube URL or File Link', fr: 'URL YouTube ou lien du fichier' },
+            },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
             },
           ],
         },
@@ -766,6 +1130,32 @@ export const Pages: CollectionConfig = {
                 },
               ],
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -791,6 +1181,32 @@ export const Pages: CollectionConfig = {
               type: 'text',
               label: { en: 'Button label', fr: 'Texte du bouton' },
               defaultValue: "S'abonner",
+            },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
             },
           ],
         },
@@ -833,6 +1249,32 @@ export const Pages: CollectionConfig = {
               label: { fr: 'Nombre max de formations affichées', en: 'Max formations to show' },
               defaultValue: 12,
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -870,6 +1312,32 @@ export const Pages: CollectionConfig = {
               name: 'mapsEmbedUrl',
               type: 'text',
               label: { fr: 'URL Google Maps (embed)', en: 'Google Maps embed URL' },
+            },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
             },
           ],
         },
@@ -939,6 +1407,32 @@ export const Pages: CollectionConfig = {
                 ],
               }),
             },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
+                },
+              ],
+            },
           ],
         },
         {
@@ -996,6 +1490,32 @@ export const Pages: CollectionConfig = {
                       OrderedListFeature(),
                     ],
                   }),
+                },
+              ],
+            },
+
+            {
+              name: 'visibility',
+              type: 'group',
+              label: { en: 'Visibility', fr: 'Visibilité' },
+              admin: {
+                description: {
+                  en: 'Control on which devices this section is visible.',
+                  fr: 'Contrôler sur quels appareils cette section est visible.',
+                },
+              },
+              fields: [
+                {
+                  name: 'hideOnMobile',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Mobile', fr: 'Masquer sur mobile' },
+                  defaultValue: false,
+                },
+                {
+                  name: 'hideOnDesktop',
+                  type: 'checkbox',
+                  label: { en: 'Hide on Desktop', fr: 'Masquer sur bureau' },
+                  defaultValue: false,
                 },
               ],
             },
