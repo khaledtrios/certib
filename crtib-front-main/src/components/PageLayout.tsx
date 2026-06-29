@@ -47,13 +47,13 @@ export default function PageLayout({ page }: PageLayoutProps) {
         </div>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
           {imageUrl ? (
-            <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm overflow-hidden ring-2 ring-white">
+            <div className="bg-white shadow-sm px-3 py-2">
               <Image
                 src={imageUrl}
                 alt={title}
-                width={56}
-                height={56}
-                className="object-cover w-full h-full rounded-full"
+                width={120}
+                height={64}
+                className="object-contain w-auto h-auto max-h-16 max-w-[120px]"
               />
             </div>
           ) : (

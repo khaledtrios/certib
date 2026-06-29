@@ -20,10 +20,10 @@ type DataGridDownloadsProps = {
 };
 
 function formatDate(value: string | Date): string {
-  if (value instanceof Date) return value.toLocaleDateString("pt-BR");
+  if (value instanceof Date) return value.toLocaleDateString("fr-FR");
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleDateString("pt-BR");
+  return date.toLocaleDateString("fr-FR");
 }
 
 export function DataGridDownloads({
@@ -65,7 +65,7 @@ export function DataGridDownloads({
             ? String(b.numero ?? "")
             : String(b.titulo ?? "");
 
-        const compare = aStr.localeCompare(bStr, "pt-BR", { numeric: true });
+        const compare = aStr.localeCompare(bStr, "fr-FR", { numeric: true });
         return sortDirection === "asc" ? compare : -compare;
       });
     }
@@ -192,7 +192,7 @@ export function DataGridDownloads({
                   colSpan={5}
                   className="px-4 py-6 text-center text-sm text-gray-600"
                 >
-                  Nenhum documento encontrado.
+                  Aucun document trouvé.
                 </td>
               </tr>
             ) : (
@@ -247,7 +247,7 @@ export function DataGridDownloads({
         {totalPages > 1 && (
           <div className="flex items-center justify-end gap-3">
             <span className="text-sm text-crtib-gray-dark">
-              Página <span className="font-semibold">{safePage}</span> /{" "}
+              Page <span className="font-semibold">{safePage}</span> /{" "}
               <span className="font-semibold">{totalPages}</span>
             </span>
 
@@ -258,7 +258,7 @@ export function DataGridDownloads({
                 disabled={safePage <= 1}
                 className="rounded-md border border-[#303e48] bg-[#303e48] px-3 py-1 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-[#303e48] disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Anterior
+                Précédent
               </button>
 
               <button
@@ -267,7 +267,7 @@ export function DataGridDownloads({
                 disabled={safePage >= totalPages}
                 className="rounded-md border border-[#303e48] bg-[#303e48] px-3 py-1 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-[#303e48] disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Próxima
+                Suivant
               </button>
             </div>
           </div>
