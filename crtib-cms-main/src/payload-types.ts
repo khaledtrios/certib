@@ -775,6 +775,10 @@ export interface News {
    */
   publishedAt: string;
   /**
+   * If set, the article will no longer appear on the site after this date.
+   */
+  expiresAt?: string | null;
+  /**
    * Used on the listing card and at the top of the news.
    */
   featuredImage: number | Media;
@@ -1583,6 +1587,7 @@ export interface NewsSelect<T extends boolean = true> {
   category?: T;
   rubrique?: T;
   publishedAt?: T;
+  expiresAt?: T;
   featuredImage?: T;
   excerpt?: T;
   content?: T;

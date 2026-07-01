@@ -92,7 +92,7 @@ export const News: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'publishedAt', 'updatedAt'],
+    defaultColumns: ['title', 'category', 'publishedAt', 'expiresAt', 'updatedAt'],
     group: { fr: 'Actualités', en: 'News' },
     description: {
       fr: 'Gérer les actualités et les communiqués.',
@@ -107,7 +107,17 @@ export const News: CollectionConfig = {
   access: {
     read: ({ req: { user } }) => {
       if (user) return true
-      return { _status: { equals: 'published' } }
+      return {
+        and: [
+          { _status: { equals: 'published' } },
+          {
+            or: [
+              { expiresAt: { exists: false } },
+              { expiresAt: { greater_than: new Date().toISOString() } },
+            ],
+          },
+        ],
+      }
     },
     create: ({ req: { user } }) => Boolean(user),
     update: ({ req: { user } }) => Boolean(user),
@@ -210,6 +220,20 @@ export const News: CollectionConfig = {
             return value
           },
         ],
+      },
+    },
+    {
+      name: 'expiresAt',
+      type: 'date',
+      label: { fr: "Date d'expiration", en: 'Expiry Date' },
+      admin: {
+        description: {
+          fr: "Si renseignée, l'article n'apparaîtra plus sur le site après cette date.",
+          en: 'If set, the article will no longer appear on the site after this date.',
+        },
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
       },
     },
     {
