@@ -1,32 +1,17 @@
-import { notFound } from "next/navigation";
-import { getPageBySlug } from "@/lib/payload";
-import PageLayout from "@/components/PageLayout";
-import type { Metadata } from "next";
-import type { Page } from "@/types/payload";
+import { redirect } from "next/navigation";
+import { getSiteLanguages } from "@/lib/payload";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const page = (await getPageBySlug("downloads")) as Page | null;
-    if (!page) return { title: "Téléchargements" };
-    return {
-      title: page.seo?.metaTitle || page.title,
-      description: page.seo?.metaDescription || undefined,
-    };
-  } catch {
-    return { title: "Téléchargements" };
-  }
-}
-
+// Legacy route: /downloads → redirect to /{defaultLang}/downloads
+// The page is now served by app/[...slug]/page.tsx at /fr/downloads
 export default async function DownloadsPage() {
-  let page: Page | null = null;
+  let defaultLang = "fr";
   try {
-    page = (await getPageBySlug("downloads")) as Page | null;
-  } catch (error) {
-    console.error("Error fetching downloads page:", error);
-    notFound();
+    const langs = await getSiteLanguages();
+    defaultLang = langs.docs.find((l) => l.isDefault)?.slug ?? "fr";
+  } catch {
+    // CMS unavailable — fall back to "fr"
   }
-  if (!page) notFound();
-  return <PageLayout page={page} />;
+  redirect(`/${defaultLang}/downloads`);
 }

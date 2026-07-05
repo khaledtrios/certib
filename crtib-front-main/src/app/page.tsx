@@ -1,35 +1,46 @@
-import { BlockRenderer } from "@/components/home/BlockRenderer";
-import RichText from "@/components/RichText";
-import { getPageBySlug } from "@/lib/payload";
+import { getSiteLanguages } from "@/lib/payload";
+import { LangRedirectClient } from "@/components/LangRedirectClient";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Root "/" page.
+ *
+ * The server fetches active languages and passes them to the client component,
+ * which reads localStorage and immediately calls router.replace(/{lang}).
+ *
+ * - SEO: "/" is not a canonical page (all content lives under /{lang}/…).
+ *   Bots that don't run JS get the <noscript> meta-refresh to the default lang.
+ * - No flash: LangRedirectClient renders null and redirects synchronously in
+ *   useEffect, before any visible content is painted.
+ * - Server content/x-lang is never affected — language is decided by the URL
+ *   after the redirect, not by this component.
+ */
 export default async function Home() {
-  let page: any = null;
+  let defaultLang = "fr";
+  let activeLangs: string[] = ["fr"];
+
   try {
-    page = await getPageBySlug("home");
+    const languages = await getSiteLanguages();
+    const def = languages.docs.find((l) => l.isDefault);
+    if (def) defaultLang = def.slug;
+    activeLangs = languages.docs
+      .filter((l) => l.isActive)
+      .map((l) => l.slug);
+    // Always include the default even if isActive is missing
+    if (!activeLangs.includes(defaultLang)) activeLangs.push(defaultLang);
   } catch {
-    // CMS unavailable — renders with empty layout
+    // CMS unavailable — fall back to "fr"
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F5F5F5]">
-      <div className="flex-1">
-        {/* Blocos do page builder (campo "layout") */}
-        {page?.layout?.length > 0 && <BlockRenderer blocks={page.layout} />}
-
-        {/* Conteúdo RichText (campo "conteúdo da página") */}
-        {page?.content && (
-          <section className="py-12 md:py-16 bg-[#f5f5f5]">
-            <div className="container mx-auto px-4 md:px-8 max-w-4xl">
-              <div className="page-content">
-                <RichText content={page.content} />
-              </div>
-            </div>
-          </section>
-        )}
-      </div>
-
-    </div>
+    <>
+      {/* No-JS / bot fallback: hard redirect to default language */}
+      <noscript>
+        {/* eslint-disable-next-line @next/next/no-head-element */}
+        <meta httpEquiv="refresh" content={`0;url=/${defaultLang}`} />
+      </noscript>
+      <LangRedirectClient defaultLang={defaultLang} activeLangs={activeLangs} />
+    </>
   );
 }

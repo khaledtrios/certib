@@ -22,6 +22,7 @@ import { Formations } from './collections/Formations'
 import { FormationCategories } from './collections/FormationCategories'
 import { ActualiteCategories } from './collections/ActualiteCategories'
 import { ActualiteRubriques } from './collections/ActualiteRubriques'
+import { SiteLanguages } from './collections/SiteLanguages'
 import { FooterSettings } from './globals/FooterSettings'
 
 const filename = fileURLToPath(import.meta.url)
@@ -83,6 +84,7 @@ export default buildConfig({
     TimelineItems,
     Clauses,
     NewsletterSubscribers,
+    SiteLanguages,
   ],
   email: process.env.SMTP_HOST
     ? nodemailerAdapter({

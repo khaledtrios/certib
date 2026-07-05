@@ -47,14 +47,49 @@ export const Pages: CollectionConfig = {
       name: 'slug',
       type: 'text',
       required: true,
-      unique: true,
+      // unique removed: slug uniqueness is per (slug + language), not global.
       index: true,
       label: { fr: 'URL de la Page', en: 'Page URL' },
       admin: {
         description: {
-          fr: 'URL amicale pour la page',
-          en: 'Friendly URL for the page (e.g. our-history)',
+          fr: 'URL amicale. Doit être unique par langue (/fr/mpu ET /de/mpu sont deux pages différentes).',
+          en: 'Friendly URL. Must be unique per language (/fr/mpu and /de/mpu can coexist).',
         },
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      validate: async (value: any, { data, id, req }: any) => {
+        if (!value) return true
+
+        // During a duplicate operation the beforeDuplicate hook handles slug
+        // uniqueness. Skip validation here to avoid a false conflict.
+        const reqUrl: string = req?.url ?? ''
+        if (reqUrl.includes('/duplicate')) return true
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const langId: string | null = (data as any)?.language ?? null
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const andConditions: any[] = [
+          { slug: { equals: value } },
+          ...(id ? [{ id: { not_equals: id } }] : []),
+        ]
+        if (langId) {
+          andConditions.push({ language: { equals: langId } })
+        } else {
+          andConditions.push({
+            or: [{ language: { exists: false } }, { language: { equals: null } }],
+          })
+        }
+        const existing = await req.payload.find({
+          collection: 'pages',
+          where: { and: andConditions },
+          limit: 1,
+        })
+        if (existing.docs.length > 0) {
+          return langId
+            ? 'Ce slug est déjà utilisé pour cette langue.'
+            : 'Ce slug est déjà utilisé (sans langue assignée).'
+        }
+        return true
       },
       hooks: {
         beforeValidate: [
@@ -114,6 +149,20 @@ export const Pages: CollectionConfig = {
         description: {
           en: 'Optional image displayed in the page header (replaces the green dot).',
           fr: 'Image optionnelle affichée dans l\'en-tête de la page (remplace le point vert).',
+        },
+      },
+    },
+    {
+      name: 'language',
+      type: 'relationship',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      relationTo: 'site-languages' as any,
+      label: { fr: 'Langue de la page', en: 'Page language' },
+      admin: {
+        position: 'sidebar',
+        description: {
+          fr: 'Détermine le préfixe d\'URL (ex : /fr/ma-page, /de/ma-page). Toutes les langues ont un préfixe.',
+          en: 'Sets the URL prefix (e.g. /fr/my-page, /de/my-page). All languages have a prefix.',
         },
       },
     },
@@ -1566,6 +1615,35 @@ export const Pages: CollectionConfig = {
     },
   ],
   hooks: {
+    // When duplicating a page, auto-append -2, -3, … to the slug so it's
+    // unique within the same language and our validate() doesn't block it.
+    beforeDuplicate: [
+      async ({ data, req }) => {
+        const base = typeof data.slug === 'string' ? data.slug : ''
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const langId: string | null = (data as any).language ?? null
+
+        for (let suffix = 2; suffix < 200; suffix++) {
+          const candidate = `${base}-${suffix}`
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const andConditions: any[] = [{ slug: { equals: candidate } }]
+          if (langId) andConditions.push({ language: { equals: langId } })
+
+          const existing = await req.payload.find({
+            collection: 'pages',
+            where: { and: andConditions },
+            limit: 1,
+          })
+
+          if (existing.docs.length === 0) {
+            return { ...data, slug: candidate }
+          }
+        }
+
+        // Fallback: should never happen in practice
+        return data
+      },
+    ],
     afterChange: [revalidatePage],
   },
 }

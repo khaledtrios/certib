@@ -28,12 +28,11 @@ export const ActualiteRubriques: CollectionConfig = {
       name: 'slug',
       type: 'text',
       required: true,
-      unique: true,
       label: { fr: 'Slug', en: 'Slug' },
       admin: {
         description: {
-          fr: 'Identifiant unique — utilisé dans les filtres (ex: marches-publics)',
-          en: 'Unique identifier — used in filters (e.g. marches-publics)',
+          fr: 'Identifiant — utilisé dans les filtres (ex: marches-publics)',
+          en: 'Identifier — used in filters (e.g. marches-publics)',
         },
       },
       hooks: {
@@ -59,6 +58,20 @@ export const ActualiteRubriques: CollectionConfig = {
       type: 'number',
       label: { fr: 'Ordre d\'affichage', en: 'Display order' },
       admin: { description: { fr: 'Tri dans les filtres (optionnel)', en: 'Sort in filters (optional)' } },
+    },
+    {
+      name: 'language',
+      type: 'relationship',
+      relationTo: 'site-languages',
+      required: false,
+      label: { fr: 'Langue', en: 'Language' },
+      admin: {
+        position: 'sidebar',
+        description: {
+          fr: 'Langue de cette rubrique. Laisser vide = français (par défaut).',
+          en: 'Language of this section. Leave empty = French (default).',
+        },
+      },
     },
   ],
 }

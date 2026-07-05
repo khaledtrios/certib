@@ -57,6 +57,14 @@ export type PageIcon =
   | "settings"
   | "list";
 
+export interface SiteLanguageRef {
+  id: string;
+  name: string;
+  slug: string;
+  isDefault: boolean;
+  isActive: boolean;
+}
+
 export interface Page {
   id: string;
   title: string;
@@ -65,20 +73,25 @@ export interface Page {
   menuOrder?: number | null;
   isHidden?: boolean | null;
   icon?: PageIcon | null;
-  layout?: any[]; // Blocos de layout (page builder)
+  headerImage?: PayloadMedia | string | null;
+  /** Populated at depth ≥ 1 */
+  language?: SiteLanguageRef | string | null;
+  layout?: any[];
   seo?: {
     metaTitle?: string;
     metaDescription?: string;
     metaImage?: PayloadMedia | string;
   };
   status?: "draft" | "published";
-  _status?: "draft" | "published"; // Campo injetado quando drafts está habilitado
+  _status?: "draft" | "published";
   createdAt: string;
   updatedAt: string;
 }
 
 export interface PageWithChildren extends Page {
   children?: PageWithChildren[];
+  /** Computed by GlobalLayout: /{lang}/{slug} */
+  href?: string;
 }
 
 // Globals - Settings
@@ -114,6 +127,7 @@ export interface NewsArticle {
   slug: string;
   category?: NewsCategory | string | null;
   rubrique?: NewsRubrique | string | null;
+  language?: SiteLanguageRef | string | null;
   publishedAt: string;
   featuredImage?: PayloadMedia | string;
   excerpt?: string;

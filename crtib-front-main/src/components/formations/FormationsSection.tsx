@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Calendar, MapPin, Clock, Users, Euro, Mail, ExternalLink } from "lucide-react";
+
+const BUILTIN_LANG_CODES = ["fr", "de", "en", "lu", "pt", "es", "it", "nl"];
 import { getMediaUrl } from "@/lib/payload";
 
 interface FormationCategory {
@@ -185,6 +187,11 @@ export function FormationsSection({ title, category, showFilters = true, limit =
   const [formations, setFormations] = useState<Formation[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>(category && category !== "all" ? category : "all");
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
+
+  // Extract lang from URL prefix
+  const segments = pathname.split("/").filter(Boolean);
+  const lang = BUILTIN_LANG_CODES.includes(segments[0] ?? "") ? segments[0] : "fr";
 
   useEffect(() => {
     const fetchFormations = async () => {
@@ -192,6 +199,8 @@ export function FormationsSection({ title, category, showFilters = true, limit =
       try {
         const params = new URLSearchParams({ limit: String(limit), sort: "title", depth: "1" });
         if (activeFilter !== "all") params.set("where[category.slug][equals]", activeFilter);
+        // Filter by current language (works after seed assigns language to existing content)
+        params.set("where[language.slug][equals]", lang);
         const res = await fetch(`/api/cms/formations?${params}`);
         const data = await res.json();
         setFormations(data.docs ?? []);
@@ -202,7 +211,7 @@ export function FormationsSection({ title, category, showFilters = true, limit =
       }
     };
     fetchFormations();
-  }, [activeFilter, limit]);
+  }, [activeFilter, limit, lang]);
 
   const categories = ["all", "marches-publics", "performance-energetique", "construction-durable", "digitalisation-bim", "autre"];
 
@@ -243,7 +252,7 @@ export function FormationsSection({ title, category, showFilters = true, limit =
         ) : formations.length === 0 ? (
           <div className="text-center py-16 text-gray-400">
             <span className="text-5xl mb-4 block">📚</span>
-            <p className="text-sm">Aucune formation disponible pour le moment.</p>
+            <p className="text-sm">Aucune formation disponible dans cette langue.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

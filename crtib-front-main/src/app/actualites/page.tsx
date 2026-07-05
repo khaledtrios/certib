@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getNewsArticles, getMediaUrl } from "@/lib/payload";
+import { headers } from "next/headers";
+import { getNewsArticles, getMediaUrl, getSiteLanguages, buildContentLangWhere } from "@/lib/payload";
 
 export const dynamic = "force-dynamic";
 import type { NewsArticle } from "@/types/payload";
@@ -17,29 +18,13 @@ const CATEGORIES = [
   { value: "evenement", label: "Événement" },
 ] as const;
 
-const FOOTER_LINKS = [
-  { id: "f1", label: "Accueil", href: "/" },
-  { id: "f2", label: "Actualités", href: "/actualites" },
-  { id: "f3", label: "Agenda", href: "/agenda" },
-  { id: "f4", label: "Liens", href: "/liens" },
-  { id: "f5", label: "Dictionnaire", href: "/dictionnaire" },
-  { id: "f6", label: "Contact", href: "/contact" },
-  { id: "f7", label: "Construction durable", href: "/construction-durable" },
-];
-
-const FOOTER_SECONDARY = [
-  { id: "f8", label: "Plan du site", href: "/plan-du-site" },
-  { id: "f9", label: "Mentions légales", href: "/mentions-legales" },
-];
-
 interface PageProps {
   searchParams: Promise<{ page?: string; category?: string }>;
 }
 
 export const metadata: Metadata = {
   title: "Actualités | CRTI-B",
-  description:
-    "Retrouvez toutes les actualités, communiqués et événements du CRTI-B",
+  description: "Retrouvez toutes les actualités, communiqués et événements du CRTI-B",
   openGraph: {
     title: "Actualités | CRTI-B",
     description: "Retrouvez toutes les actualités, communiqués et événements du CRTI-B",
@@ -59,21 +44,38 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
   const { page: pageParam, category } = await searchParams;
   const currentPage = Math.max(1, parseInt(pageParam || "1", 10));
 
-  const where = category
+  // Resolve current language from middleware header
+  const headersList = await headers();
+  const currentLang = headersList.get("x-lang") ?? "fr";
+  let defaultLang = "fr";
+  try {
+    const langs = await getSiteLanguages();
+    defaultLang = langs.docs.find((l) => l.isDefault)?.slug ?? "fr";
+  } catch {}
+
+  const langWhere = buildContentLangWhere(currentLang, defaultLang);
+
+  const baseWhere = category
     ? {
         and: [
           { _status: { equals: "published" } },
           { "category.slug": { equals: category } },
+          langWhere,
         ],
       }
-    : { _status: { equals: "published" } };
+    : {
+        and: [
+          { _status: { equals: "published" } },
+          langWhere,
+        ],
+      };
 
   let result;
   try {
     result = await getNewsArticles({
       limit: ITEMS_PER_PAGE,
       page: currentPage,
-      where,
+      where: baseWhere,
     });
   } catch {
     result = {
@@ -98,7 +100,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
       href: `/actualites/${article.slug}`,
       excerpt: article.excerpt,
       imageUrl: image ? getMediaUrl(image) : undefined,
-      imageAlt: image?.alt || article.title,
+      imageAlt: (image as any)?.alt || article.title,
     };
   });
 
@@ -142,7 +144,6 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
       <div className="pb-6 pt-16">
         <div className="mx-auto w-full max-w-[1320px] px-8">
           <div className="flex flex-wrap items-center gap-3">
-            {/* "Tout" tab */}
             <Link
               href={buildUrl(1, "")}
               className={[
@@ -154,7 +155,6 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
             >
               Tout
             </Link>
-            {/* Category tabs */}
             {CATEGORIES.slice(1).map((cat) => {
               const isActive = cat.value === (category || "");
               return (
@@ -187,7 +187,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
           {items.length === 0 ? (
             <div className="py-24 text-center">
               <p className="font-sans text-[15px] uppercase tracking-[0.08em] text-[#6B6B6B]">
-                Aucun article trouvé
+                Aucun contenu disponible dans cette langue
               </p>
             </div>
           ) : (
@@ -213,21 +213,12 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
                   ‹
                 </Link>
               )}
-
               {rangeStart > 1 && (
                 <>
-                  <Link
-                    href={buildUrl(1, category)}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-[2px] border border-gray-300 bg-white font-sans text-[13px] font-semibold text-crtib-gray-dark hover:border-[#37C2A2] hover:text-[#37C2A2]"
-                  >
-                    1
-                  </Link>
-                  {rangeStart > 2 && (
-                    <span className="px-1 text-[#6B6B6B]">…</span>
-                  )}
+                  <Link href={buildUrl(1, category)} className="inline-flex h-10 w-10 items-center justify-center rounded-[2px] border border-gray-300 bg-white font-sans text-[13px] font-semibold text-crtib-gray-dark hover:border-[#37C2A2] hover:text-[#37C2A2]">1</Link>
+                  {rangeStart > 2 && <span className="px-1 text-[#6B6B6B]">…</span>}
                 </>
               )}
-
               {pageRange.map((p) => (
                 <Link
                   key={p}
@@ -243,21 +234,12 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
                   {p}
                 </Link>
               ))}
-
               {rangeEnd < totalPages && (
                 <>
-                  {rangeEnd < totalPages - 1 && (
-                    <span className="px-1 text-[#6B6B6B]">…</span>
-                  )}
-                  <Link
-                    href={buildUrl(totalPages, category)}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-[2px] border border-gray-300 bg-white font-sans text-[13px] font-semibold text-crtib-gray-dark hover:border-[#37C2A2] hover:text-[#37C2A2]"
-                  >
-                    {totalPages}
-                  </Link>
+                  {rangeEnd < totalPages - 1 && <span className="px-1 text-[#6B6B6B]">…</span>}
+                  <Link href={buildUrl(totalPages, category)} className="inline-flex h-10 w-10 items-center justify-center rounded-[2px] border border-gray-300 bg-white font-sans text-[13px] font-semibold text-crtib-gray-dark hover:border-[#37C2A2] hover:text-[#37C2A2]">{totalPages}</Link>
                 </>
               )}
-
               {hasNextPage && (
                 <Link
                   href={buildUrl(currentPage + 1, category)}
@@ -271,7 +253,6 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
           )}
         </div>
       </section>
-
     </div>
   );
 }

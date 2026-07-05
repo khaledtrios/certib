@@ -17,8 +17,8 @@ const FALLBACK = {
   copyrightName: "CRTI-B",
 };
 
-export async function Footer() {
-  const data = await getFooterSettings();
+export async function Footer({ lang }: { lang?: string } = {}) {
+  const data = await getFooterSettings(lang);
 
   const description = data?.description || FALLBACK.description;
   const phone = data?.phone || FALLBACK.phone;

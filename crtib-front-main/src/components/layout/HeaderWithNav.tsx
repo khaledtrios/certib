@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, Menu, X, Search } from "lucide-react";
 import { SearchModal } from "@/components/layout/SearchModal";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import type { SiteLanguage } from "@/components/layout/LanguageSwitcher";
 import type { PageWithChildren } from "@/types/payload";
 
 // --- Desktop Dropdown Child (com suporte a netos via flyout) -----------------
@@ -23,7 +25,7 @@ function DropdownChildDesktop({
     return (
       <Link
         key={child.id}
-        href={`/${child.slug}`}
+        href={child.href ?? `/${child.slug}`}
         onClick={onCloseAll}
         className="flex items-center px-5 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-200 transition-colors group/item"
       >
@@ -41,7 +43,7 @@ function DropdownChildDesktop({
       onMouseLeave={() => setSubOpen(false)}
     >
       <Link
-        href={`/${child.slug}`}
+        href={child.href ?? `/${child.slug}`}
         onClick={onCloseAll}
         className="flex items-center justify-between px-5 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-200 transition-colors group/item"
       >
@@ -56,7 +58,7 @@ function DropdownChildDesktop({
           {child.children!.map((grandchild: PageWithChildren) => (
             <Link
               key={grandchild.id}
-              href={`/${grandchild.slug}`}
+              href={grandchild.href ?? `/${grandchild.slug}`}
               onClick={onCloseAll}
               className="flex items-center px-5 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-200 transition-colors group/gc"
             >
@@ -101,7 +103,7 @@ function NavItemDesktop({ page }: { page: PageWithChildren }) {
   if (!hasChildren) {
     return (
       <Link
-        href={`/${page.slug}`}
+        href={page.href ?? `/${page.slug}`}
         className="group px-5 py-3 flex items-center border-l border-gray-200 first:border-l-0 h-full hover:bg-gray-200 transition-colors"
       >
         {itemContent}
@@ -117,7 +119,7 @@ function NavItemDesktop({ page }: { page: PageWithChildren }) {
       onMouseLeave={() => setOpen(false)}
     >
       <Link
-        href={`/${page.slug}`}
+        href={page.href ?? `/${page.slug}`}
         className="px-5 py-3 flex items-center border-l border-gray-200 first:border-l-0 h-full hover:bg-gray-200 transition-colors"
       >
         {itemContent}
@@ -157,7 +159,7 @@ function MobileChildItem({
   if (!hasGrandchildren) {
     return (
       <Link
-        href={`/${child.slug}`}
+        href={child.href ?? `/${child.slug}`}
         onClick={onClose}
         className="flex items-center pl-12 pr-6 py-4 border-b border-gray-100 hover:bg-gray-200 transition-colors"
       >
@@ -172,7 +174,7 @@ function MobileChildItem({
     <>
       <div className="flex items-center justify-between border-b border-gray-100 hover:bg-gray-200 transition-colors">
         <Link
-          href={`/${child.slug}`}
+          href={child.href ?? `/${child.slug}`}
           onClick={onClose}
           className="flex-1 pl-12 pr-2 py-4"
         >
@@ -196,7 +198,7 @@ function MobileChildItem({
           {child.children!.map((grandchild: PageWithChildren) => (
             <Link
               key={grandchild.id}
-              href={`/${grandchild.slug}`}
+              href={grandchild.href ?? `/${grandchild.slug}`}
               onClick={onClose}
               className="flex items-center pl-16 pr-6 py-3.5 border-b border-gray-200 hover:bg-gray-200 transition-colors"
             >
@@ -224,7 +226,7 @@ function NavItemMobile({
   if (!hasChildren) {
     return (
       <Link
-        href={`/${page.slug}`}
+        href={page.href ?? `/${page.slug}`}
         onClick={onClose}
         className="flex items-center px-6 py-5 border-b border-gray-100 hover:bg-gray-200 transition-colors group"
       >
@@ -239,7 +241,7 @@ function NavItemMobile({
     <>
       <div className="flex items-center justify-between border-b border-gray-100 hover:bg-gray-200 transition-colors">
         <Link
-          href={`/${page.slug}`}
+          href={page.href ?? `/${page.slug}`}
           onClick={onClose}
           className="flex-1 px-6 py-5"
         >
@@ -273,9 +275,10 @@ function NavItemMobile({
 
 interface HeaderWithNavProps {
   pages: PageWithChildren[];
+  languages?: SiteLanguage[];
 }
 
-export function HeaderWithNav({ pages }: HeaderWithNavProps) {
+export function HeaderWithNav({ pages, languages = [] }: HeaderWithNavProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -297,8 +300,16 @@ export function HeaderWithNav({ pages }: HeaderWithNavProps) {
             </Link>
           </div>
 
-          {/* Hamburger mobile + lupa */}
+          {/* Sélecteur de langue desktop (top-right) */}
+          {languages.length > 1 && (
+            <div className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2">
+              <LanguageSwitcher languages={languages} />
+            </div>
+          )}
+
+          {/* Hamburger mobile + lupa + langue */}
           <div className="lg:hidden absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1">
+            {languages.length > 1 && <LanguageSwitcher languages={languages} />}
             <button
               onClick={() => setSearchOpen(true)}
               className="p-2.5 text-[#08AA86] hover:bg-gray-200 rounded-lg transition-colors"

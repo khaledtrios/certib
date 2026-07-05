@@ -81,6 +81,7 @@ export interface Config {
     'timeline-items': TimelineItem;
     clauses: Clause;
     'newsletter-subscribers': NewsletterSubscriber;
+    'site-languages': SiteLanguage;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -102,6 +103,7 @@ export interface Config {
     'timeline-items': TimelineItemsSelect<false> | TimelineItemsSelect<true>;
     clauses: ClausesSelect<false> | ClausesSelect<true>;
     'newsletter-subscribers': NewsletterSubscribersSelect<false> | NewsletterSubscribersSelect<true>;
+    'site-languages': SiteLanguagesSelect<false> | SiteLanguagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -200,7 +202,7 @@ export interface Page {
   id: number;
   title: string;
   /**
-   * Friendly URL for the page (e.g. our-history)
+   * Friendly URL. Must be unique per language (/fr/mpu and /de/mpu can coexist).
    */
   slug: string;
   /**
@@ -213,6 +215,10 @@ export interface Page {
    * Optional image displayed in the page header (replaces the green dot).
    */
   headerImage?: (number | null) | Media;
+  /**
+   * Sets the URL prefix (e.g. /fr/my-page, /de/my-page). All languages have a prefix.
+   */
+  language?: (number | null) | SiteLanguage;
   /**
    * Page builder: add, order, and configure each section.
    */
@@ -701,6 +707,33 @@ export interface Page {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Manage site languages. Every active language has a URL prefix (e.g. /fr/page, /de/page).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-languages".
+ */
+export interface SiteLanguage {
+  id: number;
+  /**
+   * e.g. Français, Deutsch, English
+   */
+  name: string;
+  /**
+   * e.g. fr, de, en, lu
+   */
+  slug: string;
+  /**
+   * Only one language can be default. Saving this removes the status from others.
+   */
+  isDefault?: boolean | null;
+  /**
+   * Only active languages appear on the site. The default language cannot be deactivated.
+   */
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "actualite-categories".
  */
@@ -708,13 +741,17 @@ export interface ActualiteCategory {
   id: number;
   name: string;
   /**
-   * Unique identifier — used in URLs (e.g. actualite)
+   * Identifier — used in URLs (e.g. actualite)
    */
   slug: string;
   /**
    * Sort in filters (optional)
    */
   order?: number | null;
+  /**
+   * Language of this category. Leave empty = French (default).
+   */
+  language?: (number | null) | SiteLanguage;
   updatedAt: string;
   createdAt: string;
 }
@@ -726,13 +763,17 @@ export interface ActualiteRubrique {
   id: number;
   name: string;
   /**
-   * Unique identifier — used in filters (e.g. marches-publics)
+   * Identifier — used in filters (e.g. marches-publics)
    */
   slug: string;
   /**
    * Sort in filters (optional)
    */
   order?: number | null;
+  /**
+   * Language of this section. Leave empty = French (default).
+   */
+  language?: (number | null) | SiteLanguage;
   updatedAt: string;
   createdAt: string;
 }
@@ -765,6 +806,10 @@ export interface News {
    * Automatically generated from the title
    */
   slug: string;
+  /**
+   * Language of this article. Leave empty = French (default).
+   */
+  language?: (number | null) | SiteLanguage;
   category: number | ActualiteCategory;
   /**
    * Site section this news belongs to
@@ -830,6 +875,10 @@ export interface Formation {
    * Unique URL identifier
    */
   slug?: string | null;
+  /**
+   * Language of this training. Leave empty = French (default).
+   */
+  language?: (number | null) | SiteLanguage;
   image?: (number | null) | Media;
   category?: (number | null) | FormationCategory;
   categoryLegacy?:
@@ -870,9 +919,13 @@ export interface FormationCategory {
   id: number;
   name: string;
   /**
-   * Unique URL identifier (e.g. marches-publics)
+   * URL identifier (e.g. marches-publics)
    */
   slug: string;
+  /**
+   * Language of this category. Leave empty = French (default).
+   */
+  language?: (number | null) | SiteLanguage;
   updatedAt: string;
   createdAt: string;
 }
@@ -961,6 +1014,10 @@ export interface TimelineItem {
    * Display order. Lower number appears first.
    */
   order?: number | null;
+  /**
+   * Language of this item. Leave empty = French (default).
+   */
+  language?: (number | null) | SiteLanguage;
   updatedAt: string;
   createdAt: string;
 }
@@ -1060,6 +1117,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'newsletter-subscribers';
         value: number | NewsletterSubscriber;
+      } | null)
+    | ({
+        relationTo: 'site-languages';
+        value: number | SiteLanguage;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1154,6 +1215,7 @@ export interface PagesSelect<T extends boolean = true> {
   menuOrder?: T;
   isHidden?: T;
   headerImage?: T;
+  language?: T;
   layout?:
     | T
     | {
@@ -1584,6 +1646,7 @@ export interface PagesSelect<T extends boolean = true> {
 export interface NewsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  language?: T;
   category?: T;
   rubrique?: T;
   publishedAt?: T;
@@ -1610,6 +1673,7 @@ export interface ActualiteCategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   order?: T;
+  language?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1621,6 +1685,7 @@ export interface ActualiteRubriquesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   order?: T;
+  language?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1631,6 +1696,7 @@ export interface ActualiteRubriquesSelect<T extends boolean = true> {
 export interface FormationsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  language?: T;
   image?: T;
   category?: T;
   categoryLegacy?: T;
@@ -1654,6 +1720,7 @@ export interface FormationsSelect<T extends boolean = true> {
 export interface FormationCategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  language?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1700,6 +1767,7 @@ export interface TimelineItemsSelect<T extends boolean = true> {
   year?: T;
   title?: T;
   order?: T;
+  language?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1726,6 +1794,18 @@ export interface NewsletterSubscribersSelect<T extends boolean = true> {
   email?: T;
   status?: T;
   unsubscribeToken?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-languages_select".
+ */
+export interface SiteLanguagesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  isDefault?: T;
+  isActive?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1799,6 +1879,29 @@ export interface FooterSetting {
    * Displayed as "© 2025 [name] – Tous droits réservés"
    */
   copyrightName?: string | null;
+  /**
+   * Override description and links per language. Leave empty to use the values above (French default).
+   */
+  translations?:
+    | {
+        language: number | SiteLanguage;
+        /**
+         * Short text under the logo (leave empty to use the default)
+         */
+        description?: string | null;
+        /**
+         * Leave empty to use the default links
+         */
+        links?:
+          | {
+              label: string;
+              href: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1820,6 +1923,20 @@ export interface FooterSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   copyrightName?: T;
+  translations?:
+    | T
+    | {
+        language?: T;
+        description?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              id?: T;
+            };
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

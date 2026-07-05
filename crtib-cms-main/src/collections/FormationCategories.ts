@@ -28,12 +28,25 @@ export const FormationCategories: CollectionConfig = {
       name: 'slug',
       type: 'text',
       required: true,
-      unique: true,
       label: { fr: 'Slug', en: 'Slug' },
       admin: {
         description: {
-          fr: 'Identifiant unique dans l\'URL (ex: marches-publics)',
-          en: 'Unique URL identifier (e.g. marches-publics)',
+          fr: 'Identifiant dans l\'URL (ex: marches-publics)',
+          en: 'URL identifier (e.g. marches-publics)',
+        },
+      },
+    },
+    {
+      name: 'language',
+      type: 'relationship',
+      relationTo: 'site-languages',
+      required: false,
+      label: { fr: 'Langue', en: 'Language' },
+      admin: {
+        position: 'sidebar',
+        description: {
+          fr: 'Langue de cette catégorie. Laisser vide = français (par défaut).',
+          en: 'Language of this category. Leave empty = French (default).',
         },
       },
     },

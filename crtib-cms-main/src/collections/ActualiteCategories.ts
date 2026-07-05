@@ -28,12 +28,11 @@ export const ActualiteCategories: CollectionConfig = {
       name: 'slug',
       type: 'text',
       required: true,
-      unique: true,
       label: { fr: 'Slug', en: 'Slug' },
       admin: {
         description: {
-          fr: 'Identifiant unique — utilisé dans les URLs (ex: actualite)',
-          en: 'Unique identifier — used in URLs (e.g. actualite)',
+          fr: 'Identifiant — utilisé dans les URLs (ex: actualite)',
+          en: 'Identifier — used in URLs (e.g. actualite)',
         },
       },
       hooks: {
@@ -59,6 +58,20 @@ export const ActualiteCategories: CollectionConfig = {
       type: 'number',
       label: { fr: 'Ordre d\'affichage', en: 'Display order' },
       admin: { description: { fr: 'Tri dans les filtres (optionnel)', en: 'Sort in filters (optional)' } },
+    },
+    {
+      name: 'language',
+      type: 'relationship',
+      relationTo: 'site-languages',
+      required: false,
+      label: { fr: 'Langue', en: 'Language' },
+      admin: {
+        position: 'sidebar',
+        description: {
+          fr: 'Langue de cette catégorie. Laisser vide = français (par défaut).',
+          en: 'Language of this category. Leave empty = French (default).',
+        },
+      },
     },
   ],
 }

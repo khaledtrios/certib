@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { getNewsArticles, getMediaUrl } from "@/lib/payload";
 import { NewsSection } from "./NewsSection";
 import type { NewsItem } from "./NewsCard";
 import type { NewsArticle } from "@/types/payload";
+
+const BUILTIN_LANG_CODES = ["fr", "de", "en", "lu", "pt", "es", "it", "nl"];
 
 type Props = {
   title?: string;
@@ -16,19 +19,26 @@ type Props = {
 export function NewsSectionClient({ maxItems = 2, ...props }: Props) {
   const [items, setItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
+
+  // Extract lang from URL (first segment)
+  const segments = pathname.split("/").filter(Boolean);
+  const lang = BUILTIN_LANG_CODES.includes(segments[0] ?? "") ? segments[0] : "fr";
 
   useEffect(() => {
     const limit = Math.max(2, Math.min(maxItems, 6));
-    getNewsArticles({ limit: 50 })
+    // Filter by current language (simple slug filter — works after seed runs)
+    getNewsArticles({
+      limit: 50,
+      where: { "language.slug": { equals: lang } },
+    })
       .then((result) => {
         const allDocs = (result.docs as NewsArticle[]) || [];
-        // Mélange côté client (Math.random = vrai aléatoire)
         const shuffled = [...allDocs].sort(() => Math.random() - 0.5);
-        // Round-robin par rubrique
         const groups = new Map<string, NewsArticle[]>();
         for (const doc of shuffled) {
           const r = (doc as any).rubrique;
-          const key = (r && typeof r === 'object' ? r.slug : r) || "general";
+          const key = (r && typeof r === "object" ? r.slug : r) || "general";
           if (!groups.has(key)) groups.set(key, []);
           groups.get(key)!.push(doc);
         }
@@ -58,14 +68,14 @@ export function NewsSectionClient({ maxItems = 2, ...props }: Props) {
               excerpt: article.excerpt,
               imageUrl: image ? getMediaUrl(image) : undefined,
               imageAlt: image?.alt || article.title,
-              rubrique: (article as any).rubrique ?? null,  // object {id,name,slug} or null
+              rubrique: (article as any).rubrique ?? null,
             };
           }),
         );
       })
       .catch(() => setItems([]))
       .finally(() => setLoading(false));
-  }, [maxItems]);
+  }, [maxItems, lang]);
 
   if (loading) return <div className="py-16" />;
 

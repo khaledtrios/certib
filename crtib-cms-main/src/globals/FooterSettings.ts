@@ -91,5 +91,55 @@ export const FooterSettings: GlobalConfig = {
         description: { en: 'Displayed as "© 2025 [name] – Tous droits réservés"', fr: 'Affiché comme "© 2025 [nom] – Tous droits réservés"' },
       },
     },
+    {
+      name: 'translations',
+      type: 'array',
+      label: { en: 'Translations by language', fr: 'Traductions par langue' },
+      admin: {
+        description: {
+          en: 'Override description and links per language. Leave empty to use the values above (French default).',
+          fr: 'Surchargez la description et les liens pour chaque langue. Laisser vide = valeurs ci-dessus (français par défaut).',
+        },
+      },
+      fields: [
+        {
+          name: 'language',
+          type: 'relationship',
+          relationTo: 'site-languages',
+          required: true,
+          label: { fr: 'Langue', en: 'Language' },
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: { en: 'Description', fr: 'Description' },
+          admin: {
+            description: { en: 'Short text under the logo (leave empty to use the default)', fr: 'Texte court sous le logo (laisser vide = utilise le texte par défaut)' },
+          },
+        },
+        {
+          name: 'links',
+          type: 'array',
+          label: { en: 'Useful Links', fr: 'Liens utiles' },
+          admin: {
+            description: { en: 'Leave empty to use the default links', fr: 'Laisser vide = utilise les liens par défaut' },
+          },
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              required: true,
+              label: { en: 'Label', fr: 'Libellé' },
+            },
+            {
+              name: 'href',
+              type: 'text',
+              required: true,
+              label: { en: 'URL', fr: 'URL' },
+            },
+          ],
+        },
+      ],
+    },
   ],
 }

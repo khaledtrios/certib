@@ -1,4 +1,5 @@
-import { getNewsArticles, getMediaUrl } from "@/lib/payload";
+import { headers } from "next/headers";
+import { getNewsArticles, getMediaUrl, getSiteLanguages } from "@/lib/payload";
 import { NewsSection } from "./NewsSection";
 import type { NewsItem } from "./NewsCard";
 import type { NewsArticle, WhereClause } from "@/types/payload";
@@ -66,21 +67,34 @@ export async function NewsSectionLoader({
 }: Props) {
   const limit = Math.max(2, Math.min(maxItems, 6));
 
+  // Resolve current language from middleware header
+  const headersList = await headers();
+  const currentLang = headersList.get("x-lang") ?? "fr";
+  let defaultLang = "fr";
+  try {
+    const langs = await getSiteLanguages();
+    defaultLang = langs.docs.find((l) => l.isDefault)?.slug ?? "fr";
+  } catch {}
+
+  const langWhere: WhereClause = currentLang === defaultLang
+    ? { or: [{ "language.slug": { equals: currentLang } }, { language: { exists: false } }] }
+    : { "language.slug": { equals: currentLang } };
+
   let items: NewsItem[] = [];
 
   try {
-    // Build where clause — only filter when selections are non-empty
     const catIds = extractIds(filterCategories);
     const rubIds = extractIds(filterRubriques);
 
-    const conditions: WhereClause[] = [{ _status: { equals: "published" } }];
+    const conditions: WhereClause[] = [
+      { _status: { equals: "published" } },
+      langWhere,
+    ];
     if (catIds.length > 0) conditions.push({ category: { in: catIds } });
     if (rubIds.length > 0) conditions.push({ rubrique: { in: rubIds } });
 
-    const where: WhereClause =
-      conditions.length > 1 ? { and: conditions } : conditions[0];
+    const where: WhereClause = { and: conditions };
 
-    // Fetch a pool large enough for rubrique diversity mixing
     const result = await getNewsArticles({
       limit: Math.max(limit * 4, 12),
       where,
@@ -88,7 +102,6 @@ export async function NewsSectionLoader({
     const allDocs = (result.docs as NewsArticle[])
       .filter((doc) => !excludeSlug || doc.slug !== excludeSlug);
 
-    // Mélange aléatoire puis sélection équilibrée par rubrique
     const shuffled = shuffleSeed(allDocs);
     const selected = mixByRubrique(shuffled, limit);
 
@@ -105,7 +118,7 @@ export async function NewsSectionLoader({
         excerpt: article.excerpt,
         imageUrl: image ? getMediaUrl(image) : undefined,
         imageAlt: image?.alt || article.title,
-        rubrique: (article as any).rubrique ?? null,  // object {id,name,slug} or null
+        rubrique: (article as any).rubrique ?? null,
       };
     });
   } catch (error) {

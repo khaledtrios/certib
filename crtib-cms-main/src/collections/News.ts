@@ -134,7 +134,6 @@ export const News: CollectionConfig = {
       name: 'slug',
       type: 'text',
       required: true,
-      unique: true,
       index: true,
       label: { fr: "URL de l'actualité", en: 'News URL' },
       admin: {
@@ -159,6 +158,38 @@ export const News: CollectionConfig = {
             return value
           },
         ],
+      },
+      validate: async (value: any, { data, id, req }: any) => {
+        if (!value) return true
+        const reqUrl: string = req?.url ?? ''
+        if (reqUrl.includes('/duplicate')) return true
+        const langId: string | null = (data as any)?.language ?? null
+        const andConditions: any[] = [
+          { slug: { equals: value } },
+          ...(id ? [{ id: { not_equals: id } }] : []),
+        ]
+        if (langId) {
+          andConditions.push({ language: { equals: langId } })
+        } else {
+          andConditions.push({ or: [{ language: { exists: false } }, { language: { equals: null } }] })
+        }
+        const existing = await req.payload.find({ collection: 'news', where: { and: andConditions }, limit: 1 })
+        if (existing.docs.length > 0) return langId ? 'Ce slug est d\u00e9j\u00e0 utilis\u00e9 pour cette langue.' : 'Ce slug est d\u00e9j\u00e0 utilis\u00e9 (sans langue assign\u00e9e).'
+        return true
+      },
+    },
+    {
+      name: 'language',
+      type: 'relationship',
+      relationTo: 'site-languages',
+      required: false,
+      label: { fr: 'Langue', en: 'Language' },
+      admin: {
+        position: 'sidebar',
+        description: {
+          fr: 'Langue de cette actualit\u00e9. Laisser vide = fran\u00e7ais (par d\u00e9faut).',
+          en: 'Language of this article. Leave empty = French (default).',
+        },
       },
     },
     {
@@ -370,6 +401,18 @@ export const News: CollectionConfig = {
     },
   ],
   hooks: {
+    beforeDuplicate: [async ({ data, req }) => {
+      const base = typeof data.slug === 'string' ? data.slug : ''
+      const langId: string | null = (data as any).language ?? null
+      for (let suffix = 2; suffix < 200; suffix++) {
+        const candidate = `${base}-${suffix}`
+        const andConditions: any[] = [{ slug: { equals: candidate } }]
+        if (langId) andConditions.push({ language: { equals: langId } })
+        const existing = await req.payload.find({ collection: 'news', where: { and: andConditions }, limit: 1 })
+        if (existing.docs.length === 0) return { ...data, slug: candidate }
+      }
+      return data
+    }],
     afterChange: [revalidateNews, sendNewsletterOnPublish],
   },
 }

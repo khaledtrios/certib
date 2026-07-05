@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Dosis } from "next/font/google";
 import { Providers } from "@/lib/providers";
 import { GlobalLayout } from "@/components/layout/GlobalLayout";
+import { HtmlLangSync } from "@/components/layout/HtmlLangSync";
+import { getSiteLanguages } from "@/lib/payload";
 import "./globals.css";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +14,7 @@ const dosis = Dosis({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || "https://crtib.lu"),
   title: {
     default: "CRTI-B – Centre de Ressources des Technologies et de l'Innovation pour le Bâtiment",
     template: "%s – CRTI-B",
@@ -41,15 +44,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  let languages: Array<{ slug: string; isDefault: boolean }> = [];
+  try {
+    const res = await getSiteLanguages();
+    languages = res.docs;
+  } catch {
+    languages = [{ slug: "fr", isDefault: true }];
+  }
+
   return (
     <html lang="fr">
       <body className={`${dosis.variable} antialiased`}>
         <Providers>
+          {/* Syncs <html lang> on client navigation. SSR default = "fr". */}
+          <HtmlLangSync languages={languages} />
           <GlobalLayout>{children}</GlobalLayout>
         </Providers>
       </body>

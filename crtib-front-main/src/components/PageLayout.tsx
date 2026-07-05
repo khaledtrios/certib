@@ -8,17 +8,26 @@ interface PageLayoutProps {
   page: Page;
 }
 
+function getLangSlug(page: Page): string {
+  if (page.language && typeof page.language === "object") {
+    return (page.language as any).slug ?? "fr";
+  }
+  return "fr";
+}
+
 function buildBreadcrumbItems(page: Page): BreadcrumbItem[] {
   const items: BreadcrumbItem[] = [];
+  const lang = getLangSlug(page);
 
   if (page.parent && typeof page.parent === "object") {
     const parent = page.parent as Page;
-    if (parent.slug && parent.title) {
-      items.push({ href: `/${parent.slug}`, title: parent.title });
+    const parentLang = getLangSlug(parent) || lang;
+    if (parent.slug && parent.title && parent.slug !== page.slug) {
+      items.push({ href: `/${parentLang}/${parent.slug}`, title: parent.title });
     }
   }
 
-  items.push({ href: `/${page.slug}`, title: page.title });
+  items.push({ href: `/${lang}/${page.slug}`, title: page.title });
   return items;
 }
 

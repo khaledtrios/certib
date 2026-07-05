@@ -48,6 +48,20 @@ export const TimelineItems: CollectionConfig = {
         description: { en: 'Display order. Lower number appears first.', fr: "Ordre d'affichage. Le nombre le plus bas apparaît en premier." },
       },
     },
+    {
+      name: 'language',
+      type: 'relationship',
+      relationTo: 'site-languages',
+      required: false,
+      label: { fr: 'Langue', en: 'Language' },
+      admin: {
+        position: 'sidebar',
+        description: {
+          fr: 'Langue de cet événement. Laisser vide = français (par défaut).',
+          en: 'Language of this item. Leave empty = French (default).',
+        },
+      },
+    },
   ],
   hooks: {
     afterChange: [revalidateHome],

@@ -13,6 +13,8 @@
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "seed:languages": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx/esm src/seed/languages.ts",
+    "seed:assign-default-language": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx/esm src/seed/assign-default-language.ts",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"

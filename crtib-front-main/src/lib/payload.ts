@@ -148,9 +148,38 @@ export async function getGlobal<T>(
   return fetchPayload<T>(`/globals/${slug}${queryString}`, options);
 }
 
-export async function getFooterSettings() {
+/**
+ * Builds a Payload where-clause for filtering content by language.
+ * For the default language, also includes legacy docs without a language set.
+ */
+export function buildContentLangWhere(lang: string, defaultLang: string) {
+  if (lang === defaultLang) {
+    return {
+      or: [
+        { "language.slug": { equals: lang } },
+        { language: { exists: false } },
+      ],
+    };
+  }
+  return { "language.slug": { equals: lang } };
+}
+
+export async function getFooterSettings(lang?: string) {
   try {
-    return await getGlobal<any>("footer-settings");
+    const data = await getGlobal<any>("footer-settings");
+    if (!lang || !data?.translations?.length) return data;
+    const translation = data.translations.find((t: any) => {
+      const tLang = t.language;
+      if (!tLang) return false;
+      const tSlug = typeof tLang === "object" ? tLang.slug : tLang;
+      return tSlug === lang;
+    });
+    if (!translation) return data;
+    return {
+      ...data,
+      description: translation.description || data.description,
+      links: translation.links?.length ? translation.links : data.links,
+    };
   } catch {
     return null;
   }
@@ -168,45 +197,92 @@ export async function getPages(params: PayloadQueryParams = {}) {
 }
 
 /**
- * Busca uma página por slug (apenas publicadas)
+ * Busca uma página por slug + langue (toujours requis).
+ * Fallback : pages legacy sans langue assignée (pour la compatibilité ascendante).
  */
-export async function getPageBySlug(slug: string) {
+export async function getPageBySlug(slug: string, langSlug: string) {
   const normalized = decodeURIComponent(slug).trim().replace(/\s+/g, "-");
-  const response = await getCollection("pages", {
+
+  // 1. Correspondance exacte (slug + langue)
+  const exact = await getCollection("pages", {
     depth: 1,
     limit: 1,
-    where: { slug: { equals: normalized } },
+    where: {
+      and: [
+        { slug: { equals: normalized } },
+        { "language.slug": { equals: langSlug } },
+      ],
+    },
   });
-  if (response.docs[0]) return response.docs[0];
-  // fallback: try the raw decoded slug (spaces, trailing spaces) for legacy entries
-  const fallback = await getCollection("pages", {
+  if (exact.docs[0]) return exact.docs[0];
+
+  // 2. Fallback : pages sans langue assignée (contenu existant avant le système multilingue)
+  const legacy = await getCollection("pages", {
     depth: 1,
     limit: 1,
-    where: { slug: { equals: decodeURIComponent(slug).trim() } },
+    where: {
+      and: [
+        { slug: { equals: normalized } },
+        { language: { exists: false } },
+      ],
+    },
   });
-  return fallback.docs[0] || null;
+  return legacy.docs[0] ?? null;
 }
 
 /**
- * Busca notícias publicadas
+ * Busca as línguas activas du site configuradas no CMS
  */
-export async function getNewsArticles(params: PayloadQueryParams = {}) {
+export async function getSiteLanguages(): Promise<{ docs: Array<{ name: string; slug: string; isDefault: boolean; isActive: boolean }> }> {
+  try {
+    return await getCollection("site-languages", {
+      limit: 20,
+      sort: "name",
+      where: { isActive: { equals: true } },
+    }) as any;
+  } catch {
+    return { docs: [] };
+  }
+}
+
+/**
+ * Busca notícias publicadas, filtradas par langue si fournie.
+ */
+export async function getNewsArticles(
+  params: PayloadQueryParams = {},
+  langFilter?: { lang: string; defaultLang: string },
+) {
+  let finalParams = { ...params };
+  if (langFilter) {
+    const lf = buildContentLangWhere(langFilter.lang, langFilter.defaultLang);
+    finalParams.where = finalParams.where
+      ? { and: [finalParams.where, lf] }
+      : lf;
+  }
   return getCollection("news", {
     depth: 1,
     limit: 10,
     sort: "-publishedAt",
-    ...params,
+    ...finalParams,
   });
 }
 
 /**
- * Busca uma notícia por slug (apenas publicadas)
+ * Busca uma notícia por slug, filtrée par langue si fournie.
+ * Fallback legacy (sans langue) si lang = defaultLang.
  */
-export async function getNewsBySlug(slug: string) {
+export async function getNewsBySlug(
+  slug: string,
+  langFilter?: { lang: string; defaultLang: string },
+) {
+  const conditions: any[] = [{ slug: { equals: slug } }];
+  if (langFilter) {
+    conditions.push(buildContentLangWhere(langFilter.lang, langFilter.defaultLang));
+  }
   const response = await getCollection("news", {
     depth: 1,
     limit: 1,
-    where: { slug: { equals: slug } },
+    where: conditions.length > 1 ? { and: conditions } : conditions[0],
   });
   return response.docs[0] || null;
 }
@@ -280,37 +356,64 @@ export async function getActivityReports(params: PayloadQueryParams = {}) {
 }
 
 /**
- * Busca itens da linha do tempo ordenados
+ * Busca itens da linha do tempo ordenados, filtrés par langue si fournie.
  */
-export async function getTimelineItems(params: PayloadQueryParams = {}) {
+export async function getTimelineItems(
+  params: PayloadQueryParams = {},
+  langFilter?: { lang: string; defaultLang: string },
+) {
+  let finalParams = { ...params };
+  if (langFilter) {
+    const lf = buildContentLangWhere(langFilter.lang, langFilter.defaultLang);
+    finalParams.where = finalParams.where
+      ? { and: [finalParams.where, lf] }
+      : lf;
+  }
   return getCollection("timeline-items", {
     depth: 0,
     limit: 100,
     sort: "order",
-    ...params,
+    ...finalParams,
   });
 }
 
 /**
- * Busca formations publiées triées par titre
+ * Busca formations publiées triées par titre, filtrées par langue si fournie.
  */
-export async function getFormations(params: PayloadQueryParams = {}) {
+export async function getFormations(
+  params: PayloadQueryParams = {},
+  langFilter?: { lang: string; defaultLang: string },
+) {
+  let finalParams = { ...params };
+  if (langFilter) {
+    const lf = buildContentLangWhere(langFilter.lang, langFilter.defaultLang);
+    finalParams.where = finalParams.where
+      ? { and: [finalParams.where, lf] }
+      : lf;
+  }
   return getCollection("formations", {
     depth: 1,
     limit: 100,
     sort: "title",
-    ...params,
+    ...finalParams,
   });
 }
 
 /**
- * Busca une formation par slug (publiée uniquement)
+ * Busca une formation par slug, filtrée par langue si fournie.
  */
-export async function getFormationBySlug(slug: string) {
+export async function getFormationBySlug(
+  slug: string,
+  langFilter?: { lang: string; defaultLang: string },
+) {
+  const conditions: any[] = [{ slug: { equals: slug } }];
+  if (langFilter) {
+    conditions.push(buildContentLangWhere(langFilter.lang, langFilter.defaultLang));
+  }
   const response = await getCollection("formations", {
     depth: 1,
     limit: 1,
-    where: { slug: { equals: slug } },
+    where: conditions.length > 1 ? { and: conditions } : conditions[0],
   });
   return response.docs[0] || null;
 }
