@@ -374,6 +374,7 @@ function renderBlockContent(block: any): React.ReactNode {
       );
 
     case "textBlock":
+      if (!block.content) return null;
       return (
         <section className="w-full bg-white py-8">
           <div className="mx-auto max-w-3xl px-6">

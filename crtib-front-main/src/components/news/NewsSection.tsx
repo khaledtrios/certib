@@ -22,11 +22,6 @@ export function NewsSection({
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, displayCount);
 
-  const paddedItems = [
-    ...visibleItems,
-    ...Array.from({ length: displayCount - visibleItems.length }, () => null),
-  ];
-
   const isBlock = variant === "block";
 
   return (
@@ -63,10 +58,10 @@ export function NewsSection({
               " ",
             )}
           >
-            {paddedItems.map((item, index) => (
+            {visibleItems.map((item) => (
               <NewsCard
-                key={item?.id || `placeholder-${index}`}
-                item={item || undefined}
+                key={item.id}
+                item={item}
                 variant={isBlock ? "block" : "default"}
               />
             ))}
