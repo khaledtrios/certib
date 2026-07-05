@@ -113,7 +113,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
   for (let p = rangeStart; p <= rangeEnd; p++) pageRange.push(p);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f5f5f5]">
+    <div className="flex flex-col bg-[#f5f5f5]">
       {/* Breadcrumb */}
       <div className="border-b border-gray-200 bg-white py-4">
         <div className="container mx-auto max-w-6xl px-4 md:px-8">
@@ -182,7 +182,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
       </div>
 
       {/* Grid */}
-      <section className="flex-1 pb-12">
+      <section className="pb-12">
         <div className="mx-auto w-full max-w-[1320px] px-8">
           {items.length === 0 ? (
             <div className="py-24 text-center">
