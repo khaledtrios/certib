@@ -271,6 +271,100 @@ function NavItemMobile({
   );
 }
 
+// --- Mobile Language Section -------------------------------------------------
+
+function MobileLangSection({
+  languages,
+  onClose,
+}: {
+  languages: SiteLanguage[];
+  onClose: () => void;
+}) {
+  const [availableLangs, setAvailableLangs] = useState<string[] | null>(null);
+
+  const pathname = typeof window !== "undefined" ? window.location.pathname : "/";
+  const segments = pathname.split("/").filter(Boolean);
+  const allCodes = languages.map((l) => l.slug);
+  const isLangPrefix = allCodes.includes(segments[0] ?? "");
+  const defaultLang = languages.find((l) => l.isDefault)?.slug ?? "fr";
+  const currentLang = isLangPrefix ? segments[0] : defaultLang;
+  const pageSlug = isLangPrefix ? segments.slice(1).join("/") : segments.join("/");
+  const effectiveSlug = pageSlug || "home";
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/api/translations?slug=${encodeURIComponent(effectiveSlug)}`)
+      .then((r) => r.json())
+      .then((data: { langs: string[] }) => { if (!cancelled) setAvailableLangs(data.langs); })
+      .catch(() => { if (!cancelled) setAvailableLangs(null); });
+    return () => { cancelled = true; };
+  }, [effectiveSlug]);
+
+  function saveLangPreference(slug: string) {
+    try { localStorage.setItem("preferred_lang", slug); } catch {}
+    document.cookie = `preferred_lang=${slug};path=/;max-age=31536000;SameSite=Lax`;
+  }
+
+  function buildUrl(slug: string) {
+    return pageSlug ? `/${slug}/${pageSlug}` : `/${slug}`;
+  }
+
+  return (
+    <div className="border-t border-gray-200 px-6 py-4 bg-gray-50">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
+        Langue
+      </p>
+      <div className="flex flex-wrap gap-2">
+        {languages.map((lang) => {
+          const isActive = lang.slug === currentLang;
+          const hasTranslation =
+            isActive || availableLangs === null || availableLangs.includes(lang.slug);
+          const href = buildUrl(lang.slug);
+
+          if (isActive) {
+            return (
+              <a
+                key={lang.slug}
+                href={href}
+                onClick={() => { saveLangPreference(lang.slug); onClose(); }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#08AA86] text-white text-[12px] font-bold uppercase tracking-wider"
+              >
+                {lang.slug}
+                <span className="font-normal normal-case tracking-normal text-white/80 text-[11px]">{lang.name}</span>
+              </a>
+            );
+          }
+
+          if (!hasTranslation) {
+            return (
+              <span
+                key={lang.slug}
+                title={`${lang.name} – pas de traduction disponible`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-gray-200 text-gray-300 text-[12px] font-bold uppercase tracking-wider cursor-not-allowed"
+              >
+                {lang.slug}
+                <span className="font-normal normal-case tracking-normal text-[11px]">{lang.name}</span>
+              </span>
+            );
+          }
+
+          return (
+            <a
+              key={lang.slug}
+              href={href}
+              onClick={() => { saveLangPreference(lang.slug); onClose(); }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#08AA86]/30 text-[#08AA86] text-[12px] font-bold uppercase tracking-wider hover:bg-[#08AA86]/10 transition-colors"
+            >
+              {lang.slug}
+              <span className="font-normal normal-case tracking-normal text-[11px]">{lang.name}</span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // --- Header Principal (Logo centralizada em cima, menu embaixo) --------------
 
 interface HeaderWithNavProps {
@@ -307,9 +401,8 @@ export function HeaderWithNav({ pages, languages = [] }: HeaderWithNavProps) {
             </div>
           )}
 
-          {/* Hamburger mobile + lupa + langue */}
+          {/* Hamburger mobile + lupa (sans langue ici → dans le drawer) */}
           <div className="lg:hidden absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1">
-            {languages.length > 1 && <LanguageSwitcher languages={languages} />}
             <button
               onClick={() => setSearchOpen(true)}
               className="p-2.5 text-[#08AA86] hover:bg-gray-200 rounded-lg transition-colors"
@@ -375,6 +468,14 @@ export function HeaderWithNav({ pages, languages = [] }: HeaderWithNavProps) {
                 />
               ))}
             </nav>
+
+            {/* Langue — en bas du drawer */}
+            {languages.length > 1 && (
+              <MobileLangSection
+                languages={languages}
+                onClose={() => setMobileOpen(false)}
+              />
+            )}
           </div>
         </div>
       )}
