@@ -32,7 +32,7 @@ export function NewsSection({
   return (
     <section className="w-full">
       <div className={isBlock ? "bg-crtib-green-blue text-white" : ""}>
-        <div className="mx-auto w-full max-w-[1320px] px-8 pt-8 pb-20">
+        <div className="mx-auto w-full max-w-[1320px] px-8 pt-8 pb-12">
           <div className="flex items-start justify-between gap-6">
             <h2
               className={[
@@ -59,7 +59,7 @@ export function NewsSection({
           </div>
 
           <div
-            className={["mt-8 grid gap-16", "grid-cols-1 lg:grid-cols-2"].join(
+            className={["mt-8 grid gap-8", "grid-cols-1 lg:grid-cols-2"].join(
               " ",
             )}
           >

@@ -182,7 +182,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
       </div>
 
       {/* Grid */}
-      <section className="flex-1 pb-20">
+      <section className="flex-1 pb-12">
         <div className="mx-auto w-full max-w-[1320px] px-8">
           {items.length === 0 ? (
             <div className="py-24 text-center">
@@ -191,7 +191,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
               {items.map((item) => (
                 <NewsCard key={item.id} item={item} variant="default" />
               ))}
