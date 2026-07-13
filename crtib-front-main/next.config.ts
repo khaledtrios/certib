@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
   experimental: {
     staleTimes: {
       dynamic: 0,
-      static: 0,
+      static: 30,
     },
   },
   // Send no-cache headers on every response so browsers and proxies never cache pages
