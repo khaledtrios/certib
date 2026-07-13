@@ -92,7 +92,7 @@ export const News: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'publishedAt', 'expiresAt', 'updatedAt'],
+    defaultColumns: ['title', 'language', 'category', 'publishedAt', 'expiresAt', 'updatedAt'],
     group: { fr: 'Actualités', en: 'News' },
     description: {
       fr: 'Gérer les actualités et les communiqués.',

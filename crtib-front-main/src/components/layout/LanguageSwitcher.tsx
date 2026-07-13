@@ -31,16 +31,27 @@ export function LanguageSwitcher({ languages }: { languages: SiteLanguage[] }) {
   const effectiveSlug = pageSlug || "home";
 
   const [availableLangs, setAvailableLangs] = useState<string[] | null>(null);
+  const [overrides, setOverrides] = useState<Record<string, string>>({});
 
   useEffect(() => {
     let cancelled = false;
     setAvailableLangs(null);
-    fetch(`/api/translations?slug=${encodeURIComponent(effectiveSlug)}`)
+    setOverrides({});
+    const params = new URLSearchParams({
+      slug: effectiveSlug,
+      lang: currentLang,
+    });
+    fetch(`/api/translations?${params}`)
       .then((r) => r.json())
-      .then((data: { langs: string[] }) => { if (!cancelled) setAvailableLangs(data.langs); })
+      .then((data: { langs: string[]; overrides?: Record<string, string> }) => {
+        if (!cancelled) {
+          setAvailableLangs(data.langs);
+          setOverrides(data.overrides ?? {});
+        }
+      })
       .catch(() => { if (!cancelled) setAvailableLangs(null); });
     return () => { cancelled = true; };
-  }, [effectiveSlug]);
+  }, [effectiveSlug, currentLang]);
 
   // Close on outside click
   useEffect(() => {
@@ -95,7 +106,8 @@ export function LanguageSwitcher({ languages }: { languages: SiteLanguage[] }) {
           {otherLanguages.map((lang) => {
             const hasTranslation =
               availableLangs === null || availableLangs.includes(lang.slug);
-            const href = buildLangUrl(lang.slug, pageSlug);
+            // Use explicit translation link if set by admin, otherwise fall back to same slug
+            const href = overrides[lang.slug] ?? buildLangUrl(lang.slug, pageSlug);
 
             if (!hasTranslation) {
               return (

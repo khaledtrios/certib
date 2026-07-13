@@ -21,7 +21,7 @@ export const Pages: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'status', 'updatedAt'],
+    defaultColumns: ['title', 'language', 'slug', 'status', 'updatedAt'],
     group: { fr: 'Pages', en: 'Pages' },
     description: {
       fr: 'Gérer les pages du site.',
@@ -165,6 +165,41 @@ export const Pages: CollectionConfig = {
           en: 'Sets the URL prefix (e.g. /fr/my-page, /de/my-page). All languages have a prefix.',
         },
       },
+    },
+    {
+      name: 'linkedTranslations',
+      type: 'array',
+      label: { fr: 'Traductions liées', en: 'Linked translations' },
+      admin: {
+        position: 'sidebar',
+        description: {
+          fr: 'Associer cette page à son équivalent dans chaque autre langue (comme WordPress/Polylang). Le sélecteur de langue utilisera ces liens directs.',
+          en: 'Link this page to its equivalent in each other language (like WordPress/Polylang). The language switcher will use these direct links.',
+        },
+      },
+      fields: [
+        {
+          name: 'language',
+          type: 'relationship',
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          relationTo: 'site-languages' as any,
+          required: true,
+          label: { fr: 'Langue', en: 'Language' },
+        },
+        {
+          name: 'page',
+          type: 'relationship',
+          relationTo: 'pages',
+          required: true,
+          label: { fr: 'Page liée', en: 'Linked page' },
+          admin: {
+            description: {
+              fr: 'La page correspondante dans cette langue.',
+              en: 'The corresponding page in this language.',
+            },
+          },
+        },
+      ],
     },
     {
       name: 'layout',

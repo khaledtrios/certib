@@ -59,7 +59,7 @@ export default async function PageLayout({ page }: PageLayoutProps) {
         </div>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
           {imageUrl ? (
-            <div className="bg-white shadow-sm px-3 py-2">
+            <div className="bg-white px-3 py-2">
               <Image
                 src={imageUrl}
                 alt={title}

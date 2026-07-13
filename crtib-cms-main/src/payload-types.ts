@@ -222,6 +222,19 @@ export interface Page {
    */
   language?: (number | null) | SiteLanguage;
   /**
+   * Link this page to its equivalent in each other language (like WordPress/Polylang). The language switcher will use these direct links.
+   */
+  linkedTranslations?:
+    | {
+        language: number | SiteLanguage;
+        /**
+         * The corresponding page in this language.
+         */
+        page: number | Page;
+        id?: string | null;
+      }[]
+    | null;
+  /**
    * Page builder: add, order, and configure each section.
    */
   layout?:
@@ -1315,6 +1328,13 @@ export interface PagesSelect<T extends boolean = true> {
   isHidden?: T;
   headerImage?: T;
   language?: T;
+  linkedTranslations?:
+    | T
+    | {
+        language?: T;
+        page?: T;
+        id?: T;
+      };
   layout?:
     | T
     | {
