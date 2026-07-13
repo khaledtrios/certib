@@ -141,43 +141,66 @@ function renderNode(node: any, key: number): React.ReactNode {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const v = node.value as any;
       if (!v?.url) return null;
-      const imageUrl = absUrl(v.url);
-      const alt = v.alt || "";
+      const fileUrl = absUrl(v.url);
       const caption = node.fields?.caption || "";
       const pos = node.fields?.position || "center";
       const href = node.fields?.href || "";
       const widthPct = node.fields?.width || "100";
 
-      const posClass =
-        (
-          {
-            left: "float-left mr-6 mb-4",
-            center: "mx-auto block",
-            right: "float-right ml-6 mb-4",
-          } as Record<string, string>
-        )[pos] ?? "mx-auto block";
+      // Detect file type — PDF gets a download card, images get <img>
+      const mime: string = v.mimeType || "";
+      const filename: string = v.filename || v.url || "";
+      const ext = filename.split(".").pop()?.toLowerCase() ?? "";
+      const isPdf = mime.includes("pdf") || ext === "pdf";
+      const isDoc = ["doc", "docx", "xls", "xlsx", "ppt", "pptx", "rtf", "odt"].includes(ext);
 
-      const containerStyle: React.CSSProperties =
-        widthPct !== "100" ? { width: `${widthPct}%` } : {};
+      if (isPdf || isDoc) {
+        const badgeExt = ext.toUpperCase() || "PDF";
+        const label = caption || href || v.filename || "Télécharger";
+        const posClass = pos === "center"
+          ? "mx-auto"
+          : pos === "right" ? "ml-auto" : "";
+        return (
+          <div key={key} className={`my-4 ${posClass}`} style={widthPct !== "100" ? { maxWidth: `${widthPct}%` } : {}}>
+            <a
+              href={fileUrl}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm transition-all hover:border-[#08AA86]/40 hover:shadow-md no-underline"
+            >
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#08AA86]/10 text-[10px] font-extrabold uppercase tracking-wider text-[#08AA86]">
+                {badgeExt}
+              </span>
+              <span className="flex-1 text-[13px] font-semibold text-gray-700 group-hover:text-[#08AA86] transition-colors leading-snug">
+                {label}
+              </span>
+              <svg className="h-4 w-4 shrink-0 text-gray-300 transition-colors group-hover:text-[#08AA86]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </a>
+          </div>
+        );
+      }
+
+      // Image
+      const alt = v.alt || "";
+      const posClass =
+        ({ left: "float-left mr-6 mb-4", center: "mx-auto block", right: "float-right ml-6 mb-4" } as Record<string, string>)[pos] ?? "mx-auto block";
+      const containerStyle: React.CSSProperties = widthPct !== "100" ? { width: `${widthPct}%` } : {};
 
       const imgEl = (
-        <img src={imageUrl} alt={alt} style={{ width: "100%", height: "auto", display: "block" }} />
+        <img src={fileUrl} alt={alt} style={{ width: "100%", height: "auto", display: "block" }} />
       );
-      const linked = href ? (
-        <a href={href} target="_blank" rel="noopener noreferrer">
-          {imgEl}
-        </a>
-      ) : (
-        imgEl
-      );
+      const linked = href
+        ? <a href={href} target="_blank" rel="noopener noreferrer">{imgEl}</a>
+        : imgEl;
 
       if (caption) {
         return (
           <figure key={key} className={posClass} style={containerStyle}>
             {linked}
-            <figcaption className="text-sm text-gray-600 italic mt-2">
-              {caption}
-            </figcaption>
+            <figcaption className="text-sm text-gray-600 italic mt-2">{caption}</figcaption>
           </figure>
         );
       }

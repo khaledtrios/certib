@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { getFooterSettings } from "@/lib/payload";
+import { getLabels } from "@/lib/labels";
 
 const FALLBACK = {
   description: "Centre de Ressources des Technologies et de l'Innovation pour le Bâtiment",
@@ -18,7 +19,10 @@ const FALLBACK = {
 };
 
 export async function Footer({ lang }: { lang?: string } = {}) {
-  const data = await getFooterSettings(lang);
+  const [data, labels] = await Promise.all([
+    getFooterSettings(lang),
+    getLabels(lang ?? "fr"),
+  ]);
 
   const description = data?.description || FALLBACK.description;
   const phone = data?.phone || FALLBACK.phone;
@@ -45,7 +49,7 @@ export async function Footer({ lang }: { lang?: string } = {}) {
 
           {/* Coordonnées */}
           <div className="flex flex-col gap-3">
-            <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/50 mb-1">Contact</h3>
+            <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/50 mb-1">{labels.footer_contact_heading}</h3>
             {address && (
               <a
                 href={addressUrl}
@@ -80,7 +84,7 @@ export async function Footer({ lang }: { lang?: string } = {}) {
           {/* Liens utiles */}
           {links.length > 0 && (
             <div className="flex flex-col gap-3">
-              <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/50 mb-1">Liens utiles</h3>
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/50 mb-1">{labels.footer_links_heading}</h3>
               {links.map((l, i) => (
                 <Link
                   key={i}
@@ -100,7 +104,7 @@ export async function Footer({ lang }: { lang?: string } = {}) {
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-6xl px-6 py-4 flex flex-wrap items-center justify-between gap-3">
           <span className="text-[12px] text-white/40">
-            © {new Date().getFullYear()} {copyrightName} – Tous droits réservés
+            © {new Date().getFullYear()} {copyrightName} – {labels.footer_rights}
           </span>
           <div className="flex items-center gap-4">
             {links.slice(0, 3).map((l, i) => (

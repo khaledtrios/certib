@@ -294,15 +294,8 @@ export const News: CollectionConfig = {
       type: 'richText',
       label: { fr: 'Contenu', en: 'Content' },
       editor: lexicalEditor({
-        features: () => [
-          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
-          BoldFeature(),
-          ItalicFeature(),
-          UnderlineFeature(),
-          LinkFeature({}),
-          UnorderedListFeature(),
-          OrderedListFeature(),
-          BlockquoteFeature(),
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures.filter((f: any) => f.key !== 'upload'),
           UploadFeature({
             collections: {
               media: {
@@ -337,7 +330,7 @@ export const News: CollectionConfig = {
                     type: 'text',
                     label: { en: 'Link URL', fr: 'URL du lien' },
                     admin: {
-                      description: { en: 'Optional: make image clickable', fr: 'Optionnel : rendre l\'image cliquable' },
+                      description: { en: 'Optional: make image clickable / PDF download label', fr: 'Optionnel : rendre le fichier cliquable' },
                     },
                   },
                 ],

@@ -9,68 +9,152 @@ export type TimelineItem = {
 type TimelineProps = {
   items: TimelineItem[];
   className?: string;
-  /** Se true, destaca o último ponto com um círculo no fim da linha. */
   highlightLast?: boolean;
 };
 
-export function Timeline({
-  items,
-  className = "",
-  highlightLast = true,
-}: TimelineProps) {
+export function Timeline({ items, className = "", highlightLast = true }: TimelineProps) {
   if (!items || items.length === 0) return null;
 
   return (
-    <div className={`w-full ${className}`}>
-      <div className="relative mx-auto max-w-5xl">
-        {/* Linha base da timeline */}
-        <div
-          className="pointer-events-none absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-crtib-green-blue"
-          aria-hidden
-        />
+    <div className={className}>
+      {/* ── Desktop : horizontal alternating ── */}
+      <div className="hidden md:block">
+        <HorizontalTimeline items={items} highlightLast={highlightLast} />
+      </div>
 
-        {/* Marcadores */}
-        <div className="relative flex items-center justify-between gap-4">
-          {items.map((item, index) => {
-            const isLast = highlightLast && index === items.length - 1;
-
-            return (
-              <div
-                key={item.id}
-                className="flex min-w-0 flex-1 flex-col items-center text-center"
-              >
-                {/* Traço vertical ou, no último, apenas a bolinha final */}
-                <div className="relative flex h-8 items-center justify-center">
-                  {!isLast && (
-                    <div
-                      className="h-4 w-px bg-crtib-green-blue"
-                      aria-hidden
-                    />
-                  )}
-
-                  {isLast && (
-                    <div
-                      className="h-4 w-4 rounded-full border border-crtib-green-blue bg-crtib-white"
-                      aria-hidden
-                    />
-                  )}
-                </div>
-
-                {/* Ano e título */}
-                <span className="mt-1 text-sm font-semibold text-crtib-gray-dark">
-                  {item.year}
-                </span>
-                {item.title ? (
-                  <span className="mt-0.5 line-clamp-2 text-xs text-crtib-gray-dark/80">
-                    {item.title}
-                  </span>
-                ) : null}
-              </div>
-            );
-          })}
-        </div>
+      {/* ── Mobile : vertical ── */}
+      <div className="md:hidden">
+        <VerticalTimeline items={items} highlightLast={highlightLast} />
       </div>
     </div>
   );
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Horizontal — desktop
+   Items alternate: even → label above the line, odd → below.
+───────────────────────────────────────────────────────────── */
+function HorizontalTimeline({
+  items,
+  highlightLast,
+}: {
+  items: TimelineItem[];
+  highlightLast?: boolean;
+}) {
+  const LABEL_H = "h-[96px]"; // fixed label area height — keeps dots on same axis
+
+  return (
+    <div className="relative w-full">
+      {/* Labels ABOVE the line (even indices) */}
+      <div className="flex">
+        {items.map((item, i) => (
+          <div key={`top-${item.id}`} className="flex flex-1 flex-col items-center">
+            {i % 2 === 0 ? (
+              <div className={`flex ${LABEL_H} flex-col items-center justify-end pb-3`}>
+                <span className="text-2xl font-extrabold leading-none text-[#08AA86]">
+                  {item.year}
+                </span>
+                {item.title && (
+                  <span className="mt-1.5 text-center text-[12.5px] leading-snug text-gray-500 max-w-[130px]">
+                    {item.title}
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div className={LABEL_H} />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Dots + horizontal line */}
+      <div className="relative flex items-center">
+        {/* Line behind dots */}
+        <div className="absolute inset-y-1/2 left-0 right-0 h-0.5 -translate-y-1/2 bg-[#08AA86]/25" />
+
+        {items.map((item, i) => {
+          const isLast = highlightLast && i === items.length - 1;
+          return (
+            <div key={`dot-${item.id}`} className="relative z-10 flex flex-1 justify-center">
+              {isLast ? (
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#08AA86] ring-[5px] ring-[#08AA86]/20" />
+              ) : (
+                <span className="flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#08AA86] bg-white" />
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Labels BELOW the line (odd indices) */}
+      <div className="flex">
+        {items.map((item, i) => (
+          <div key={`bot-${item.id}`} className="flex flex-1 flex-col items-center">
+            {i % 2 !== 0 ? (
+              <div className={`flex ${LABEL_H} flex-col items-center justify-start pt-3`}>
+                <span className="text-2xl font-extrabold leading-none text-[#08AA86]">
+                  {item.year}
+                </span>
+                {item.title && (
+                  <span className="mt-1.5 text-center text-[12.5px] leading-snug text-gray-500 max-w-[130px]">
+                    {item.title}
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div className={LABEL_H} />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Vertical — mobile
+───────────────────────────────────────────────────────────── */
+function VerticalTimeline({
+  items,
+  highlightLast,
+}: {
+  items: TimelineItem[];
+  highlightLast?: boolean;
+}) {
+  return (
+    <div className="relative pl-8">
+      {/* Vertical line */}
+      <div className="absolute left-[9px] top-2 bottom-2 w-0.5 bg-[#08AA86]/25" />
+
+      <div className="flex flex-col gap-8">
+        {items.map((item, i) => {
+          const isLast = highlightLast && i === items.length - 1;
+          return (
+            <div key={item.id} className="relative flex items-start gap-4">
+              {/* Dot */}
+              <div className="absolute -left-8 top-1">
+                {isLast ? (
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#08AA86] ring-[5px] ring-[#08AA86]/20" />
+                ) : (
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#08AA86] bg-white" />
+                )}
+              </div>
+
+              {/* Content */}
+              <div>
+                <p className="text-2xl font-extrabold leading-none text-[#08AA86]">
+                  {item.year}
+                </p>
+                {item.title && (
+                  <p className="mt-1.5 text-[13px] leading-snug text-gray-500">
+                    {item.title}
+                  </p>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

@@ -53,7 +53,6 @@ import { Timeline } from "@/components/timeline/Timeline";
 import { ClausesGrid } from "@/components/blocks/ClausesGrid";
 import { DynamicGrid } from "@/components/blocks/DynamicGrid";
 import { DataGridDownloads } from "@/components/DataGridDownloads";
-import { DownloadLink } from "@/components/ui";
 import { getMediaUrl } from "@/lib/payload";
 import { PhotoHeroCarousel } from "@/components/home/PhotoHeroCarousel";
 import { NewsletterBlock } from "@/components/blocks/NewsletterBlock";
@@ -63,11 +62,12 @@ import { FormationsSection } from "@/components/formations/FormationsSection";
 import { ContactBlock } from "@/components/contact/ContactBlock";
 import RichText from "@/components/RichText";
 import React from "react";
+import { type Labels, DEFAULT_LABELS } from "@/lib/labels";
 
 
 // ─── Renderizador de blocos ────────────────────────────────────────────────────
 
-function renderBlockContent(block: any): React.ReactNode {
+function renderBlockContent(block: any, labels: Labels): React.ReactNode {
   switch (block.blockType) {
     case "photoHeroCarousel": {
       const slides = (block.slides ?? []).map(
@@ -115,7 +115,7 @@ function renderBlockContent(block: any): React.ReactNode {
                     key={j}
                     title={item.title}
                     pdfUrl={getMediaUrl(item.file)}
-                    triggerLabel={item.triggerLabel ?? "Voir le PDF"}
+                    triggerLabel={item.triggerLabel ?? labels.see_pdf}
                   />
                 ) : (
                   <VideoViewerModal
@@ -208,12 +208,15 @@ function renderBlockContent(block: any): React.ReactNode {
       return (
         <section className="w-full bg-[#F5F5F5]">
           <div className="mx-auto w-full max-w-6xl px-6 py-12">
-            <h2 className="mb-6 text-lg font-semibold uppercase tracking-[0.25em] text-crtib-gray-dark">
-              Téléchargements
-            </h2>
+            {block.title && (
+              <h2 className="mb-6 text-lg font-semibold uppercase tracking-[0.25em] text-crtib-gray-dark">
+                {block.title}
+              </h2>
+            )}
             <DataGridDownloads
               documents={documents}
               pageSize={block.pageSize ?? 10}
+              labels={labels}
             />
           </div>
         </section>
@@ -222,25 +225,44 @@ function renderBlockContent(block: any): React.ReactNode {
 
     case "downloadLinks": {
       const items: any[] = (block.items ?? []).filter((i: any) => i.label);
+      if (items.length === 0) return null;
       return (
-        <section className="w-full bg-white">
-          <div className="mx-auto w-full max-w-6xl px-6 py-12">
+        <section className="w-full bg-[#F5F5F5]">
+          <div className="mx-auto w-full max-w-4xl px-6 py-12">
             {block.title && (
-              <h2 className="mb-6 text-lg font-semibold uppercase tracking-[0.25em] text-crtib-gray-dark">
+              <h2 className="mb-8 text-center text-lg font-semibold uppercase tracking-[0.25em] text-crtib-gray-dark">
                 {block.title}
               </h2>
             )}
-            <ul className="flex flex-col gap-4">
-              {items.map((item, j) => (
-                <li key={j}>
-                  <DownloadLink
-                    variant="custom"
-                    href={getMediaUrl(item.file)}
-                    title={item.label}
-                    download
-                  />
-                </li>
-              ))}
+            <ul className="flex flex-col gap-3">
+              {items.map((item, j) => {
+                const url = getMediaUrl(item.file);
+                const ext = (item.file?.filename ?? item.file ?? "").split(".").pop()?.toUpperCase() || "PDF";
+                return (
+                  <li key={j}>
+                    <a
+                      href={url || "#"}
+                      download={!!url}
+                      target={url ? "_blank" : undefined}
+                      rel="noopener noreferrer"
+                      className="group flex items-center gap-4 rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm transition-all hover:border-[#08AA86]/40 hover:shadow-md"
+                    >
+                      {/* Badge extension */}
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#08AA86]/10 text-[10px] font-extrabold uppercase tracking-wider text-[#08AA86]">
+                        {ext}
+                      </span>
+
+                      {/* Label */}
+                      <span className="flex-1 text-[14px] font-semibold text-gray-700 group-hover:text-[#08AA86] transition-colors leading-snug">
+                        {item.label}
+                      </span>
+
+                      {/* Icône téléchargement */}
+                      <Download className="h-4 w-4 shrink-0 text-gray-300 transition-colors group-hover:text-[#08AA86]" />
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </section>
@@ -281,9 +303,11 @@ function renderBlockContent(block: any): React.ReactNode {
       return (
         <section className="w-full bg-[#F5F5F5]">
           <div className="mx-auto w-full max-w-6xl px-6 py-12">
-            <h2 className="mb-8 text-lg font-semibold uppercase tracking-[0.25em] text-crtib-gray-dark">
-              Notre histoire
-            </h2>
+            {block.title && (
+              <h2 className="mb-8 text-lg font-semibold uppercase tracking-[0.25em] text-crtib-gray-dark">
+                {block.title}
+              </h2>
+            )}
             <Timeline
               items={items}
               highlightLast={block.highlightLast ?? true}
@@ -360,6 +384,7 @@ function renderBlockContent(block: any): React.ReactNode {
           heading={block.heading}
           description={block.description}
           buttonLabel={block.buttonLabel}
+          labels={labels}
         />
       );
 
@@ -370,6 +395,7 @@ function renderBlockContent(block: any): React.ReactNode {
           category={block.category}
           showFilters={block.showFilters !== false}
           limit={block.limit ?? 12}
+          labels={labels}
         />
       );
 
@@ -407,7 +433,7 @@ function renderBlockContent(block: any): React.ReactNode {
   }
 }
 
-export function BlockRenderer({ blocks }: { blocks: any[] }) {
+export function BlockRenderer({ blocks, labels = DEFAULT_LABELS }: { blocks: any[]; labels?: Labels }) {
   if (!blocks?.length) return null;
 
   return (
@@ -422,7 +448,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
         else if (hideOnMobile) visibilityClass = "hidden lg:block";
         else if (hideOnDesktop) visibilityClass = "lg:hidden";
 
-        const content = renderBlockContent(block);
+        const content = renderBlockContent(block, labels);
         if (!content) return null;
 
         if (!visibilityClass) return <React.Fragment key={key}>{content}</React.Fragment>;

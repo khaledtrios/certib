@@ -7,6 +7,7 @@ import { Calendar, MapPin, Clock, Users, Euro, Mail, ExternalLink } from "lucide
 
 const BUILTIN_LANG_CODES = ["fr", "de", "en", "lu", "pt", "es", "it", "nl"];
 import { getMediaUrl } from "@/lib/payload";
+import { type Labels, DEFAULT_LABELS, interpolate } from "@/lib/labels";
 
 interface FormationCategory {
   id: number;
@@ -69,7 +70,7 @@ function resolveCategoryName(cat: FormationCategory | string | null | undefined)
   return cat.name ?? null;
 }
 
-export function FormationCard({ formation }: { formation: Formation }) {
+export function FormationCard({ formation, labels = DEFAULT_LABELS }: { formation: Formation; labels?: Labels }) {
   const router = useRouter();
   const imageUrl = formation.image?.url ? getMediaUrl(formation.image) : null;
 
@@ -132,7 +133,7 @@ export function FormationCard({ formation }: { formation: Formation }) {
           {formation.maxParticipants && (
             <span className="flex items-center gap-2">
               <Users className="w-3.5 h-3.5 text-[#08AA86] flex-shrink-0" />
-              Max {formation.maxParticipants} participants
+              {interpolate(labels.formations_max_participants, formation.maxParticipants)}
             </span>
           )}
           {formation.price && (
@@ -154,7 +155,7 @@ export function FormationCard({ formation }: { formation: Formation }) {
               className="shrink-0 flex items-center gap-1 bg-[#08AA86] text-white text-[11px] font-semibold px-3 py-1.5 rounded hover:bg-[#068a6c] transition-colors"
             >
               <ExternalLink className="w-3 h-3" />
-              S'inscrire
+              {labels.formations_register_online}
             </a>
           )}
           {formation.registrationEmail && (
@@ -164,11 +165,11 @@ export function FormationCard({ formation }: { formation: Formation }) {
               className="shrink-0 flex items-center gap-1 border border-[#08AA86] text-[#08AA86] text-[11px] font-semibold px-3 py-1.5 rounded hover:bg-[#f0fdf9] transition-colors"
             >
               <Mail className="w-3 h-3" />
-              Contacter
+              {labels.formations_register_email}
             </a>
           )}
           <span className="ml-auto shrink-0 whitespace-nowrap text-[#08AA86] text-[12px] font-semibold">
-            Voir le détail →
+            {labels.formations_see_detail}
           </span>
         </div>
       </div>
@@ -181,9 +182,10 @@ interface FormationsSectionProps {
   category?: string | null;
   showFilters?: boolean;
   limit?: number;
+  labels?: Labels;
 }
 
-export function FormationsSection({ title, category, showFilters = true, limit = 12 }: FormationsSectionProps) {
+export function FormationsSection({ title, category, showFilters = true, limit = 12, labels = DEFAULT_LABELS }: FormationsSectionProps) {
   const [formations, setFormations] = useState<Formation[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>(category && category !== "all" ? category : "all");
   const [loading, setLoading] = useState(true);
@@ -252,12 +254,12 @@ export function FormationsSection({ title, category, showFilters = true, limit =
         ) : formations.length === 0 ? (
           <div className="text-center py-16 text-gray-400">
             <span className="text-5xl mb-4 block">📚</span>
-            <p className="text-sm">Aucune formation disponible dans cette langue.</p>
+            <p className="text-sm">{labels.formations_empty}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {formations.map((f) => (
-              <FormationCard key={f.id} formation={f} />
+              <FormationCard key={f.id} formation={f} labels={labels} />
             ))}
           </div>
         )}

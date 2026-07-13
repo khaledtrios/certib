@@ -1,28 +1,22 @@
 "use client";
 
 import React, { useState } from "react";
+import { type Labels, DEFAULT_LABELS } from "@/lib/labels";
 
 interface NewsletterBlockProps {
   heading: string;
   description?: string | null;
   buttonLabel?: string | null;
+  labels?: Labels;
 }
 
 type FormStatus = "idle" | "loading" | "success" | "error" | "duplicate";
-
-const STATUS_MESSAGES: Record<
-  Exclude<FormStatus, "idle" | "loading">,
-  string
-> = {
-  success: "Merci ! Vous êtes maintenant abonné(e) à notre newsletter.",
-  error: "Une erreur est survenue. Veuillez réessayer.",
-  duplicate: "Cette adresse e-mail est déjà abonnée à notre newsletter.",
-};
 
 export function NewsletterBlock({
   heading,
   description,
   buttonLabel,
+  labels = DEFAULT_LABELS,
 }: NewsletterBlockProps) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -57,7 +51,7 @@ export function NewsletterBlock({
     }
   };
 
-  const label = buttonLabel || "S'abonner";
+  const label = buttonLabel || labels.newsletter_subscribe;
   const feedbackStatus =
     status !== "idle" && status !== "loading" ? status : null;
 
@@ -72,7 +66,7 @@ export function NewsletterBlock({
 
           {status === "success" ? (
             <p className="rounded-md bg-white/20 px-5 py-3 text-sm font-medium text-white">
-              {STATUS_MESSAGES.success}
+              {labels.newsletter_success}
             </p>
           ) : (
             <form
@@ -81,14 +75,14 @@ export function NewsletterBlock({
               className="flex flex-col gap-3 sm:flex-row"
             >
               <label htmlFor="newsletter-email" className="sr-only">
-                Adresse e-mail
+                {labels.newsletter_email_label}
               </label>
               <input
                 id="newsletter-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Votre adresse e-mail"
+                placeholder={labels.newsletter_email_placeholder}
                 required
                 disabled={status === "loading"}
                 className="flex-1 rounded-md border border-transparent bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/60 disabled:opacity-60"
@@ -98,7 +92,7 @@ export function NewsletterBlock({
                 disabled={status === "loading"}
                 className="rounded-md bg-white px-6 py-3 text-sm font-semibold text-[#08AA86] transition-opacity hover:opacity-90 disabled:opacity-60 whitespace-nowrap"
               >
-                {status === "loading" ? "Envoi…" : label}
+                {status === "loading" ? labels.newsletter_sending : label}
               </button>
             </form>
           )}
@@ -107,7 +101,7 @@ export function NewsletterBlock({
             <p
               className={`mt-4 text-sm ${feedbackStatus === "duplicate" ? "text-yellow-200" : "text-red-200"}`}
             >
-              {STATUS_MESSAGES[feedbackStatus]}
+              {feedbackStatus === "duplicate" ? labels.newsletter_duplicate : labels.newsletter_error}
             </p>
           )}
         </div>

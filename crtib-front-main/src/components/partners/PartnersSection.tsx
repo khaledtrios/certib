@@ -68,16 +68,18 @@ export function PartnersSection({
             </div>
           </div>
 
-          <div className="grid gap-4">
-            <h3 className="text-[14px] font-semibold uppercase tracking-[0.2em] text-crtib-gray-dark">
-              {associationsTitle}
-            </h3>
-            <div className="flex flex-wrap justify-center gap-4 pb-2">
-              {associations.map((item) => (
-                <LogoItem key={item.id} item={item} />
-              ))}
+          {associations.length > 0 && (
+            <div className="grid gap-4">
+              <h3 className="text-[14px] font-semibold uppercase tracking-[0.2em] text-crtib-gray-dark">
+                {associationsTitle}
+              </h3>
+              <div className="flex flex-wrap justify-center gap-4 pb-2">
+                {associations.map((item) => (
+                  <LogoItem key={item.id} item={item} />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

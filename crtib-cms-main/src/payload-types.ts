@@ -82,6 +82,7 @@ export interface Config {
     clauses: Clause;
     'newsletter-subscribers': NewsletterSubscriber;
     'site-languages': SiteLanguage;
+    'ui-labels': UiLabel;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -104,6 +105,7 @@ export interface Config {
     clauses: ClausesSelect<false> | ClausesSelect<true>;
     'newsletter-subscribers': NewsletterSubscribersSelect<false> | NewsletterSubscribersSelect<true>;
     'site-languages': SiteLanguagesSelect<false> | SiteLanguagesSelect<true>;
+    'ui-labels': UiLabelsSelect<false> | UiLabelsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -1039,6 +1041,99 @@ export interface NewsletterSubscriber {
   createdAt: string;
 }
 /**
+ * Interface strings per language. Create one document per active language.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ui-labels".
+ */
+export interface UiLabel {
+  id: number;
+  lang: number | SiteLanguage;
+  breadcrumb_home?: string | null;
+  download?: string | null;
+  language_label?: string | null;
+  no_translation?: string | null;
+  newsletter_subscribe?: string | null;
+  newsletter_sending?: string | null;
+  newsletter_email_placeholder?: string | null;
+  newsletter_email_label?: string | null;
+  newsletter_success?: string | null;
+  newsletter_error?: string | null;
+  newsletter_duplicate?: string | null;
+  calc_trade_label?: string | null;
+  calc_trade_tooltip?: string | null;
+  calc_market_label?: string | null;
+  calc_market_unit?: string | null;
+  calc_market_tooltip?: string | null;
+  calc_duration_label?: string | null;
+  calc_duration_unit?: string | null;
+  calc_duration_tooltip?: string | null;
+  calc_submit?: string | null;
+  formations_back?: string | null;
+  formations_date?: string | null;
+  formations_duration?: string | null;
+  formations_location?: string | null;
+  formations_participants?: string | null;
+  formations_price?: string | null;
+  formations_register_heading?: string | null;
+  formations_register_online?: string | null;
+  formations_register_email?: string | null;
+  formations_see_detail?: string | null;
+  formations_empty?: string | null;
+  formations_max_participants?: string | null;
+  news_page_title?: string | null;
+  news_page_subtitle?: string | null;
+  news_filter_all?: string | null;
+  news_read_article?: string | null;
+  news_read_all?: string | null;
+  news_other_title?: string | null;
+  news_empty?: string | null;
+  news_article_count_single?: string | null;
+  news_article_count_plural?: string | null;
+  see_pdf?: string | null;
+  open?: string | null;
+  close?: string | null;
+  search?: string | null;
+  previous?: string | null;
+  next?: string | null;
+  page_label?: string | null;
+  contact_coordinates_heading?: string | null;
+  contact_form_heading?: string | null;
+  contact_name?: string | null;
+  contact_name_placeholder?: string | null;
+  contact_email_label?: string | null;
+  contact_subject?: string | null;
+  contact_subject_placeholder?: string | null;
+  contact_message?: string | null;
+  contact_message_placeholder?: string | null;
+  contact_submit?: string | null;
+  contact_sending?: string | null;
+  contact_success_heading?: string | null;
+  contact_success_body?: string | null;
+  contact_success_reset?: string | null;
+  contact_error?: string | null;
+  footer_contact_heading?: string | null;
+  footer_links_heading?: string | null;
+  footer_rights?: string | null;
+  table_number?: string | null;
+  table_title?: string | null;
+  table_date?: string | null;
+  table_version?: string | null;
+  table_download?: string | null;
+  table_search_placeholder?: string | null;
+  table_search_label?: string | null;
+  table_empty?: string | null;
+  table_of?: string | null;
+  table_documents?: string | null;
+  unsub_success_heading?: string | null;
+  unsub_success_body?: string | null;
+  unsub_error_heading?: string | null;
+  unsub_error_body?: string | null;
+  unsub_back_home?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -1121,6 +1216,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'site-languages';
         value: number | SiteLanguage;
+      } | null)
+    | ({
+        relationTo: 'ui-labels';
+        value: number | UiLabel;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1806,6 +1905,96 @@ export interface SiteLanguagesSelect<T extends boolean = true> {
   slug?: T;
   isDefault?: T;
   isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ui-labels_select".
+ */
+export interface UiLabelsSelect<T extends boolean = true> {
+  lang?: T;
+  breadcrumb_home?: T;
+  download?: T;
+  language_label?: T;
+  no_translation?: T;
+  newsletter_subscribe?: T;
+  newsletter_sending?: T;
+  newsletter_email_placeholder?: T;
+  newsletter_email_label?: T;
+  newsletter_success?: T;
+  newsletter_error?: T;
+  newsletter_duplicate?: T;
+  calc_trade_label?: T;
+  calc_trade_tooltip?: T;
+  calc_market_label?: T;
+  calc_market_unit?: T;
+  calc_market_tooltip?: T;
+  calc_duration_label?: T;
+  calc_duration_unit?: T;
+  calc_duration_tooltip?: T;
+  calc_submit?: T;
+  formations_back?: T;
+  formations_date?: T;
+  formations_duration?: T;
+  formations_location?: T;
+  formations_participants?: T;
+  formations_price?: T;
+  formations_register_heading?: T;
+  formations_register_online?: T;
+  formations_register_email?: T;
+  formations_see_detail?: T;
+  formations_empty?: T;
+  formations_max_participants?: T;
+  news_page_title?: T;
+  news_page_subtitle?: T;
+  news_filter_all?: T;
+  news_read_article?: T;
+  news_read_all?: T;
+  news_other_title?: T;
+  news_empty?: T;
+  news_article_count_single?: T;
+  news_article_count_plural?: T;
+  see_pdf?: T;
+  open?: T;
+  close?: T;
+  search?: T;
+  previous?: T;
+  next?: T;
+  page_label?: T;
+  contact_coordinates_heading?: T;
+  contact_form_heading?: T;
+  contact_name?: T;
+  contact_name_placeholder?: T;
+  contact_email_label?: T;
+  contact_subject?: T;
+  contact_subject_placeholder?: T;
+  contact_message?: T;
+  contact_message_placeholder?: T;
+  contact_submit?: T;
+  contact_sending?: T;
+  contact_success_heading?: T;
+  contact_success_body?: T;
+  contact_success_reset?: T;
+  contact_error?: T;
+  footer_contact_heading?: T;
+  footer_links_heading?: T;
+  footer_rights?: T;
+  table_number?: T;
+  table_title?: T;
+  table_date?: T;
+  table_version?: T;
+  table_download?: T;
+  table_search_placeholder?: T;
+  table_search_label?: T;
+  table_empty?: T;
+  table_of?: T;
+  table_documents?: T;
+  unsub_success_heading?: T;
+  unsub_success_body?: T;
+  unsub_error_heading?: T;
+  unsub_error_body?: T;
+  unsub_back_home?: T;
   updatedAt?: T;
   createdAt?: T;
 }

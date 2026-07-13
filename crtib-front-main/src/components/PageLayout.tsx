@@ -3,6 +3,7 @@ import type { Page } from "@/types/payload";
 import Breadcrumb, { type BreadcrumbItem } from "./Breadcrumb";
 import { BlockRenderer } from "@/components/home/BlockRenderer";
 import { getMediaUrl } from "@/lib/payload";
+import { getLabels } from "@/lib/labels";
 
 interface PageLayoutProps {
   page: Page;
@@ -31,8 +32,10 @@ function buildBreadcrumbItems(page: Page): BreadcrumbItem[] {
   return items;
 }
 
-export default function PageLayout({ page }: PageLayoutProps) {
+export default async function PageLayout({ page }: PageLayoutProps) {
   const { title, layout } = page;
+  const lang = getLangSlug(page);
+  const labels = await getLabels(lang);
   const breadcrumbItems = buildBreadcrumbItems(page);
 
   const headerImage = (page as any).headerImage;
@@ -43,7 +46,7 @@ export default function PageLayout({ page }: PageLayoutProps) {
       {/* Breadcrumb */}
       <div className="bg-white py-4 border-b border-gray-200">
         <div className="container mx-auto px-4 md:px-8 max-w-6xl">
-          <Breadcrumb items={breadcrumbItems} />
+          <Breadcrumb items={breadcrumbItems} homeLabel={labels.breadcrumb_home} />
         </div>
       </div>
 
@@ -76,7 +79,7 @@ export default function PageLayout({ page }: PageLayoutProps) {
       {/* Sections de la page */}
       {layout && layout.length > 0 && (
         <div className="pt-12 md:pt-14">
-          <BlockRenderer blocks={layout} />
+          <BlockRenderer blocks={layout} labels={labels} />
         </div>
       )}
     </div>

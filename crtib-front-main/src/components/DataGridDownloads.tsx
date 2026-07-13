@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { DownloadFormatButton } from "@/components/DownloadFormatButton";
 import type { DownloadDocument } from "@/types/downloads";
+import { type Labels, DEFAULT_LABELS } from "@/lib/labels";
 
 type DownloadDocumentWithId = DownloadDocument & { id?: string | number };
 
@@ -12,6 +13,7 @@ type SortDirection = "asc" | "desc";
 type DataGridDownloadsProps = {
   documents: DownloadDocumentWithId[];
   pageSize?: number;
+  labels?: Labels;
   onDownload?: (
     doc: DownloadDocumentWithId,
     extension: string,
@@ -29,6 +31,7 @@ function formatDate(value: string | Date): string {
 export function DataGridDownloads({
   documents,
   pageSize: rawPageSize = 10,
+  labels = DEFAULT_LABELS,
 }: DataGridDownloadsProps) {
   const pageSize = Math.max(1, Math.floor(Number(rawPageSize) || 10));
   const [searchTerm, setSearchTerm] = useState("");
@@ -123,16 +126,16 @@ export function DataGridDownloads({
     <section className="w-full rounded-md border border-gray-200 bg-crtib-white shadow-sm">
       <div className="mx-auto flex w-full max-w-[140rem] flex-col items-center gap-4 border-b border-gray-200 p-4 sm:flex-row sm:justify-center">
         <span className="text-xs font-semibold text-crtib-gray-dark sm:whitespace-nowrap">
-          Rechercher un document
+          {labels.table_search_label}
         </span>
 
         <div className="w-full sm:max-w-xs sm:ml-4">
           <label className="relative block">
-            <span className="sr-only">Rechercher un document</span>
+            <span className="sr-only">{labels.table_search_label}</span>
             <input
               type="text"
               className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-crtib-gray-dark placeholder:text-gray-400 focus:border-crtib-green focus:outline-none focus:ring-1 focus:ring-crtib-green"
-              placeholder="N° ou titre du document..."
+              placeholder={labels.table_search_placeholder}
               value={searchTerm}
               onChange={(event) => {
                 setSearchTerm(event.target.value);
@@ -153,7 +156,7 @@ export function DataGridDownloads({
                   onClick={() => handleSort("numero")}
                   className="flex w-full items-center justify-between"
                 >
-                  <span>N°</span>
+                  <span>{labels.table_number}</span>
                   {renderSortIcon("numero")}
                 </button>
               </th>
@@ -163,7 +166,7 @@ export function DataGridDownloads({
                   onClick={() => handleSort("titulo")}
                   className="flex w-full items-center justify-between"
                 >
-                  <span>Titre</span>
+                  <span>{labels.table_title}</span>
                   {renderSortIcon("titulo")}
                 </button>
               </th>
@@ -173,15 +176,15 @@ export function DataGridDownloads({
                   onClick={() => handleSort("data")}
                   className="flex w-full items-center justify-between"
                 >
-                  <span>Date</span>
+                  <span>{labels.table_date}</span>
                   {renderSortIcon("data")}
                 </button>
               </th>
               <th className="bg-[#37c2a2] px-4 py-2 text-left text-sm font-semibold text-white">
-                Version
+                {labels.table_version}
               </th>
               <th className="bg-[#37c2a2] px-4 py-2 text-left text-sm font-semibold text-white">
-                Télécharger
+                {labels.table_download}
               </th>
             </tr>
           </thead>
@@ -192,7 +195,7 @@ export function DataGridDownloads({
                   colSpan={5}
                   className="px-4 py-6 text-center text-sm text-gray-600"
                 >
-                  Aucun document trouvé.
+                  {labels.table_empty}
                 </td>
               </tr>
             ) : (
@@ -241,13 +244,13 @@ export function DataGridDownloads({
 
       <div className="flex flex-col gap-3 border-t border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between">
         <span className="text-xs text-crtib-gray-dark">
-          {showingFrom}-{showingTo} sur {filteredAndSorted.length} documents
+          {showingFrom}-{showingTo} {labels.table_of} {filteredAndSorted.length} {labels.table_documents}
         </span>
 
         {totalPages > 1 && (
           <div className="flex items-center justify-end gap-3">
             <span className="text-sm text-crtib-gray-dark">
-              Page <span className="font-semibold">{safePage}</span> /{" "}
+              {labels.page_label} <span className="font-semibold">{safePage}</span> /{" "}
               <span className="font-semibold">{totalPages}</span>
             </span>
 
@@ -258,7 +261,7 @@ export function DataGridDownloads({
                 disabled={safePage <= 1}
                 className="rounded-md border border-[#303e48] bg-[#303e48] px-3 py-1 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-[#303e48] disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Précédent
+                {labels.previous}
               </button>
 
               <button
@@ -267,7 +270,7 @@ export function DataGridDownloads({
                 disabled={safePage >= totalPages}
                 className="rounded-md border border-[#303e48] bg-[#303e48] px-3 py-1 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-[#303e48] disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Suivant
+                {labels.next}
               </button>
             </div>
           </div>

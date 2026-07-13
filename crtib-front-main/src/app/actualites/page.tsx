@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { getNewsArticles, getMediaUrl, getSiteLanguages, buildContentLangWhere } from "@/lib/payload";
+import { getLabels } from "@/lib/labels";
 
 export const dynamic = "force-dynamic";
 import type { NewsArticle } from "@/types/payload";
@@ -52,6 +53,8 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
     const langs = await getSiteLanguages();
     defaultLang = langs.docs.find((l) => l.isDefault)?.slug ?? "fr";
   } catch {}
+
+  const labels = await getLabels(currentLang);
 
   const langWhere = buildContentLangWhere(currentLang, defaultLang);
 
@@ -119,7 +122,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
       {/* Breadcrumb */}
       <div className="border-b border-gray-200 bg-white py-4">
         <div className="container mx-auto max-w-6xl px-4 md:px-8">
-          <Breadcrumb items={[{ href: "/actualites", title: "Actualités" }]} />
+          <Breadcrumb items={[{ href: "/actualites", title: labels.news_page_title }]} homeLabel={labels.breadcrumb_home} />
         </div>
       </div>
 
@@ -127,10 +130,10 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
       <section className="relative bg-white pb-10 pt-12 text-center">
         <div className="mx-auto max-w-3xl px-4 md:px-8">
           <h1 className="font-sans text-[28px] font-light uppercase tracking-[0.12em] text-crtib-gray-dark md:text-[36px]">
-            Actualités
+            {labels.news_page_title}
           </h1>
           <p className="mt-3 font-sans text-[14px] text-[#6B6B6B]">
-            Retrouvez toutes les actualités, communiqués et événements du CRTI-B
+            {labels.news_page_subtitle}
           </p>
         </div>
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
@@ -153,7 +156,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
                   : "border-gray-300 bg-white text-crtib-gray-dark hover:border-[#37C2A2] hover:text-[#37C2A2]",
               ].join(" ")}
             >
-              Tout
+              {labels.news_filter_all}
             </Link>
             {CATEGORIES.slice(1).map((cat) => {
               const isActive = cat.value === (category || "");
@@ -174,7 +177,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
             })}
             {totalDocs > 0 && (
               <span className="ml-auto font-sans text-[13px] text-[#6B6B6B]">
-                {totalDocs} article{totalDocs > 1 ? "s" : ""}
+                {totalDocs} {totalDocs > 1 ? labels.news_article_count_plural : labels.news_article_count_single}
               </span>
             )}
           </div>
@@ -187,7 +190,7 @@ export default async function ActualitesPage({ searchParams }: PageProps) {
           {items.length === 0 ? (
             <div className="py-24 text-center">
               <p className="font-sans text-[15px] uppercase tracking-[0.08em] text-[#6B6B6B]">
-                Aucun contenu disponible dans cette langue
+                {labels.news_empty}
               </p>
             </div>
           ) : (

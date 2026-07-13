@@ -7,13 +7,14 @@ export interface BreadcrumbItem {
 
 interface BreadcrumbProps {
   items: BreadcrumbItem[];
+  homeLabel?: string;
 }
 
-export default function Breadcrumb({ items }: BreadcrumbProps) {
+export default function Breadcrumb({ items, homeLabel = "Accueil" }: BreadcrumbProps) {
   return (
     <nav className="text-sm text-gray-600" aria-label="Fil d'Ariane">
       <Link href="/" className="hover:text-gray-900">
-        Accueil
+        {homeLabel}
       </Link>
 
       {items.map((item, index) => {
