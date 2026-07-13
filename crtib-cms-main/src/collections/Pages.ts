@@ -172,10 +172,6 @@ export const Pages: CollectionConfig = {
       label: { fr: 'Traductions liées', en: 'Linked translations' },
       admin: {
         position: 'sidebar',
-        description: {
-          fr: 'Associer cette page à son équivalent dans chaque autre langue (comme WordPress/Polylang). Le sélecteur de langue utilisera ces liens directs.',
-          en: 'Link this page to its equivalent in each other language (like WordPress/Polylang). The language switcher will use these direct links.',
-        },
       },
       fields: [
         {

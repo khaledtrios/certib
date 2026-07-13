@@ -221,9 +221,6 @@ export interface Page {
    * Sets the URL prefix (e.g. /fr/my-page, /de/my-page). All languages have a prefix.
    */
   language?: (number | null) | SiteLanguage;
-  /**
-   * Link this page to its equivalent in each other language (like WordPress/Polylang). The language switcher will use these direct links.
-   */
   linkedTranslations?:
     | {
         language: number | SiteLanguage;
