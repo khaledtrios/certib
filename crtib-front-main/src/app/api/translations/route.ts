@@ -7,7 +7,7 @@ import { getCollection, getSiteLanguages } from "@/lib/payload";
  * Returns:
  *  - langs:     language codes that have a published page for this slug
  *  - overrides: { [langSlug]: href } — explicit translation links set by the
- *               admin via the linkedTranslations field (WordPress/Polylang style).
+ *               admin via the linkedTranslations field.
  *               When an override exists, the LanguageSwitcher navigates to that
  *               specific URL instead of building /{lang}/{sameSlug}.
  */
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
     const langsRes = await getSiteLanguages();
     if (langsRes.docs.length === 0) return NextResponse.json({ langs: [], overrides: {} });
 
-    // ── Step 1: fetch the current page with depth:1 to get linkedTranslations ──
+    // ── Step 1: fetch current page with linkedTranslations (depth:1) ──
     const currentPageRes = await getCollection<any>("pages", {
       where: {
         and: [
@@ -50,8 +50,8 @@ export async function GET(req: NextRequest) {
     const linkedTranslations: Array<{ language: any; page: any }> =
       currentPage?.linkedTranslations ?? [];
 
-    // Build overrides map from explicit translation links.
-    // Each entry: { language: {slug, ...}, page: {slug, language: {slug,...}, ...} }
+    // Build overrides from linkedTranslations.
+    // Each entry: { language: {slug,...}, page: {slug, language: {slug,...},...} }
     const overrides: Record<string, string> = {};
     for (const link of linkedTranslations) {
       const langSlug =
@@ -59,7 +59,6 @@ export async function GET(req: NextRequest) {
       const linkedPage = link.page;
       if (!langSlug || !linkedPage) continue;
 
-      // Determine the linked page's language prefix
       const linkedLangSlug =
         typeof linkedPage.language === "object"
           ? linkedPage.language?.slug

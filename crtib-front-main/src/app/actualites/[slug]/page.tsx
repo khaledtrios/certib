@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { getNewsBySlug, getMediaUrl, getSiteLanguages } from "@/lib/payload";
+import { SITE_URL, absoluteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 import type { NewsArticle } from "@/types/payload";
@@ -54,19 +55,28 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   try {
     const { currentLang, defaultLang } = await resolveLang();
     const article = (await getNewsBySlug(slug, { lang: currentLang, defaultLang })) as NewsArticle | null;
-    if (!article) return { title: "Actualité introuvable" };
+    if (!article) return { title: "Actualité introuvable", robots: { index: false, follow: true } };
 
     const image =
       article.featuredImage && typeof article.featuredImage === "object"
         ? (article.featuredImage as PayloadMedia)
         : undefined;
 
+    const title = article.seo?.metaTitle || article.title;
+    const description = article.seo?.metaDescription || article.excerpt || undefined;
+    const canonicalPath = `/actualites/${slug}`;
+
     return {
-      title: article.seo?.metaTitle || article.title,
-      description: article.seo?.metaDescription || article.excerpt || undefined,
+      title,
+      description,
+      alternates: { canonical: absoluteUrl(canonicalPath) },
       openGraph: {
-        title: article.seo?.metaTitle || article.title,
-        description: article.seo?.metaDescription || article.excerpt || undefined,
+        title,
+        description,
+        url: absoluteUrl(canonicalPath),
+        type: "article",
+        publishedTime: article.publishedAt,
+        modifiedTime: article.updatedAt,
         images: image?.url ? [getMediaUrl(image)] : undefined,
       },
     };
@@ -95,7 +105,6 @@ export default async function NewsDetailPage({ params }: PageProps) {
 
   const imageUrl = image ? getMediaUrl(image) : undefined;
   const categoryLabel = resolveCategoryLabel(article.category);
-  const base = process.env.NEXT_PUBLIC_SERVER_URL ?? "https://crtib.lu";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -105,11 +114,11 @@ export default async function NewsDetailPage({ params }: PageProps) {
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
     image: imageUrl ? [imageUrl] : undefined,
-    url: `${base}/actualites/${slug}`,
+    url: absoluteUrl(`/actualites/${slug}`),
     publisher: {
       "@type": "Organization",
       name: "CRTI-B",
-      url: base,
+      url: SITE_URL,
     },
   };
 

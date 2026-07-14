@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { getNewsArticles, getMediaUrl, getSiteLanguages, buildContentLangWhere } from "@/lib/payload";
 import { getLabels } from "@/lib/labels";
+import { absoluteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 import type { NewsArticle } from "@/types/payload";
@@ -23,15 +24,8 @@ interface PageProps {
   searchParams: Promise<{ page?: string; category?: string }>;
 }
 
-export const metadata: Metadata = {
-  title: "Actualités | CRTI-B",
-  description: "Retrouvez toutes les actualités, communiqués et événements du CRTI-B",
-  openGraph: {
-    title: "Actualités | CRTI-B",
-    description: "Retrouvez toutes les actualités, communiqués et événements du CRTI-B",
-    images: [{ url: "/og-default.png", width: 1200, height: 630, alt: "CRTI-B Actualités" }],
-  },
-};
+const NEWS_LIST_DESCRIPTION =
+  "Retrouvez toutes les actualités, communiqués et événements du CRTI-B";
 
 function buildUrl(page: number, category?: string): string {
   const params = new URLSearchParams();
@@ -39,6 +33,29 @@ function buildUrl(page: number, category?: string): string {
   if (page > 1) params.set("page", String(page));
   const qs = params.toString();
   return `/actualites${qs ? `?${qs}` : ""}`;
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const { page: pageParam, category } = await searchParams;
+  const currentPage = Math.max(1, parseInt(pageParam || "1", 10));
+  const canonicalPath = buildUrl(currentPage, category);
+
+  // Category filters are a "filter view" (like an internal search) — keep them
+  // out of the index to avoid near-duplicate content, but let plain pagination
+  // (unique articles per page) stay indexable with a self-referencing canonical.
+  const isFilterView = Boolean(category);
+
+  return {
+    title: "Actualités",
+    description: NEWS_LIST_DESCRIPTION,
+    alternates: { canonical: absoluteUrl(canonicalPath) },
+    robots: isFilterView ? { index: false, follow: true } : undefined,
+    openGraph: {
+      title: "Actualités – CRTI-B",
+      description: NEWS_LIST_DESCRIPTION,
+      url: absoluteUrl(canonicalPath),
+    },
+  };
 }
 
 export default async function ActualitesPage({ searchParams }: PageProps) {

@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Champs obligatoires manquants." }, { status: 400 });
     }
 
-    const cmsUrl = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
+    const cmsUrl = process.env.NEXT_PUBLIC_PAYLOAD_URL || "http://localhost:3000";
     await fetch(`${cmsUrl}/api/email`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

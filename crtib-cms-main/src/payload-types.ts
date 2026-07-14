@@ -224,9 +224,6 @@ export interface Page {
   linkedTranslations?:
     | {
         language: number | SiteLanguage;
-        /**
-         * The corresponding page in this language.
-         */
         page: number | Page;
         id?: string | null;
       }[]

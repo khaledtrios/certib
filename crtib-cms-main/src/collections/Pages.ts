@@ -188,11 +188,11 @@ export const Pages: CollectionConfig = {
           relationTo: 'pages',
           required: true,
           label: { fr: 'Page liée', en: 'Linked page' },
-          admin: {
-            description: {
-              fr: 'La page correspondante dans cette langue.',
-              en: 'The corresponding page in this language.',
-            },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          filterOptions: ({ siblingData }: any) => {
+            const langId = siblingData?.language
+            if (!langId) return true
+            return { language: { equals: langId } }
           },
         },
       ],

@@ -7,6 +7,7 @@ import { getFormationBySlug, getMediaUrl, getSiteLanguages } from "@/lib/payload
 import RichText from "@/components/RichText";
 import Breadcrumb from "@/components/Breadcrumb";
 import { Calendar, MapPin, Clock, Users, Euro, Mail, ExternalLink, ArrowLeft } from "lucide-react";
+import { SITE_URL, absoluteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -56,10 +57,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const { currentLang, defaultLang } = await resolveLang();
   const formation = await getFormationBySlug(slug, { lang: currentLang, defaultLang }) as any;
-  if (!formation) return { title: "Formation introuvable | CRTI-B" };
+  if (!formation) return { title: "Formation introuvable", robots: { index: false, follow: true } };
+
+  const description = `Formation CRTI-B : ${formation.title}${formation.location ? ` — ${formation.location}` : ""}`;
+  const canonicalPath = `/formations/${formation.slug ?? formation.id}`;
+  const imageUrl = formation.image ? getMediaUrl(formation.image) : undefined;
+
   return {
-    title: `${formation.title} | CRTI-B`,
-    description: `Formation CRTI-B : ${formation.title}${formation.location ? ` — ${formation.location}` : ""}`,
+    title: formation.title,
+    description,
+    alternates: { canonical: absoluteUrl(canonicalPath) },
+    openGraph: {
+      title: formation.title,
+      description,
+      url: absoluteUrl(canonicalPath),
+      type: "website",
+      images: imageUrl ? [imageUrl] : undefined,
+    },
   };
 }
 
@@ -71,15 +85,14 @@ export default async function FormationDetailPage({ params }: PageProps) {
   if (!formation) notFound();
 
   const imageUrl = formation.image ? getMediaUrl(formation.image) : null;
-  const base = process.env.NEXT_PUBLIC_SERVER_URL ?? "https://crtib.lu";
 
   const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Course",
     name: formation.title,
     description: `Formation CRTI-B : ${formation.title}${formation.location ? ` — ${formation.location}` : ""}`,
-    url: `${base}/formations/${formation.slug ?? formation.id}`,
-    provider: { "@type": "Organization", name: "CRTI-B", url: base },
+    url: absoluteUrl(`/formations/${formation.slug ?? formation.id}`),
+    provider: { "@type": "Organization", name: "CRTI-B", url: SITE_URL },
     ...(formation.startDate ? { startDate: formation.startDate } : {}),
     ...(formation.endDate ? { endDate: formation.endDate } : {}),
     ...(formation.location ? { location: { "@type": "Place", name: formation.location } } : {}),

@@ -30,10 +30,17 @@ export function LanguageSwitcher({ languages }: { languages: SiteLanguage[] }) {
   const pageSlug = isLangPrefix ? segments.slice(1).join("/") : segments.join("/");
   const effectiveSlug = pageSlug || "home";
 
+  const isHomePage = !pageSlug;
+
   const [availableLangs, setAvailableLangs] = useState<string[] | null>(null);
   const [overrides, setOverrides] = useState<Record<string, string>>({});
 
   useEffect(() => {
+    if (isHomePage) {
+      setAvailableLangs(languages.map((l) => l.slug));
+      setOverrides({});
+      return;
+    }
     let cancelled = false;
     setAvailableLangs(null);
     setOverrides({});
@@ -51,7 +58,7 @@ export function LanguageSwitcher({ languages }: { languages: SiteLanguage[] }) {
       })
       .catch(() => { if (!cancelled) setAvailableLangs(null); });
     return () => { cancelled = true; };
-  }, [effectiveSlug, currentLang]);
+  }, [effectiveSlug, currentLang, isHomePage]);
 
   // Close on outside click
   useEffect(() => {

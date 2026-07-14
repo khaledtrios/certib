@@ -1,6 +1,12 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { getLabels } from "@/lib/labels";
+
+export const metadata: Metadata = {
+  title: "Désabonnement newsletter",
+  robots: { index: false, follow: false },
+};
 
 interface Props {
   searchParams: Promise<{ error?: string }>;

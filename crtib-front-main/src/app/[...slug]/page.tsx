@@ -1,8 +1,9 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { getPageBySlug, getSiteLanguages } from "@/lib/payload";
 import PageLayout from "@/components/PageLayout";
 import type { Metadata } from "next";
 import type { Page } from "@/types/payload";
+import { absoluteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -108,6 +109,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       openGraph: {
         title: page.seo?.metaTitle || page.title,
         description: page.seo?.metaDescription || undefined,
+        url: absoluteUrl(canonicalPath),
         locale: pageLanguage === "fr" ? "fr_LU" : pageLanguage,
         images:
           page.seo?.metaImage && typeof page.seo.metaImage === "object"
@@ -115,9 +117,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             : undefined,
       },
       alternates: {
-        canonical: canonicalPath,
+        canonical: absoluteUrl(canonicalPath),
         languages: Object.keys(hreflangAlternates).length > 0
-          ? hreflangAlternates
+          ? Object.fromEntries(
+              Object.entries(hreflangAlternates).map(([lang, path]) => [
+                lang,
+                absoluteUrl(path),
+              ]),
+            )
           : undefined,
       },
     };
@@ -143,7 +150,7 @@ export default async function DynamicPage({ params }: PageProps) {
 
   // Legacy URL (no lang prefix) → permanent redirect to prefixed URL
   if (resolved.isLegacy && resolved.legacyRedirectTo) {
-    redirect(resolved.legacyRedirectTo);
+    permanentRedirect(resolved.legacyRedirectTo);
   }
 
   if (!resolved.page) notFound();

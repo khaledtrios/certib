@@ -4,6 +4,7 @@ import { Providers } from "@/lib/providers";
 import { GlobalLayout } from "@/components/layout/GlobalLayout";
 import { HtmlLangSync } from "@/components/layout/HtmlLangSync";
 import { getSiteLanguages } from "@/lib/payload";
+import { SITE_URL, absoluteUrl } from "@/lib/site";
 import "./globals.css";
 
 export const dynamic = "force-dynamic";
@@ -13,14 +14,16 @@ const dosis = Dosis({
   subsets: ["latin"],
 });
 
+const SITE_DESCRIPTION =
+  "CRTI-B – Centre de Ressources des Technologies et de l'Innovation pour le Bâtiment au Luxembourg. Marchés publics, Performance énergétique, Construction durable, Digitalisation BIM.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || "https://crtib.lu"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "CRTI-B – Centre de Ressources des Technologies et de l'Innovation pour le Bâtiment",
     template: "%s – CRTI-B",
   },
-  description:
-    "CRTI-B – Centre de Ressources des Technologies et de l'Innovation pour le Bâtiment au Luxembourg. Marchés publics, Performance énergétique, Construction durable, Digitalisation BIM.",
+  description: SITE_DESCRIPTION,
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
@@ -32,16 +35,34 @@ export const metadata: Metadata = {
     siteName: "CRTI-B",
     locale: "fr_LU",
     type: "website",
-    url: process.env.NEXT_PUBLIC_SERVER_URL,
-    images: [
-      {
-        url: "/og-default.png",
-        width: 1200,
-        height: 630,
-        alt: "CRTI-B – Centre de Ressources des Technologies et de l'Innovation pour le Bâtiment",
-      },
-    ],
+    url: SITE_URL,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "CRTI-B – Centre de Ressources des Technologies et de l'Innovation pour le Bâtiment",
+    description: SITE_DESCRIPTION,
+  },
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: "CRTI-B",
+      url: SITE_URL,
+      logo: absoluteUrl("/logo.svg"),
+      email: "contact@crtib.lu",
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: "CRTI-B",
+      url: SITE_URL,
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+  ],
 };
 
 export default async function RootLayout({
@@ -60,6 +81,10 @@ export default async function RootLayout({
   return (
     <html lang="fr">
       <body className={`${dosis.variable} antialiased`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <Providers>
           {/* Syncs <html lang> on client navigation. SSR default = "fr". */}
           <HtmlLangSync languages={languages} />

@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 import { getSiteLanguages } from "@/lib/payload";
 
 export const dynamic = "force-dynamic";
@@ -13,5 +13,5 @@ export default async function DownloadsPage() {
   } catch {
     // CMS unavailable — fall back to "fr"
   }
-  redirect(`/${defaultLang}/downloads`);
+  permanentRedirect(`/${defaultLang}/downloads`);
 }

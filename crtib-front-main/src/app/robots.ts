@@ -1,13 +1,13 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.NEXT_PUBLIC_SERVER_URL ?? "https://crtib.lu";
   return {
     rules: {
       userAgent: "*",
       allow: "/",
       disallow: ["/api/", "/newsletter/unsubscribed"],
     },
-    sitemap: `${base}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }
