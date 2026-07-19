@@ -9,6 +9,7 @@ export const dynamic = "force-dynamic";
 
 interface PageProps {
   params: Promise<{ slug: string[] }>;
+  searchParams?: Promise<{ page?: string; category?: string }>;
 }
 
 // Always-recognised lang codes (fallback when DB is empty)
@@ -137,8 +138,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 // Page component
 // ---------------------------------------------------------------------------
 
-export default async function DynamicPage({ params }: PageProps) {
+export default async function DynamicPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
 
   let resolved: Resolved;
   try {
@@ -155,5 +157,5 @@ export default async function DynamicPage({ params }: PageProps) {
 
   if (!resolved.page) notFound();
 
-  return <PageLayout page={resolved.page!} />;
+  return <PageLayout page={resolved.page!} searchParams={resolvedSearchParams} />;
 }

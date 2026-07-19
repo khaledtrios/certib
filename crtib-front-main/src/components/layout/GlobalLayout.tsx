@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { getPages, getSiteLanguages } from "@/lib/payload";
 import { HeaderWithNav } from "./HeaderWithNav";
 import { Footer } from "./Footer";
+import { ScrollToTopButton } from "./ScrollToTopButton";
 import type { Page, PageWithChildren } from "@/types/payload";
 import type { SiteLanguage } from "./LanguageSwitcher";
 
@@ -99,6 +100,7 @@ export async function GlobalLayout({ children }: { children: React.ReactNode }) 
         <HeaderWithNav pages={hierarchyPages} languages={languages} />
         <main className="flex-1">{children}</main>
         <Footer lang={currentLang} />
+        <ScrollToTopButton />
       </div>
     );
   } catch (error: unknown) {
@@ -110,6 +112,7 @@ export async function GlobalLayout({ children }: { children: React.ReactNode }) 
       <div className="min-h-screen flex flex-col bg-white">
         <main className="flex-1">{children}</main>
         <Footer lang={currentLang} />
+        <ScrollToTopButton />
       </div>
     );
   }

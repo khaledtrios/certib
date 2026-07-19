@@ -312,6 +312,18 @@ export const Pages: CollectionConfig = {
               defaultValue: '/actualites',
             },
             {
+              name: 'showAll',
+              type: 'checkbox',
+              label: { en: 'Show all news (paginated list)', fr: 'Afficher toutes les actualités (liste paginée)' },
+              defaultValue: false,
+              admin: {
+                description: {
+                  fr: 'Active le mode liste complète avec pagination et filtres par catégorie. Utilisez ce mode sur la page "Actualités".',
+                  en: 'Enables the full paginated list with category filters. Use this on the "News" page.',
+                },
+              },
+            },
+            {
               name: 'filterCategories',
               type: 'relationship',
               relationTo: 'actualite-categories',

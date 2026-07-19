@@ -261,6 +261,10 @@ export interface Page {
             variant?: ('default' | 'block') | null;
             ctaHref?: string | null;
             /**
+             * Enables the full paginated list with category filters. Use this on the "News" page.
+             */
+            showAll?: boolean | null;
+            /**
              * Leave empty to show all categories.
              */
             filterCategories?: (number | ActualiteCategory)[] | null;
@@ -1361,6 +1365,7 @@ export interface PagesSelect<T extends boolean = true> {
               maxItems?: T;
               variant?: T;
               ctaHref?: T;
+              showAll?: T;
               filterCategories?: T;
               filterRubriques?: T;
               visibility?:

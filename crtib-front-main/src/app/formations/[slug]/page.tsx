@@ -112,7 +112,7 @@ export default async function FormationDetailPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="flex flex-col min-h-screen bg-[#f5f5f5]">
+      <div className="flex flex-col h-full bg-[#f5f5f5]">
         {/* Breadcrumb */}
         <div className="border-b border-gray-200 bg-white py-4">
           <div className="container mx-auto max-w-6xl px-4 md:px-8">

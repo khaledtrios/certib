@@ -1,4 +1,5 @@
 import { NewsSectionLoader } from "@/components/news/NewsSectionLoader";
+import { NewsSectionAllLoader } from "@/components/news/NewsSectionAllLoader";
 import { PdfViewerModal } from "@/components/pdf/PdfViewerModal";
 import { VideoViewerModal } from "@/components/video/VideoViewerModal";
 import { VideoEmbedSection } from "@/components/video/VideoEmbedSection";
@@ -67,7 +68,13 @@ import { type Labels, DEFAULT_LABELS } from "@/lib/labels";
 
 // ─── Renderizador de blocos ────────────────────────────────────────────────────
 
-function renderBlockContent(block: any, labels: Labels): React.ReactNode {
+interface BlockContext {
+  lang: string;
+  pageSlug: string;
+  searchParams: { page?: string; category?: string };
+}
+
+function renderBlockContent(block: any, labels: Labels, ctx: BlockContext = { lang: "fr", pageSlug: "", searchParams: {} }): React.ReactNode {
   switch (block.blockType) {
     case "photoHeroCarousel": {
       const slides = (block.slides ?? []).map(
@@ -86,7 +93,21 @@ function renderBlockContent(block: any, labels: Labels): React.ReactNode {
         />
       );
     }
-    case "newsSection":
+    case "newsSection": {
+      if (block.showAll) {
+        const basePath = ctx.pageSlug && ctx.pageSlug !== "home"
+          ? `/${ctx.lang}/${ctx.pageSlug}`
+          : `/${ctx.lang}`;
+        const currentPage = Number(ctx.searchParams.page) || 1;
+        return (
+            <NewsSectionAllLoader
+            lang={ctx.lang}
+            basePath={basePath}
+            page={currentPage}
+            category={ctx.searchParams.category}
+          />
+        );
+      }
       return (
         <NewsSectionLoader
           title={block.title}
@@ -97,6 +118,7 @@ function renderBlockContent(block: any, labels: Labels): React.ReactNode {
           filterRubriques={block.filterRubriques ?? null}
         />
       );
+    }
 
     case "documentsSection": {
       const items: any[] = block.items ?? [];
@@ -433,8 +455,21 @@ function renderBlockContent(block: any, labels: Labels): React.ReactNode {
   }
 }
 
-export function BlockRenderer({ blocks, labels = DEFAULT_LABELS }: { blocks: any[]; labels?: Labels }) {
+export function BlockRenderer({
+  blocks,
+  labels = DEFAULT_LABELS,
+  lang = "fr",
+  pageSlug = "",
+  searchParams = {},
+}: {
+  blocks: any[];
+  labels?: Labels;
+  lang?: string;
+  pageSlug?: string;
+  searchParams?: { page?: string; category?: string };
+}) {
   if (!blocks?.length) return null;
+  const ctx: BlockContext = { lang, pageSlug, searchParams };
 
   return (
     <>
@@ -448,7 +483,7 @@ export function BlockRenderer({ blocks, labels = DEFAULT_LABELS }: { blocks: any
         else if (hideOnMobile) visibilityClass = "hidden lg:block";
         else if (hideOnDesktop) visibilityClass = "lg:hidden";
 
-        const content = renderBlockContent(block, labels);
+        const content = renderBlockContent(block, labels, ctx);
         if (!content) return null;
 
         if (!visibilityClass) return <React.Fragment key={key}>{content}</React.Fragment>;

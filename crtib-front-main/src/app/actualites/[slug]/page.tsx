@@ -128,7 +128,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="min-h-screen bg-[#f5f5f5]">
+      <div className="h-full bg-[#f5f5f5]">
         {/* Breadcrumb */}
         <div className="bg-white py-4 border-b border-gray-200">
           <div className="container mx-auto px-4 md:px-8 max-w-6xl">

@@ -7,6 +7,7 @@ import { getLabels } from "@/lib/labels";
 
 interface PageLayoutProps {
   page: Page;
+  searchParams?: { page?: string; category?: string };
 }
 
 function getLangSlug(page: Page): string {
@@ -32,9 +33,10 @@ function buildBreadcrumbItems(page: Page): BreadcrumbItem[] {
   return items;
 }
 
-export default async function PageLayout({ page }: PageLayoutProps) {
+export default async function PageLayout({ page, searchParams = {} }: PageLayoutProps) {
   const { title, layout } = page;
   const lang = getLangSlug(page);
+  const pageSlug = (page.slug && page.slug !== "home") ? page.slug : "";
   const labels = await getLabels(lang);
   const breadcrumbItems = buildBreadcrumbItems(page);
 
@@ -42,7 +44,7 @@ export default async function PageLayout({ page }: PageLayoutProps) {
   const imageUrl = headerImage ? getMediaUrl(headerImage) : null;
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5]">
+    <div className="h-full bg-[#f5f5f5]">
       {/* Breadcrumb */}
       <div className="bg-white py-4 border-b border-gray-200">
         <div className="container mx-auto px-4 md:px-8 max-w-6xl">
@@ -79,7 +81,7 @@ export default async function PageLayout({ page }: PageLayoutProps) {
       {/* Sections de la page */}
       {layout && layout.length > 0 && (
         <div className="pt-12 md:pt-14">
-          <BlockRenderer blocks={layout} labels={labels} />
+          <BlockRenderer blocks={layout} labels={labels} lang={lang} pageSlug={pageSlug} searchParams={searchParams} />
         </div>
       )}
     </div>
