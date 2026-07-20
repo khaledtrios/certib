@@ -10,23 +10,31 @@ interface TeamMember {
   phone?: string | null;
   email?: string | null;
   photo?: any;
+  photoFocus?: "top" | "center" | "bottom" | null;
   children?: TeamMember[];
 }
 
+const FOCUS_CLASS: Record<string, string> = {
+  top: "object-cover object-[center_15%]",
+  center: "object-cover object-center",
+  bottom: "object-cover object-[center_85%]",
+};
+
 function MemberCard({ member }: { member: TeamMember }) {
   const photoUrl = member.photo ? getMediaUrl(member.photo) : null;
+  const focusClass = FOCUS_CLASS[member.photoFocus ?? "center"] ?? FOCUS_CLASS.center;
 
   return (
     <div className="flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       {/* Photo */}
-      <div className="relative w-full aspect-[4/3] bg-gray-100">
+      <div className="relative w-full aspect-square bg-gray-100">
         {photoUrl ? (
           <Image
             src={photoUrl}
             alt={member.name}
             fill
-            className="object-cover object-top"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className={focusClass}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-100">

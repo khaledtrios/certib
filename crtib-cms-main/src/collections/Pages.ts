@@ -882,6 +882,20 @@ export const Pages: CollectionConfig = {
                   label: { en: 'Photo', fr: 'Photo' },
                 },
                 {
+                  name: 'photoFocus',
+                  type: 'select',
+                  label: { en: 'Photo focus', fr: 'Cadrage photo' },
+                  defaultValue: 'center',
+                  admin: {
+                    description: { fr: 'Zone mise en avant dans la carte (utile si le visage est coupé)', en: 'Which part of the photo to show in the card' },
+                  },
+                  options: [
+                    { label: { fr: 'Haut', en: 'Top' }, value: 'top' },
+                    { label: { fr: 'Centre (défaut)', en: 'Center (default)' }, value: 'center' },
+                    { label: { fr: 'Bas', en: 'Bottom' }, value: 'bottom' },
+                  ],
+                },
+                {
                   name: 'children',
                   type: 'array',
                   label: { en: 'Sub-members', fr: 'Sous-membres' },
@@ -896,6 +910,17 @@ export const Pages: CollectionConfig = {
                       type: 'upload',
                       relationTo: 'media',
                       label: { en: 'Photo', fr: 'Photo' },
+                    },
+                    {
+                      name: 'photoFocus',
+                      type: 'select',
+                      label: { en: 'Photo focus', fr: 'Cadrage photo' },
+                      defaultValue: 'center',
+                      options: [
+                        { label: { fr: 'Haut', en: 'Top' }, value: 'top' },
+                        { label: { fr: 'Centre (défaut)', en: 'Center (default)' }, value: 'center' },
+                        { label: { fr: 'Bas', en: 'Bottom' }, value: 'bottom' },
+                      ],
                     },
                   ],
                 },
