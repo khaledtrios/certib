@@ -112,10 +112,21 @@ function renderNode(node: any, key: number): React.ReactNode {
       return <li key={key}>{renderNodes(node.children)}</li>;
 
     case "link": {
-      const rel = node.rel ?? undefined;
-      const target = node.target ?? undefined;
+      const f = node.fields ?? {};
+      let href = f.url || node.url || "";
+      // Internal link: build URL from related page doc
+      if (f.linkType === "internal" && f.doc) {
+        const doc = typeof f.doc.value === "object" ? f.doc.value : null;
+        if (doc) {
+          const langSlug = typeof doc.language === "object" ? doc.language?.slug : "fr";
+          href = doc.slug === "home" ? `/${langSlug}` : `/${langSlug}/${doc.slug}`;
+        }
+      }
+      const newTab = f.newTab ?? false;
+      const target = newTab ? "_blank" : undefined;
+      const rel = newTab ? "noopener noreferrer" : (node.rel ?? undefined);
       return (
-        <a key={key} href={node.url || ""} rel={rel} target={target}>
+        <a key={key} href={href} rel={rel} target={target}>
           {renderNodes(node.children)}
         </a>
       );

@@ -105,9 +105,20 @@ function serializeNode(node: any): string {
 
   // Nó de link
   if (type === "link") {
-    const relAttr = rel ? ` rel="${rel}"` : "";
-    const targetAttr = target ? ` target="${target}"` : "";
-    return `<a href="${url}"${relAttr}${targetAttr}>${serializeNodes(children)}</a>`;
+    const f = node.fields ?? {};
+    let href = f.url || url || "";
+    // Internal link: build URL from related page doc
+    if (f.linkType === "internal" && f.doc) {
+      const doc = typeof f.doc.value === "object" ? f.doc.value : null;
+      if (doc) {
+        const langSlug = typeof doc.language === "object" ? doc.language?.slug : "fr";
+        href = doc.slug === "home" ? `/${langSlug}` : `/${langSlug}/${doc.slug}`;
+      }
+    }
+    const newTab = f.newTab ?? false;
+    const relAttr = newTab ? ` rel="noopener noreferrer"` : (rel ? ` rel="${rel}"` : "");
+    const targetAttr = newTab ? ` target="_blank"` : (target ? ` target="${target}"` : "");
+    return `<a href="${href}"${relAttr}${targetAttr}>${serializeNodes(children)}</a>`;
   }
 
   // Nó de quote

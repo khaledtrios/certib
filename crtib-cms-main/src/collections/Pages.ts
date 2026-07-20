@@ -202,6 +202,7 @@ export const Pages: CollectionConfig = {
       type: 'blocks',
       label: { fr: 'Sections de la page', en: 'Page Sections' },
       admin: {
+        disableBlockName: true,
         description: {
           fr: 'Constructeur de pages',
           en: 'Page builder: add, order, and configure each section.',
