@@ -3,6 +3,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Gutter } from '@payloadcms/ui'
 
+interface Language {
+  id: string | number
+  name: string
+  slug: string
+  isDefault: boolean
+  isActive: boolean
+}
+
 interface Page {
   id: string
   title: string
@@ -216,7 +224,6 @@ function SortableList({
                 </span>
               )}
 
-              {/* Eye toggle */}
               <button
                 type="button"
                 title={page.isHidden ? 'Afficher dans la navigation' : 'Masquer de la navigation'}
@@ -243,7 +250,6 @@ function SortableList({
                 <EyeIcon hidden={page.isHidden} />
               </button>
 
-              {/* Edit link */}
               <a
                 href={`/admin/collections/pages/${page.id}`}
                 onClick={(e) => e.stopPropagation()}
@@ -286,6 +292,8 @@ function SortableList({
 }
 
 export function PageOrderClient() {
+  const [languages, setLanguages] = useState<Language[]>([])
+  const [activeLang, setActiveLang] = useState<string>('')
   const [tree, setTree] = useState<Page[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -293,8 +301,27 @@ export function PageOrderClient() {
   const [dirty, setDirty] = useState(false)
   const [total, setTotal] = useState(0)
 
+  // Load languages once on mount
   useEffect(() => {
-    fetch('/api/pages?limit=1000&depth=1&sort=menuOrder')
+    fetch('/api/site-languages?limit=100&sort=name')
+      .then((r) => r.json())
+      .then((data) => {
+        const docs: Language[] = data.docs || []
+        const active = docs.filter((l) => l.isActive)
+        setLanguages(active)
+        const def = active.find((l) => l.isDefault) ?? active[0]
+        if (def) setActiveLang(def.slug)
+      })
+      .catch(() => {})
+  }, [])
+
+  // Reload pages when active language changes
+  useEffect(() => {
+    if (!activeLang) return
+    setLoading(true)
+    setDirty(false)
+    setStatus('idle')
+    fetch(`/api/pages?limit=1000&depth=1&sort=menuOrder&where[language.slug][equals]=${encodeURIComponent(activeLang)}`)
       .then((r) => r.json())
       .then((data) => {
         const docs = data.docs || []
@@ -303,7 +330,13 @@ export function PageOrderClient() {
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }, [])
+  }, [activeLang])
+
+  const handleLangSwitch = (slug: string) => {
+    if (slug === activeLang) return
+    if (dirty && !window.confirm('Des modifications non sauvegardées seront perdues. Continuer ?')) return
+    setActiveLang(slug)
+  }
 
   const handleReorder = (newTree: Page[]) => {
     setTree(newTree)
@@ -312,7 +345,6 @@ export function PageOrderClient() {
   }
 
   const handleToggleHide = useCallback(async (id: string) => {
-    // Find current value directly from tree closure
     const findPage = (pages: Page[]): Page | undefined => {
       for (const p of pages) {
         if (p.id === id) return p
@@ -323,10 +355,7 @@ export function PageOrderClient() {
     const page = findPage(tree)
     if (!page) return
     const newHidden = !page.isHidden
-
-    // Optimistic UI update
     setTree((prev) => updateInTree(prev, id, (p) => ({ ...p, isHidden: newHidden })))
-
     try {
       const res = await fetch('/api/page-meta', {
         method: 'PATCH',
@@ -335,7 +364,6 @@ export function PageOrderClient() {
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
     } catch {
-      // Revert on error
       setTree((prev) => updateInTree(prev, id, (p) => ({ ...p, isHidden: !newHidden })))
     }
   }, [tree])
@@ -374,10 +402,13 @@ export function PageOrderClient() {
     return n
   })()
 
+  const activeLangName = languages.find((l) => l.slug === activeLang)?.name ?? activeLang
+
   return (
     <Gutter><div style={{ maxWidth: '720px', margin: '0 auto' }}>
+
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px', gap: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '20px', gap: '16px' }}>
         <div>
           <h1 style={{ fontSize: '20px', fontWeight: '700', color: 'var(--theme-text)', margin: '0 0 5px' }}>
             Ordre des pages
@@ -385,7 +416,7 @@ export function PageOrderClient() {
           <p style={{ fontSize: '13px', color: 'var(--theme-text)', opacity: 0.5, margin: 0 }}>
             {loading
               ? 'Chargement…'
-              : `${total} page${total !== 1 ? 's' : ''}${hiddenCount > 0 ? ` · ${hiddenCount} masquée${hiddenCount > 1 ? 's' : ''}` : ''}`}
+              : `${total} page${total !== 1 ? 's' : ''} · ${activeLangName}${hiddenCount > 0 ? ` · ${hiddenCount} masquée${hiddenCount > 1 ? 's' : ''}` : ''}`}
           </p>
         </div>
 
@@ -412,6 +443,51 @@ export function PageOrderClient() {
         </button>
       </div>
 
+      {/* Language tabs */}
+      {languages.length > 1 && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '4px',
+          marginBottom: '16px',
+          borderBottom: '2px solid rgba(8,170,134,0.12)',
+          paddingBottom: '0',
+        }}>
+          {languages.map((lang) => {
+            const isActive = lang.slug === activeLang
+            return (
+              <button
+                key={lang.slug}
+                type="button"
+                onClick={() => handleLangSwitch(lang.slug)}
+                style={{
+                  padding: '8px 16px',
+                  fontSize: '13px',
+                  fontWeight: isActive ? '700' : '500',
+                  color: isActive ? '#08AA86' : 'var(--theme-text)',
+                  opacity: isActive ? 1 : 0.55,
+                  background: 'none',
+                  border: 'none',
+                  borderBottom: isActive ? '2px solid #08AA86' : '2px solid transparent',
+                  marginBottom: '-2px',
+                  cursor: 'pointer',
+                  borderRadius: '0',
+                  transition: 'color 0.15s, opacity 0.15s',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.06em',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) (e.currentTarget as HTMLElement).style.opacity = '0.85'
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) (e.currentTarget as HTMLElement).style.opacity = '0.55'
+                }}
+              >
+                {lang.name}
+              </button>
+            )
+          })}
+        </div>
+      )}
+
       {/* Legend */}
       {!loading && tree.length > 0 && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '8px 12px', background: 'rgba(8,170,134,0.04)', border: '1px solid rgba(8,170,134,0.12)', borderRadius: '8px', marginBottom: '16px', fontSize: '11px', color: '#6b7280', flexWrap: 'wrap' }}>
@@ -437,12 +513,12 @@ export function PageOrderClient() {
 
       {!loading && tree.length === 0 && (
         <div style={{ textAlign: 'center', padding: '60px 20px', color: '#9ca3af', fontSize: '13px' }}>
-          Aucune page trouvée.
+          Aucune page trouvée pour cette langue.
         </div>
       )}
 
       {!loading && tree.length > 0 && (
-        <SortableList listKey="root" items={tree} level={0} onReorder={handleReorder} onToggleHide={handleToggleHide} />
+        <SortableList listKey={`root-${activeLang}`} items={tree} level={0} onReorder={handleReorder} onToggleHide={handleToggleHide} />
       )}
 
       {dirty && (
